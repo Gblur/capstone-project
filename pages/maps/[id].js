@@ -7,14 +7,13 @@ export default function MapDetailsPage() {
 
   const router = useRouter()
   const { 
-    query: {id},
+    query: { id },
     push
   } = router
 
-
-
   return (
-    <div style={{height: '100vh'}}>
+    <div style={{height: `calc(100vh - 150px)`}}>
+      <h2>Mapname</h2>
       <Canvas />
     </div>
   )
