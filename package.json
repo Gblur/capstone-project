@@ -11,12 +11,21 @@
     "test:watch": "jest --watchAll"
   },
   "dependencies": {
+    "@emotion/react": "^11.10.6",
+    "@emotion/styled": "^11.10.6",
+    "@mui/icons-material": "^5.11.11",
+    "@mui/material": "^5.11.14",
     "eslint": "8.35.0",
     "eslint-config-next": "13.2.3",
+    "immer": "^9.0.21",
     "next": "13.2.3",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "styled-components": "^5.3.8"
+    "reactflow": "^11.6.1",
+    "styled-components": "^5.3.8",
+    "swr": "^2.1.1",
+    "use-immer": "^0.8.1",
+    "zustand": "^4.3.6"
   },
   "devDependencies": {
     "@svgr/webpack": "^6.5.1",

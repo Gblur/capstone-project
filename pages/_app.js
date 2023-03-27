@@ -1,5 +1,7 @@
 import GlobalStyle from "../styles";
 import Head from "next/head";
+import Layout from "../components/Layout";
+import "../styles/globals.css"
 
 export default function App({ Component, pageProps }) {
   return (
@@ -8,7 +10,9 @@ export default function App({ Component, pageProps }) {
       <Head>
         <title>Capstone Project</title>
       </Head>
-      <Component {...pageProps} />
+      <Layout>
+        <Component {...pageProps} />
+      </Layout>
     </>
   );
 }
