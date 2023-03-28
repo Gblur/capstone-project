@@ -14,38 +14,40 @@ export default function Canvas() {
     type: 'input',
     data: { label: 'Map Name' },
     position: { x: 250, y: 25 },
-  }]
+    
+    },
+  ]
 
   const {data, isLoading} = useSWR(url)
   const [testnode, setTestNode] = useState(initialNode)
 
-  function generateLabels(data) {
-    if(data){
-      return data.filter(item => {
-        return item.language === "HTML"
-      })
-    }
-  }
-
   let base = 50
-  useEffect(() => {
-    if(!isLoading){
-      if(data.length > 10){
-      generateLabels(data).forEach(item => {
-        base += 100;
 
+  function pushNodes(filter) {
+    const filtedData = data.filter(item => {
+      if(filter){
+        return item.language === filter
+      } 
+      return item
+    })
+    filtedData.forEach(item => {
         initialNode.push(
             {
               id: item["node_id"],  
               data: { label: item.name },
-              position: { x: 0, y: base },
+              position: { x: filtedData.length > 10 ? 0 : base += 200, y: filtedData.length > 10 ? base += 100 : 100},
               parent: "1"
             }
           ) 
-        })
-      }
-     console.log(initialNode)
-     setTestNode(initialNode)
+    })
+    setTestNode(initialNode)
+  }
+
+  useEffect(() => {
+    if(!isLoading){
+
+      console.log(data)
+      pushNodes()
     }
   },[isLoading])
 
@@ -55,12 +57,11 @@ export default function Canvas() {
     (changes) => setTestNode((nds) => applyNodeChanges(changes, nds)),
     [setTestNode]
   );
+
   // const onEdgesChange = useCallback(
   //   (changes) => setEdges((eds) => applyEdgeChanges(changes, eds)),
   //   [setEdges]
   // );
-  // const {data, isLoading, error} = useSWR(url)
-  // GET {node_id, name: repo, }
   
   if(isLoading) return <h1>isLoading...</h1>
 
