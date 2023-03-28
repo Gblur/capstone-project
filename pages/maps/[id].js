@@ -13,7 +13,7 @@ export default function MapDetailsPage() {
   } = router
 
   return (
-    <div style={{height: `calc(100vh - 150px)`}}>
+    <div style={{height: `calc(100vh - 250px)`}}>
       <h2>Mapname</h2>
       <Canvas />
     </div>
