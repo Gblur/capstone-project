@@ -2,6 +2,7 @@ import React from 'react'
 import Canvas from '../../components/Canvas'
 import 'reactflow/dist/style.css';
 import { useRouter } from 'next/router';
+import Filter from "../../components/Canvas/filter"
 
 export default function MapDetailsPage() {
 
@@ -14,6 +15,7 @@ export default function MapDetailsPage() {
   return (
     <div style={{height: `calc(100vh - 150px)`}}>
       <h2>Mapname</h2>
+      <Filter />
       <Canvas />
     </div>
   )
