@@ -84,7 +84,6 @@ export default function Canvas() {
       console.log(data)
       addChilds(testnode)
       connectChilds()
-      console.log(testnode)
       return () => {
 
       }
