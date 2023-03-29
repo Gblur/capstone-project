@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import ReactFlow, { Background, Controls, applyEdgeChanges, applyNodeChanges, ReactFlowProvider  } from 'reactflow';
+import ReactFlow, { Background, Controls, applyEdgeChanges, applyNodeChanges, ReactFlowProvider, useNodesState, useEdgesState, onNodeClick  } from 'reactflow';
 import {create} from "zustand"
 import {shallow} from "zustand/shallow"
 import { styles } from "./styles.js"
@@ -21,65 +21,81 @@ export default function Canvas() {
 
 
   const {data, isLoading} = useSWR(url)
-  const [testnode, setTestNode] = useState(initialNode)
-  const [testedge, setTestEdge] = useState(initialEdge)
+  const [testnode, setTestNode, onNodesChange] = useNodesState(initialNode)
+  const [testedge, setTestEdge, onEdgesChange] = useEdgesState(initialEdge)
 
   let base = -150
 
-  function pushNodes(filter) {
-    const filtedData = data.filter(item => {
-      if(filter){
-        return item.language === filter
-      } 
-      return item
-    })
-    filtedData.forEach(item => {
-        initialNode.push(
-            {
-              id: item["node_id"],  
-              data: { label: item.name },
-              position: { x: filtedData.length > 10 ? 0 : base += 200, y: filtedData.length > 10 ? base += 100 : 100},
-              parent: "1"
-            }
+  function handleNodeClick(event) {
+    console.log(event.currentTarget)
+  }
+
+  function filteredData(data, filter) {
+    if(data) {
+      return data.filter(item => {
+        if(filter){
+          return item.language === filter
+        } 
+        return item
+      })
+    }
+  }
+
+  const filterData = filteredData(data, "HTML")
+
+  function addChilds(initialNode) {
+    // map through initialNode and update the state by adding new elements to array
+    
+    setTestNode(
+      [
+        ...initialNode,
+        ...filterData.map(item => {
+          return (
+              {
+                id: item["node_id"],  
+                data: { label: item.name },
+                position: { x: filterData.length > 10 ? 0 : base += 200, y: filterData.length > 10 ? base += 100 : 100},
+                parent: "1"
+              }
+            ) 
+          }
         )
-        initialEdge.push(
-          {
+      ]
+    )
+  }
+
+  function connectChilds() {
+    setTestEdge(
+      [
+        ...filterData.map(item => {
+          return {
             id: item["node_id"],
             source: "1",
             target: item["node_id"],
             animated: true,
           }
-        ) 
-
-    })
-    setTestNode(initialNode)
-    setTestEdge(initialEdge)
+        })
+      ]
+    )
   }
 
   useEffect(() => {
     if(!isLoading){
-      console.log(initialNode)
-      pushNodes("HTML")
+      console.log(data)
+      addChilds(testnode)
+      connectChilds()
+      console.log(testnode)
+      return () => {
+
+      }
     }
   },[isLoading])
-
-  // const [edges, setEdges] = useState(initialEdges);
-
-  const onNodesChange = useCallback(
-    (changes) => setTestNode((nds) => applyNodeChanges(changes, nds)),
-    [setTestNode]
-  );
-
-  const onEdgesChange = useCallback(
-    (changes) => setTestEdge((eds) => applyEdgeChanges(changes, eds)),
-    [setTestEdge]
-  );
   
   if(isLoading) return <h1>isLoading...</h1>
 
   return (
     <ReactFlowProvider>
-      <ReactFlow nodes={testnode} edges={testedge} onEdgesChange={onEdgesChange} onNodesChange={onNodesChange}  fitView >
+      <ReactFlow nodes={testnode} edges={testedge} onEdgesChange={onEdgesChange} onNodeClick={handleNodeClick} onNodesChange={onNodesChange}  fitView >
         <Background style={{background:  styles["color-bg"]}} />
         <Controls />
         </ReactFlow>
