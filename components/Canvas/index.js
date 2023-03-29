@@ -4,8 +4,23 @@ import {create} from "zustand"
 import {shallow} from "zustand/shallow"
 import { styles } from "./styles.js"
 import useSWR from "swr"
+import { CircularProgress } from '@mui/material';
+import {Modal, Box, Typography} from '@mui/material';
+import { useImmer } from 'use-immer';
 
-export default function Canvas() {
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: "50%",
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  p: 4,
+};
+
+export default function Canvas({filter}) {
   
   const user = "Gblur"
   const url = `https://api.github.com/users/${user}/repos`
@@ -23,13 +38,22 @@ export default function Canvas() {
   const {data, isLoading} = useSWR(url)
   const [testnode, setTestNode, onNodesChange] = useNodesState(initialNode)
   const [testedge, setTestEdge, onEdgesChange] = useEdgesState(initialEdge)
+  const [open, setOpen] = useState(false)
+  const [branchUrl, setbranchUrl] = useImmer("")
+  const branchData = useSWR(branchUrl || "")
 
   let base = -150
 
   function handleNodeClick(event) {
-    console.log(event.currentTarget)
+    const currentNode = testnode.find(node => {
+      return (node.id === event.currentTarget.getAttribute("data-id"))
+    })
+    if(currentNode?.branches){
+      setbranchUrl(currentNode["branches"].replace("{/branch}", ""))
+    }
+    setOpen(!open)
   }
-
+  
   function filteredData(data, filter) {
     if(data) {
       return data.filter(item => {
@@ -40,10 +64,10 @@ export default function Canvas() {
       })
     }
   }
-
-  const filterData = filteredData(data, "HTML")
-
-  function addChilds(initialNode) {
+  
+  const filterData = filteredData(data, filter)
+  
+  function addChilds() {
     // map through initialNode and update the state by adding new elements to array
     
     setTestNode(
@@ -55,7 +79,8 @@ export default function Canvas() {
                 id: item["node_id"],  
                 data: { label: item.name },
                 position: { x: filterData.length > 10 ? 0 : base += 200, y: filterData.length > 10 ? base += 100 : 100},
-                parent: "1"
+                parent: "1",
+                branches: item["branches_url"]
               }
             ) 
           }
@@ -81,23 +106,46 @@ export default function Canvas() {
 
   useEffect(() => {
     if(!isLoading){
-      console.log(data)
-      addChilds(testnode)
+      addChilds()
       connectChilds()
+      console.log(testnode)
       return () => {
 
       }
     }
-  },[isLoading])
+  },[isLoading, filter])
   
-  if(isLoading) return <h1>isLoading...</h1>
+  if(isLoading) return <CircularProgress />
 
   return (
+    <>
     <ReactFlowProvider>
       <ReactFlow nodes={testnode} edges={testedge} onEdgesChange={onEdgesChange} onNodeClick={handleNodeClick} onNodesChange={onNodesChange}  fitView >
         <Background style={{background:  styles["color-bg"]}} />
         <Controls />
         </ReactFlow>
     </ReactFlowProvider>
+    <Modal
+        open={open}
+        onClose={handleNodeClick}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+      <Box sx={style}>
+        <Typography id="modal-modal-title" variant="h6" component="h2">
+          Text in a modal
+        </Typography>
+        <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+          
+        </Typography>
+        <ul>
+            {branchData?.data && branchData.data.map(branch => {
+              return <li key={branch.commit.sha}><a href={branch.commit.url} >{`link to ${branch.name}`}</a></li>
+            })}
+        </ul>
+      </Box>
+    </Modal>
+    </>
+    
   )
 }
