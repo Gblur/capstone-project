@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-const Heading = styled.h1`
+const Heading = styled.header`
   text-align: center;
 `;
 export default Heading;

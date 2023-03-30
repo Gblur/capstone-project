@@ -1,9 +1,9 @@
-import Canvas from "../components/Canvas";
-import Filter from "../components/Canvas/FilterData";
+import React, { useState } from 'react'
+import Canvas from '../../components/Canvas'
 import 'reactflow/dist/style.css';
-import { useState } from "react";
+import Filter from '../../components/Canvas/FilterData';
 
-export default function Home() {
+export default function MapDetailsPage() {
 
   const [filter, setFilter] = useState("HTML")
 
@@ -17,5 +17,5 @@ export default function Home() {
       <Filter setFilterValue={handleFilter}/>
       <Canvas filter={filter}/>
     </main>
-  );
+  )
 }
