@@ -5,7 +5,6 @@ export default function Filter({setFilterValue}) {
 
   function handleFilter(event) {
     setFilterValue(event.target.value)
-    console.log(event.currentTarget)
   }
 
   return (
