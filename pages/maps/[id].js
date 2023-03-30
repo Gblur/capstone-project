@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import Canvas from '../../components/Canvas'
 import 'reactflow/dist/style.css';
-import Filter from '../../components/Canvas/Filter';
+import Filter from '../../components/Canvas/FilterData';
 
 export default function MapDetailsPage() {
 
