@@ -11,7 +11,7 @@ export default function Filter({setFilterValue}) {
   return (
       <Select
         id="demo-simple-select"
-        label="Age"
+        label="age"
         defaultValue="HTML"
         onChange={handleFilter}
         >
