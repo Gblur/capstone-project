@@ -12,10 +12,10 @@ export default function MapDetailsPage() {
   }
 
   return (
-    <div style={{height: `calc(100vh - 250px)`}}>
+    <main style={{height: `calc(100vh - 250px)`}}>
       <h2>Mapname</h2>
       <Filter setFilterValue={handleFilter}/>
       <Canvas filter={filter}/>
-    </div>
+    </main>
   )
 }
