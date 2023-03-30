@@ -1,21 +1,11 @@
 import React, { useState } from 'react'
 import Canvas from '../../components/Canvas'
 import 'reactflow/dist/style.css';
-import { useRouter } from 'next/router';
-import { Modal } from '@mui/system';
-import Filter from '../../components/Canvas/filter';
+import Filter from '../../components/Canvas/Filter';
 
 export default function MapDetailsPage() {
 
   const [filter, setFilter] = useState("HTML")
-
-  const router = useRouter()
-  const { 
-    query: { id },
-    push
-  } = router
-
-  console.log(filter)
 
   function handleFilter(filter) {
     setFilter(filter)

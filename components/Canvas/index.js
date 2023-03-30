@@ -46,7 +46,7 @@ export default function Canvas({filter}) {
 
   function handleNodeClick(event) {
     const currentNode = testnode.find(node => {
-      return (node.id === event.currentTarget.getAttribute("data-id"))
+      return (node.id === event.target.getAttribute("data-id"))
     })
     if(currentNode?.branches){
       setbranchUrl(currentNode["branches"].replace("{/branch}", ""))
