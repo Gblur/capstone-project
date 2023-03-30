@@ -1,5 +1,5 @@
-import Canvas from "components/Canvas";
-import Filter from "components/Canvas/FilterData";
+import Canvas from "../components/Canvas";
+import Filter from "../components/Canvas/FilterData";
 import 'reactflow/dist/style.css';
 import { useState } from "react";
 
