@@ -106,7 +106,6 @@ export default function Canvas({filter}) {
     if(!isLoading){
       addChilds()
       connectChilds()
-      console.log(testnode)
       return () => {
 
       }
