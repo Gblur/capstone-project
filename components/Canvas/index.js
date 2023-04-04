@@ -8,6 +8,7 @@ import ReactFlow, {
 } from "reactflow";
 import {styles} from "./styles.js";
 import useSWR from "swr";
+import useStore from "../../store";
 import {CircularProgress} from "@mui/material";
 import {Modal, Box, Typography} from "@mui/material";
 import {useImmer} from "use-immer";
@@ -25,6 +26,14 @@ const styleModalBox = {
 	boxShadow: 24,
 	p: 4,
 };
+
+const selector = (state) => ({
+	nodes: state.nodes,
+	edges: state.edges,
+	onNodesChange: state.onNodesChange,
+	onEdgesChange: state.onEdgesChange,
+	onConnect: state.onConnect,
+});
 
 export default function Canvas({filter}) {
 	const user = process.env.REACT_APP_USERNAME || "Gblur";
@@ -47,10 +56,10 @@ export default function Canvas({filter}) {
 	];
 
 	const initialEdge = [];
-
+	// const { nodes, edges, onNodesChange, onEdgesChange, onConnect } = useStore(selector, shallow);
 	const {data, isLoading} = useSWR(url);
 	const [nodes, setNodes, onNodesChange] = useNodesState(initialNode);
-	const [testedge, setTestEdge, onEdgesChange] = useEdgesState(initialEdge);
+	const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdge);
 	const [open, setOpen] = useState(false);
 	const [branchUrl, setbranchUrl] = useImmer("");
 	const branchData = useSWR(branchUrl);
@@ -86,7 +95,7 @@ export default function Canvas({filter}) {
 			};
 
 			setNodes((nds) => nds.concat(newNode));
-			setTestEdge((eds) =>
+			setEdges((eds) =>
 				eds.concat({
 					id,
 					source: connectingNodeId.current,
@@ -162,7 +171,7 @@ export default function Canvas({filter}) {
 	}
 
 	function connectChilds() {
-		setTestEdge([
+		setEdges([
 			...filterData.map((item) => {
 				return {
 					id: item["node_id"],
@@ -191,7 +200,7 @@ export default function Canvas({filter}) {
 			<ReactFlowProvider>
 				<ReactFlow
 					nodes={nodes}
-					edges={testedge}
+					edges={edges}
 					onEdgesChange={onEdgesChange}
 					onNodesChange={onNodesChange}
 					onNodeClick={handleNodeClick}

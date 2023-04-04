@@ -62,6 +62,7 @@ const ChildNode = ({selected, data}) => {
 };
 
 const CreatedNode = ({selected, data, id}) => {
+	const updateNodeLabel = useStore((state) => state.updateNodeColor);
 	function handleInput(event) {
 		if (event.key === "Enter") {
 			data.onChange(event?.target?.value, id);
