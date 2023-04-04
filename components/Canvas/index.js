@@ -5,7 +5,6 @@ import ReactFlow, {
 	ReactFlowProvider,
 	useNodesState,
 	useEdgesState,
-	useReactFlow,
 } from "reactflow";
 import {styles} from "./styles.js";
 import useSWR from "swr";
@@ -13,6 +12,7 @@ import {CircularProgress} from "@mui/material";
 import {Modal, Box, Typography} from "@mui/material";
 import {useImmer} from "use-immer";
 import {nodeTypes} from "../../components/Node/customNode";
+import {uid} from "uid";
 
 const styleModalBox = {
 	position: "absolute",
@@ -27,31 +27,36 @@ const styleModalBox = {
 };
 
 export default function Canvas({filter}) {
-	const user = "Gblur";
+	const user = process.env.REACT_APP_USERNAME || "Gblur";
 	const url = `https://api.github.com/users/${user}/repos`;
 	const initialNode = [
 		{
 			id: "1",
-			type: "input",
-			data: {label: "Map Name"},
+			type: "parent",
+			data: {
+				label: "Map Name",
+				background: "var(--color-node-parent-bg)",
+				type: "root",
+				onChange: () => {},
+				status: "unknown",
+			},
 			position: {x: 250, y: 25},
 			selectable: false,
+			deletable: false,
 		},
 	];
 
 	const initialEdge = [];
 
 	const {data, isLoading} = useSWR(url);
-	const [testnode, setTestNode, onNodesChange] = useNodesState(initialNode);
+	const [nodes, setNodes, onNodesChange] = useNodesState(initialNode);
 	const [testedge, setTestEdge, onEdgesChange] = useEdgesState(initialEdge);
 	const [open, setOpen] = useState(false);
 	const [branchUrl, setbranchUrl] = useImmer("");
-	const branchData = useSWR(branchUrl || "");
+	const branchData = useSWR(branchUrl);
 	const connectingNodeId = useRef(null);
 
 	let base = -300;
-	let id = 1000;
-	const getId = () => `${id++}`;
 
 	const onConnectStart = useCallback((_, {nodeId}) => {
 		connectingNodeId.current = nodeId;
@@ -61,20 +66,26 @@ export default function Canvas({filter}) {
 		const targetIsPane =
 			event.target.classList.contains("react-flow__pane");
 		if (targetIsPane) {
+			const id = uid();
 			// we need to remove the wrapper bounds, in order to get the correct position
 			// const {top, left} =
 			// 	reactFlowWrapper.current.getBoundingClientRect();
-			const id = getId();
 			const newNode = {
 				id,
 				// we are removing the half of the node width (75) to center the new node
-				position: {x: 100, y: 100},
-				data: {label: `Node ${id}`},
+				position: {x: 0, y: 100},
+				data: {
+					label: `Node`,
+					background: "var(--color-node-unbound-bg)",
+					type: "Issue",
+					onChange: onChangeNodeLabel,
+					status: "custom",
+				},
 				parentNode: connectingNodeId.current,
-				type: "child",
+				type: "unbound",
 			};
 
-			setTestNode((nds) => nds.concat(newNode));
+			setNodes((nds) => nds.concat(newNode));
 			setTestEdge((eds) =>
 				eds.concat({
 					id,
@@ -85,8 +96,25 @@ export default function Canvas({filter}) {
 		}
 	}, []);
 
+	const onChangeNodeLabel = (label, id) => {
+		console.log("currentId: ", id, "label: ", label);
+
+		setNodes([
+			...nodes,
+			...nodes.map((node) => {
+				if (node.id !== id) {
+					return node;
+				}
+				node.data = {
+					...node.data,
+					label,
+				};
+			}),
+		]);
+	};
+
 	function handleNodeClick(event) {
-		const currentNode = testnode.find((node) => {
+		const currentNode = nodes.find((node) => {
 			return node.id === event.currentTarget.getAttribute("data-id");
 		});
 		if (currentNode?.branches) {
@@ -108,9 +136,7 @@ export default function Canvas({filter}) {
 	const filterData = filteredData(data, filter);
 
 	function addChilds() {
-		// map through initialNode and update the state by adding new elements to array
-
-		setTestNode([
+		setNodes([
 			...initialNode,
 			...filterData.map((item) => {
 				return {
@@ -118,14 +144,17 @@ export default function Canvas({filter}) {
 					data: {
 						label: item.name,
 						status: item.visibility,
-						background: "#99d5ff",
+						background: "var(--color-node-child-bg)",
+						type: "child",
+						onChange: () => {},
 					},
 					position: {
 						x: filterData.length > 10 ? 0 : (base += 200),
-						y: filterData.length > 10 ? (base += 100) : 100,
+						y: filterData.length > 10 ? (base += 100) : 200,
 					},
 					parentNode: "1",
 					type: "child",
+					deletable: false,
 					branches: item["branches_url"],
 				};
 			}),
@@ -145,17 +174,15 @@ export default function Canvas({filter}) {
 		]);
 	}
 
+	console.log(nodes);
+
 	useEffect(() => {
 		if (!isLoading) {
-			console.log(data);
 			addChilds();
 			connectChilds();
-
 			return () => {};
 		}
 	}, [isLoading, filter]);
-
-	console.log(testnode);
 
 	if (isLoading) return <CircularProgress />;
 
@@ -163,11 +190,11 @@ export default function Canvas({filter}) {
 		<>
 			<ReactFlowProvider>
 				<ReactFlow
-					nodes={testnode}
+					nodes={nodes}
 					edges={testedge}
 					onEdgesChange={onEdgesChange}
-					onNodeClick={handleNodeClick}
 					onNodesChange={onNodesChange}
+					onNodeClick={handleNodeClick}
 					nodeTypes={nodeTypes}
 					onConnectStart={onConnectStart}
 					onConnectEnd={onConnectEnd}

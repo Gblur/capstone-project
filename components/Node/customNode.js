@@ -1,75 +1,97 @@
-import React, { memo } from 'react';
-import { Handle, Position } from 'reactflow';
-import styled from 'styled-components';
-import LensIcon from '@mui/icons-material/Lens';
-import { createTheme } from '@mui/material/styles';
-
-const theme = createTheme({
-  status: {
-    danger: '#e53e3e',
-  },
-  palette: {
-    primary: {
-      main: '#0971f1',
-      darker: '#053e85',
-    },
-    neutral: {
-      main: '#64748B',
-      contrastText: '#fff',
-    },
-  },
-});
-
+import React, {memo, useRef, useState} from "react";
+import {Handle, Position} from "reactflow";
+import styled from "styled-components";
+import TripOriginOutlinedIcon from "@mui/icons-material/TripOriginOutlined";
 
 const Node = styled.div`
-  padding: 10px 20px;
-  border-radius: 5px;
-  background: ${props => props.background};
-  color: black;
-  border: 1px dashed ${(props) => (props.selected ? "orange" : "black")};
+	padding: 10px 20px;
+	border-radius: 5px;
+	min-width: 200px;
+	background: ${(props) => props.background};
+	color: black;
+	border: 1px solid
+		${(props) =>
+			props.selected
+				? "var(--color-node-border--selected)"
+				: "var(--color-node-border)"};
 
-  .react-flow__handle {
-    background: blue;
-    width: 15px;
-    height: 7px;
-    border-radius: 0px;
-  }
+	.react-flow__handle {
+		background: var(--color-node-border);
+		width: 15px;
+		height: 7px;
+		border-radius: 0px;
+	}
+	.icon_label {
+		display: flex;
+		justify-content: flex-end;
+		align-items: center;
+	}
+
+	p {
+		background: rgba(255, 255, 255, 0.8);
+		border-radius: 4px;
+		padding: 5px;
+	}
 `;
 
-const MainNode = ({ selected, data }) => {
-  return (
-    <>
-    <Node  selected={selected}>
-      <Handle type="target" position={Position.Top} />
-        <div>
-          {data.label}
-        </div>
-      <Handle type="source" position={Position.Bottom} />
-    </Node>
-    </>
-  );
+const MainNode = ({selected, data}) => {
+	return (
+		<>
+			<Node background={data.background} selected={selected}>
+				<h3>{data.label}</h3>
+				<Handle type="source" position={Position.Bottom} />
+			</Node>
+		</>
+	);
 };
 
-const ChildNode = ({ selected, data }) => {
-  return (
-    <>
-    <Node background={data.background} selected={selected}>
-      <Handle type="target" position={Position.Top} />
-        <div>
-          {data.label}
-        </div>
-        <i >
-          {data.status}
-          <LensIcon fontSize='8px' color="primary"/>
-        </i>
-      <Handle type="source" position={Position.Bottom} />
-    </Node>
-    </>
-  );
+const ChildNode = ({selected, data}) => {
+	return (
+		<>
+			<Node background={data.background} selected={selected}>
+				<Handle type="target" position={Position.Top} />
+				<p>{data.label}</p>
+				<div className="icon_label">
+					<i>{data.status}</i>
+					<TripOriginOutlinedIcon fontSize="8px" color="secondary" />
+				</div>
+				<Handle type="source" position={Position.Bottom} />
+			</Node>
+		</>
+	);
 };
 
+const CreatedNode = ({selected, data, id}) => {
+	function handleInput(event) {
+		if (event.key === "Enter") {
+			data.onChange(event?.target?.value, id);
+		}
+	}
+
+	return (
+		<>
+			<Node background={data.background} selected={selected}>
+				<Handle type="target" position={Position.Top} />
+				{selected ? (
+					<input onKeyUp={handleInput} />
+				) : (
+					<p>{data.label}</p>
+				)}
+
+				<div className="icon_label">
+					<select name="typenode" id="select__type">
+						<option value="">Issue</option>
+						<option value="">Branch</option>
+					</select>
+				</div>
+				<Handle type="source" position={Position.Bottom} />
+			</Node>
+		</>
+	);
+};
 
 export const nodeTypes = {
-  parent: memo(MainNode),
-  child: memo(ChildNode),
+	parent: memo(MainNode),
+	child: memo(ChildNode),
+	unbound: memo(CreatedNode),
 };
