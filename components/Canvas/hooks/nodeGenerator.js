@@ -1,6 +1,6 @@
 import {useEffect, useCallback} from "react";
 
-const StateHooks = () => {
+const Generator = () => {
 	let base = -300;
 
 	function filteredData(data, filter) {

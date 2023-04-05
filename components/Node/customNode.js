@@ -62,19 +62,20 @@ const ChildNode = ({selected, data}) => {
 };
 
 const CreatedNode = ({selected, data, id}) => {
-	const updateNodeLabel = useStore((state) => state.updateNodeColor);
-	function handleInput(event) {
-		if (event.key === "Enter") {
-			data.onChange(event?.target?.value, id);
-		}
-	}
+	const updateNodeLabel = useStore((state) => state.updateNodeLabel);
 
 	return (
 		<>
 			<Node background={data.background} selected={selected}>
 				<Handle type="target" position={Position.Top} />
 				{selected ? (
-					<input onKeyUp={handleInput} />
+					<input
+						onKeyUp={(event) => {
+							if (event.key === "Enter") {
+								updateNodeLabel(event?.target?.value, id);
+							}
+						}}
+					/>
 				) : (
 					<p>{data.label}</p>
 				)}

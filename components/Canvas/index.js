@@ -9,6 +9,7 @@ import ReactFlow, {
 import {styles} from "./styles.js";
 import useSWR from "swr";
 import useStore from "../../store";
+import {shallow} from "zustand/shallow";
 import {CircularProgress} from "@mui/material";
 import {Modal, Box, Typography} from "@mui/material";
 import {useImmer} from "use-immer";
@@ -32,95 +33,101 @@ const selector = (state) => ({
 	edges: state.edges,
 	onNodesChange: state.onNodesChange,
 	onEdgesChange: state.onEdgesChange,
+	onConnectStart: state.onConnectStart,
+	onConnectEnd: state.onConnectEnd,
 	onConnect: state.onConnect,
 });
 
-export default function Canvas({filter}) {
+export default function Canvas() {
 	const user = process.env.REACT_APP_USERNAME || "Gblur";
 	const url = `https://api.github.com/users/${user}/repos`;
-	const initialNode = [
-		{
-			id: "1",
-			type: "parent",
-			data: {
-				label: "Map Name",
-				background: "var(--color-node-parent-bg)",
-				type: "root",
-				onChange: () => {},
-				status: "unknown",
-			},
-			position: {x: 250, y: 25},
-			selectable: false,
-			deletable: false,
-		},
-	];
+	// const initialNode = [
+	// 	{
+	// 		id: "1",
+	// 		type: "parent",
+	// 		data: {
+	// 			label: "Map Name",
+	// 			background: "var(--color-node-parent-bg)",
+	// 			type: "root",
+	// 			onChange: () => {},
+	// 			status: "unknown",
+	// 		},
+	// 		position: {x: 250, y: 25},
+	// 		selectable: false,
+	// 		deletable: false,
+	// 	},
+	// ];
 
-	const initialEdge = [];
-	// const { nodes, edges, onNodesChange, onEdgesChange, onConnect } = useStore(selector, shallow);
+	// const initialEdge = [];
+	const {
+		nodes,
+		edges,
+		onNodesChange,
+		onEdgesChange,
+		onConnectStart,
+		onConnectEnd,
+	} = useStore(selector, shallow);
 	const {data, isLoading} = useSWR(url);
-	const [nodes, setNodes, onNodesChange] = useNodesState(initialNode);
-	const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdge);
+	// const [nodes, setNodes, onNodesChange] = useNodesState(initialNode);
+	// const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdge);
 	const [open, setOpen] = useState(false);
 	const [branchUrl, setbranchUrl] = useImmer("");
 	const branchData = useSWR(branchUrl);
-	const connectingNodeId = useRef(null);
 
 	let base = -300;
+	// const onConnectStart = useCallback((_, {nodeId}) => {
+	// 	connectingNodeId.current = nodeId;
+	// }, []);
 
-	const onConnectStart = useCallback((_, {nodeId}) => {
-		connectingNodeId.current = nodeId;
-	}, []);
+	// const onConnectEnd = useCallback((event) => {
+	// 	const targetIsPane =
+	// 		event.target.classList.contains("react-flow__pane");
+	// 	if (targetIsPane) {
+	// 		const id = uid();
+	// 		// we need to remove the wrapper bounds, in order to get the correct position
+	// 		// const {top, left} =
+	// 		// 	reactFlowWrapper.current.getBoundingClientRect();
+	// 		const newNode = {
+	// 			id,
+	// 			// we are removing the half of the node width (75) to center the new node
+	// 			position: {x: 0, y: 100},
+	// 			data: {
+	// 				label: `Node`,
+	// 				background: "var(--color-node-unbound-bg)",
+	// 				type: "Issue",
+	// 				status: "custom",
+	// 			},
+	// 			parentNode: connectingNodeId.current,
+	// 			type: "unbound",
+	// 		};
 
-	const onConnectEnd = useCallback((event) => {
-		const targetIsPane =
-			event.target.classList.contains("react-flow__pane");
-		if (targetIsPane) {
-			const id = uid();
-			// we need to remove the wrapper bounds, in order to get the correct position
-			// const {top, left} =
-			// 	reactFlowWrapper.current.getBoundingClientRect();
-			const newNode = {
-				id,
-				// we are removing the half of the node width (75) to center the new node
-				position: {x: 0, y: 100},
-				data: {
-					label: `Node`,
-					background: "var(--color-node-unbound-bg)",
-					type: "Issue",
-					onChange: onChangeNodeLabel,
-					status: "custom",
-				},
-				parentNode: connectingNodeId.current,
-				type: "unbound",
-			};
+	// 		setNodes((nds) => nds.concat(newNode));
+	// 		setEdges((eds) =>
+	// 			eds.concat({
+	// 				id,
+	// 				source: connectingNodeId.current,
+	// 				target: id,
+	// 			})
+	// 		);
+	// 	}
+	// }, []);
 
-			setNodes((nds) => nds.concat(newNode));
-			setEdges((eds) =>
-				eds.concat({
-					id,
-					source: connectingNodeId.current,
-					target: id,
-				})
-			);
-		}
-	}, []);
+	// const onChangeNodeLabel = (label, id) => {
+	// 	console.log("currentId: ", id, "label: ", label);
 
-	const onChangeNodeLabel = (label, id) => {
-		console.log("currentId: ", id, "label: ", label);
-
-		setNodes([
-			...nodes,
-			...nodes.map((node) => {
-				if (node.id !== id) {
-					return node;
-				}
-				node.data = {
-					...node.data,
-					label,
-				};
-			}),
-		]);
-	};
+	// 	setNodes([
+	// 		...nodes,
+	// 		...nodes.map((node) => {
+	// 			if (node.id !== id) {
+	// 				return node;
+	// 			}
+	// 			node.data = {
+	// 				...node.data,
+	// 				label,
+	// 			};
+	// 		}),
+	// 	]);
+	// };
 
 	function handleNodeClick(event) {
 		const currentNode = nodes.find((node) => {
@@ -131,67 +138,67 @@ export default function Canvas({filter}) {
 		}
 	}
 
-	function filteredData(data, filter) {
-		if (data) {
-			return data.filter((item) => {
-				if (filter) {
-					return item.language === filter;
-				}
-				return item;
-			});
-		}
-	}
+	// function filteredData(data, filter) {
+	// 	if (data) {
+	// 		return data.filter((item) => {
+	// 			if (filter) {
+	// 				return item.language === filter;
+	// 			}
+	// 			return item;
+	// 		});
+	// 	}
+	// }
 
-	const filterData = filteredData(data, filter);
+	// const filterData = filteredData(data, filter);
 
-	function addChilds() {
-		setNodes([
-			...initialNode,
-			...filterData.map((item) => {
-				return {
-					id: item["node_id"],
-					data: {
-						label: item.name,
-						status: item.visibility,
-						background: "var(--color-node-child-bg)",
-						type: "child",
-						onChange: () => {},
-					},
-					position: {
-						x: filterData.length > 10 ? 0 : (base += 200),
-						y: filterData.length > 10 ? (base += 100) : 200,
-					},
-					parentNode: "1",
-					type: "child",
-					deletable: false,
-					branches: item["branches_url"],
-				};
-			}),
-		]);
-	}
+	// function addChilds() {
+	// 	setNodes([
+	// 		...initialNode,
+	// 		...filterData.map((item) => {
+	// 			return {
+	// 				id: item["node_id"],
+	// 				data: {
+	// 					label: item.name,
+	// 					status: item.visibility,
+	// 					background: "var(--color-node-child-bg)",
+	// 					type: "child",
+	// 					onChange: () => {},
+	// 				},
+	// 				position: {
+	// 					x: filterData.length > 10 ? 0 : (base += 200),
+	// 					y: filterData.length > 10 ? (base += 100) : 200,
+	// 				},
+	// 				parentNode: "1",
+	// 				type: "child",
+	// 				deletable: false,
+	// 				branches: item["branches_url"],
+	// 			};
+	// 		}),
+	// 	]);
+	// }
 
-	function connectChilds() {
-		setEdges([
-			...filterData.map((item) => {
-				return {
-					id: item["node_id"],
-					source: "1",
-					target: item["node_id"],
-					animated: true,
-				};
-			}),
-		]);
-	}
+	// function connectChilds() {
+	// 	setEdges([
+	// 		...filterData.map((item) => {
+	// 			return {
+	// 				id: item["node_id"],
+	// 				source: "1",
+	// 				target: item["node_id"],
+	// 				animated: true,
+	// 			};
+	// 		}),
+	// 	]);
+	// }
 
-	console.log(nodes);
+	// console.log(nodes);
 
-	useEffect(() => {
-		if (!isLoading) {
-			addChilds();
-			connectChilds();
-			return () => {};
-		}
-	}, [isLoading, filter]);
+	// useEffect(() => {
+	// 	if (!isLoading) {
+	// 		addChilds();
+	// 		connectChilds();
+	// 		return () => {};
+	// 	}
+	// }, [isLoading, filter]);
 
 	if (isLoading) return <CircularProgress />;
 
