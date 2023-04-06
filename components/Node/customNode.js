@@ -1,11 +1,14 @@
 import React, {memo, useRef, useState} from "react";
 import {Handle, Position} from "reactflow";
+import useStore from "../../store";
 import styled from "styled-components";
 import TripOriginOutlinedIcon from "@mui/icons-material/TripOriginOutlined";
 
 const Node = styled.div`
 	padding: 10px 20px;
 	border-radius: 5px;
+	min-height: 100px;
+	text-align: center;
 	min-width: 200px;
 	background: ${(props) => props.background};
 	color: black;
@@ -27,10 +30,12 @@ const Node = styled.div`
 		align-items: center;
 	}
 
-	p {
+	p,
+	input {
 		background: rgba(255, 255, 255, 0.8);
 		border-radius: 4px;
 		padding: 5px;
+		margin: 1em;
 	}
 `;
 
@@ -70,16 +75,14 @@ const CreatedNode = ({selected, data, id}) => {
 				<Handle type="target" position={Position.Top} />
 				{selected ? (
 					<input
-						onKeyUp={(event) => {
-							if (event.key === "Enter") {
-								updateNodeLabel(event?.target?.value, id);
-							}
+						value={data.label}
+						onChange={(event) => {
+							updateNodeLabel(id, event?.target?.value);
 						}}
 					/>
 				) : (
 					<p>{data.label}</p>
 				)}
-
 				<div className="icon_label">
 					<select name="typenode" id="select__type">
 						<option value="">Issue</option>

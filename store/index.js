@@ -1,6 +1,24 @@
 import {create} from "zustand";
+import nodeCreator from "../components/Canvas/hooks/nodeCreator";
+import nodeGenerator from "../components/Canvas/hooks/nodeGenerator";
 import {addEdge, addNode, applyNodeChanges, applyEdgeChanges} from "reactflow";
-import useNodeCreator from "../components/Canvas/hooks/nodeCreator";
+import {mountStoreDevtool} from "simple-zustand-devtools";
+
+const handlePostData = async (nodes) => {
+	try {
+		const response = await fetch("/api/", {
+			method: "POST",
+			body: JSON.stringify(nodes),
+			headers: {"Content-Type": "application/json"},
+		});
+		if (response.ok) {
+			const data = await response.json();
+			console.log(data);
+		}
+	} catch (error) {
+		console.log(error);
+	}
+};
 
 const initialNodes = [
 	{
@@ -21,10 +39,14 @@ const initialEdges = [];
 
 // this is our useStore hook that we can use in our components to get parts of the store and call actions
 const useStore = create((set, get) => {
-	const {onConnectStart, onConnectEnd} = useNodeCreator();
 	return {
 		nodes: initialNodes,
 		edges: initialEdges,
+		fetch: async () => {
+			const response = await fetch("/api/");
+			set({nodes: await response.json()});
+		},
+		post: () => handlePostData(get().nodes),
 		onNodesChange: (changes) => {
 			set({
 				nodes: applyNodeChanges(changes, get().nodes),
@@ -40,18 +62,21 @@ const useStore = create((set, get) => {
 				edges: addEdge(connection, get().edges),
 			});
 		},
-		onConnectStart,
-		onConnectEnd: () => {
+		onGenerateNodes: (data) => {
 			set({
-				nodes: [...get().nodes, onConnectEnd().newNode],
-				edges: [...get().edges, onConnectEnd().newEdge],
+				nodes: [...get().nodes, ...nodeGenerator(data).addChilds()],
+				edges: [...get().edges, ...nodeGenerator(data).connectChilds()],
+			});
+		},
+		onNodeCreate: (id) => {
+			set({
+				nodes: [...get().nodes, nodeCreator(id)],
 			});
 		},
 		updateNodeLabel: (nodeId, label) => {
 			set({
 				nodes: get().nodes.map((node) => {
 					if (node.id === nodeId) {
-						// it's important to create a new object here, to inform React Flow about the cahnges
 						node.data = {...node.data, label};
 					}
 
@@ -61,5 +86,7 @@ const useStore = create((set, get) => {
 		},
 	};
 });
+
+mountStoreDevtool("store1", useStore);
 
 export default useStore;

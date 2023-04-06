@@ -2,7 +2,6 @@ import Canvas from "../components/Canvas";
 import Filter from "../components/Canvas/FilterData";
 import "reactflow/dist/style.css";
 import {useState} from "react";
-import ButtonSave from "../components/Button/buttonSave";
 
 export default function Home() {
 	const [filter, setFilter] = useState("HTML");
@@ -21,7 +20,6 @@ export default function Home() {
 				third="Ruby"
 				id="filter_language"
 			/>
-			<ButtonSave />
 			<Canvas filter={filter} />
 		</main>
 	);

@@ -1,15 +1,9 @@
 import React from "react";
 
-export default function ButtonSave({setFormData}) {
-	async function handleClick(event) {
-		const formdata = new FormData(event.target);
-		const data = Object.fromEntries(formdata);
-		setFormData(data);
-	}
-
+export default function ButtonSave({sendData}) {
 	return (
 		<>
-			<button onClick={handleClick}>Save Map</button>
+			<button onClick={sendData}>Save Map</button>
 		</>
 	);
 }
