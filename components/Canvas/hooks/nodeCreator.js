@@ -5,7 +5,7 @@ export default function nodeCreator(id) {
 		data: {
 			label: `Node`,
 			background: "var(--color-node-unbound-bg)",
-			type: "Issue",
+			nodeType: "Issue",
 			status: "custom",
 		},
 		type: "unbound",

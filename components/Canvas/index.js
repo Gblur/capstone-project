@@ -7,8 +7,8 @@ import ReactFlow, {
 	useEdgesState,
 } from "reactflow";
 import {styles} from "./styles.js";
-import ButtonSave from "../Button/buttonSave";
 import useSWR from "swr";
+import useSWRMutation from "swr/mutation";
 import useStore from "../../store";
 import {shallow} from "zustand/shallow";
 import {Button, CircularProgress} from "@mui/material";
@@ -16,7 +16,6 @@ import {Modal, Box, Typography} from "@mui/material";
 import {useImmer} from "use-immer";
 import {nodeTypes} from "../../components/Node/customNode";
 import {uid} from "uid";
-import {headers} from "next.config.js";
 
 const styleModalBox = {
 	position: "absolute",
@@ -30,30 +29,35 @@ const styleModalBox = {
 	p: 4,
 };
 
-export default function Canvas() {
+export default function Canvas({id}) {
 	const selector = (state) => ({
+		map: state.map,
 		nodes: state.nodes,
 		edges: state.edges,
+		fetch: state.fetch,
 		post: state.post,
 		onNodesChange: state.onNodesChange,
 		onEdgesChange: state.onEdgesChange,
 		onConnect: state.onConnect,
 		onNodeCreate: state.onNodeCreate,
 		onGenerateNodes: state.onGenerateNodes,
+		onUpdateMap: state.onUpdateMap,
 	});
 
 	const user = process.env.REACT_APP_USERNAME || "Gblur";
 	const url = `https://api.github.com/users/${user}/repos`;
 
 	const {
+		map,
 		nodes,
 		edges,
-		post,
+		fetch,
 		onNodesChange,
 		onEdgesChange,
 		onConnect,
 		onNodeCreate,
 		onGenerateNodes,
+		onUpdateMap,
 	} = useStore(selector, shallow);
 
 	const {data, isLoading} = useSWR(url);
@@ -69,19 +73,26 @@ export default function Canvas() {
 			setbranchUrl(currentNode["branches"].replace("{/branch}", ""));
 		}
 	}
+
 	useEffect(() => {
-		if (!isLoading && nodes.length < 2) {
-			onGenerateNodes(data);
-			return () => {};
+		if (!isLoading && nodes) {
+			// onGenerateNodes(data);
+			fetch(id);
 		}
+		return () => {};
 	}, [isLoading]);
 
 	if (isLoading) return <CircularProgress />;
 
 	return (
 		<>
-			<Button onClick={() => onNodeCreate(uid())}>Create Node</Button>
-			<ButtonSave sendData={post} />
+			<Button
+				onClick={() => {
+					onNodeCreate(uid());
+				}}>
+				Create Node
+			</Button>
+			<Button onClick={() => onUpdateMap(id)}>Save Map</Button>
 			<ReactFlowProvider>
 				<ReactFlow
 					nodes={nodes}
