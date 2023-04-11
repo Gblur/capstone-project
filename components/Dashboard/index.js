@@ -1,9 +1,9 @@
-import EnhancedTable from "components/Dashboard/Table";
+import EnhancedTable from "../Dashboard/Table";
 import React from "react";
 import styled from "styled-components";
 import {Modal, Box, Typography} from "@mui/material";
 import formControlStore from "../../store/formControls";
-import ProjectForm from "components/Form";
+import ProjectForm from "../Form";
 
 const styleModalBox = {
 	position: "absolute",
