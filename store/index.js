@@ -125,6 +125,17 @@ const useStore = create((set, get) => {
 				}),
 			});
 		},
+		updateNodeType: (nodeId, type) => {
+			set({
+				nodes: get().nodes.map((node) => {
+					if (node.id === nodeId) {
+						node.data = {...node.data, nodeType: type};
+					}
+
+					return node;
+				}),
+			});
+		},
 	};
 });
 

@@ -13,13 +13,6 @@ export default function Home() {
 	return (
 		<main style={{height: `calc(100vh - 250px)`}}>
 			<h2>Mapname</h2>
-			<Filter
-				setFilterValue={handleFilter}
-				first="HTML"
-				second="JavaScript"
-				third="Ruby"
-				id="filter_language"
-			/>
 			<Canvas filter={filter} />
 		</main>
 	);

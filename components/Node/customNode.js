@@ -68,6 +68,7 @@ const ChildNode = ({selected, data}) => {
 
 const CreatedNode = ({selected, data, id}) => {
 	const updateNodeLabel = useStore((state) => state.updateNodeLabel);
+	const updateNodeType = useStore((state) => state.updateNodeType);
 
 	return (
 		<>
@@ -84,9 +85,15 @@ const CreatedNode = ({selected, data, id}) => {
 					<p>{data.label}</p>
 				)}
 				<div className="icon_label">
-					<select name="typenode" id="select__type">
-						<option value="">Issue</option>
-						<option value="">Branch</option>
+					<select
+						onChange={(event) =>
+							updateNodeType(id, event?.target?.value)
+						}
+						name="typenode"
+						value={data.nodeType}
+						id="select__type">
+						<option value="Issue">Issue</option>
+						<option value="Branch">Branch</option>
 					</select>
 				</div>
 				<Handle type="source" position={Position.Bottom} />
