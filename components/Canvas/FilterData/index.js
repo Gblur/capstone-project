@@ -1,22 +1,16 @@
-import { MenuItem, Select } from '@mui/material'
-import React from 'react'
+import {MenuItem, Select} from "@mui/material";
+import React from "react";
 
-export default function Filter({setFilterValue}) {
+export default function Filter({setFilterValue, first, second, third, id}) {
+	function handleFilter(event) {
+		setFilterValue(event.target.value);
+	}
 
-  function handleFilter(event) {
-    setFilterValue(event.target.value)
-  }
-
-  return (
-      <Select
-        id="demo-simple-select"
-        label="age"
-        defaultValue="HTML"
-        onChange={handleFilter}
-        >
-        <MenuItem value="HTML">HTML</MenuItem>
-        <MenuItem value="JavaScript">Javascript</MenuItem>
-        <MenuItem value="Ruby">Ruby</MenuItem>
-      </Select>
-  )
+	return (
+		<Select id={id} defaultValue={first} onChange={handleFilter}>
+			<MenuItem value={first}>{first}</MenuItem>
+			<MenuItem value={second}>{second}</MenuItem>
+			<MenuItem value={third}>{third}</MenuItem>
+		</Select>
+	);
 }
