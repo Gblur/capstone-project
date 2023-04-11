@@ -1,11 +1,11 @@
-import React from 'react'
-import Heading from '../Heading'
+import React from "react";
+import Header from "components/Header";
 
 export default function Layout({children}) {
-  return (
-    <>
-      <Heading>🐠 Tropical Fish Capstone Template 🐠</Heading>
-      {children}
-    </>      
-  )
+	return (
+		<>
+			<Header />
+			{children}
+		</>
+	);
 }
