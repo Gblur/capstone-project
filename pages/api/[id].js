@@ -11,6 +11,13 @@ export default async function handler(req, res) {
 		case "GET":
 			const MapById = await Map.findById(id);
 			return res.status(200).json(MapById);
+		case "POST":
+			try {
+				await new Map(data).save();
+				return res.status(200).json({status: "new Map created"});
+			} catch (error) {
+				return res.status(400).json({error: error.message});
+			}
 		case "PUT":
 			const updatedMaps = await Map.findByIdAndUpdate(id, {$set: data});
 			return res.status(200).json(updatedMaps);

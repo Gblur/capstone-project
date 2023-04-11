@@ -3,22 +3,22 @@ import nodeCreator from "../components/Canvas/hooks/nodeCreator";
 import nodeGenerator from "../components/Canvas/hooks/nodeGenerator";
 import {addEdge, addNode, applyNodeChanges, applyEdgeChanges} from "reactflow";
 import {mountStoreDevtool} from "simple-zustand-devtools";
+import {uid} from "uid";
 
-// const fetchDataById = ;
 // invoke this function on Map Dashboard
-// const handlePostData = async (map) => {
-// 	const response = await fetch("/api", {
-// 		method: "POST",
-// 		body: JSON.stringify(map),
-// 		headers: {"Content-Type": "application/json"},
-// 	});
-// 	if (response.ok) {
-// 		await response.json();
-// 	}
-// };
+const handlePostData = async (map) => {
+	const response = await fetch(`/api`, {
+		method: "POST",
+		body: JSON.stringify(map),
+		headers: {"Content-Type": "application/json"},
+	});
+	if (response.ok) {
+		await response.json();
+	}
+};
 
 const handleUpdateData = async (node, id) => {
-	const response = await fetch(`/api/${id}`, {
+	const response = await fetch(`/api`, {
 		method: "PUT",
 		body: JSON.stringify(node),
 		headers: {"Content-Type": "application/json"},
@@ -46,7 +46,7 @@ const initialNodes = [
 const initialEdges = [];
 
 const initialMap = {
-	name: "",
+	name: "Test",
 	team: "",
 	mapType: "",
 	map: {
@@ -62,9 +62,16 @@ const useStore = create((set, get) => {
 		nodes: initialNodes,
 		edges: initialEdges,
 		fetch: async (id) => {
-			const response = await fetch(`/api/${id}`);
-			const data = await response.json();
-			set({nodes: data.map.nodes, edges: data.map.edges});
+			const response = await fetch(`/api/`);
+			if (response.ok) {
+				const data = await response.json();
+				if (data) {
+					set({nodes: data.map.nodes, edges: data.map.edges});
+				}
+			}
+		},
+		createProject: () => {
+			handlePostData(initialMap);
 		},
 		onNodesChange: (changes) => {
 			set({
@@ -93,14 +100,14 @@ const useStore = create((set, get) => {
 			});
 		},
 		onUpdateMap: async (id) => {
-			const nodesCreated = get().nodes.filter((node) => {
-				return node.parentNode !== "1" && node.id !== "1";
-			});
+			// const nodesCreated = get().nodes.filter((node) => {
+			// 	return node.parentNode !== "1" && node.id !== "1";
+			// });
 			handleUpdateData(
 				{
 					...get().map,
 					map: {
-						nodes: nodesCreated,
+						nodes: get().nodes,
 						edges: get().edges,
 					},
 				},

@@ -5,7 +5,7 @@ import Filter from "../../components/Canvas/FilterData";
 
 export default function MapDetailsPage() {
 	const [filter, setFilter] = useState("HTML");
-	const id = "64344942474bdd70be2756cc";
+	const id = "643481384175dca624263b4a";
 
 	function handleFilter(filter) {
 		setFilter(filter);

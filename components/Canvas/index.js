@@ -8,7 +8,6 @@ import ReactFlow, {
 } from "reactflow";
 import {styles} from "./styles.js";
 import useSWR from "swr";
-import useSWRMutation from "swr/mutation";
 import useStore from "../../store";
 import {shallow} from "zustand/shallow";
 import {Button, CircularProgress} from "@mui/material";
@@ -16,6 +15,7 @@ import {Modal, Box, Typography} from "@mui/material";
 import {useImmer} from "use-immer";
 import {nodeTypes} from "../../components/Node/customNode";
 import {uid} from "uid";
+import useLocalStorageState from "use-local-storage-state";
 
 const styleModalBox = {
 	position: "absolute",
@@ -42,6 +42,7 @@ export default function Canvas({id}) {
 		onNodeCreate: state.onNodeCreate,
 		onGenerateNodes: state.onGenerateNodes,
 		onUpdateMap: state.onUpdateMap,
+		createProject: state.createProject,
 	});
 
 	const user = process.env.REACT_APP_USERNAME || "Gblur";
@@ -51,6 +52,7 @@ export default function Canvas({id}) {
 		map,
 		nodes,
 		edges,
+		createProject,
 		fetch,
 		onNodesChange,
 		onEdgesChange,
@@ -62,6 +64,10 @@ export default function Canvas({id}) {
 
 	const {data, isLoading} = useSWR(url);
 	const [open, setOpen] = useState(false);
+	const [projectCreated, setProjectCreated] = useLocalStorageState(
+		"actionguards",
+		{defaultValue: false}
+	);
 	const [branchUrl, setbranchUrl] = useImmer("");
 	const branchData = useSWR(branchUrl);
 
@@ -76,8 +82,8 @@ export default function Canvas({id}) {
 
 	useEffect(() => {
 		if (!isLoading && nodes) {
-			// onGenerateNodes(data);
-			fetch(id);
+			onGenerateNodes(data);
+			fetch();
 		}
 		return () => {};
 	}, [isLoading]);
@@ -87,12 +93,20 @@ export default function Canvas({id}) {
 	return (
 		<>
 			<Button
+				disabled={projectCreated}
+				onClick={() => {
+					createProject();
+					setProjectCreated(true);
+				}}>
+				Create Project
+			</Button>
+			<Button
 				onClick={() => {
 					onNodeCreate(uid());
 				}}>
 				Create Node
 			</Button>
-			<Button onClick={() => onUpdateMap(id)}>Save Map</Button>
+			<Button onClick={() => onUpdateMap()}>Save Map</Button>
 			<ReactFlowProvider>
 				<ReactFlow
 					nodes={nodes}
