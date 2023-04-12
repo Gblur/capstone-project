@@ -10,7 +10,7 @@ import {styles} from "./styles.js";
 import useSWR from "swr";
 import useStore from "../../store";
 import {shallow} from "zustand/shallow";
-import {Button, CircularProgress} from "@mui/material";
+import {Button} from "@mui/material";
 import {Modal, Box, Typography} from "@mui/material";
 import {useImmer} from "use-immer";
 import {nodeTypes} from "../../components/Node/customNode";
@@ -81,14 +81,9 @@ export default function Canvas({id}) {
 	}
 
 	useEffect(() => {
-		if (!isLoading && nodes) {
-			onGenerateNodes(data);
-			fetch();
-		}
-		return () => {};
-	}, [isLoading]);
-
-	if (isLoading) return <CircularProgress />;
+		// onGenerateNodes(data);
+		fetch(id);
+	}, [id]);
 
 	return (
 		<>
@@ -106,7 +101,7 @@ export default function Canvas({id}) {
 				}}>
 				Create Node
 			</Button>
-			<Button onClick={() => onUpdateMap()}>Save Map</Button>
+			<Button onClick={() => onUpdateMap(id)}>Save Map</Button>
 			<ReactFlowProvider>
 				<ReactFlow
 					nodes={nodes}

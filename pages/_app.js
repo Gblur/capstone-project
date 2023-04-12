@@ -13,8 +13,7 @@ export default function App({Component, pageProps}) {
 			</Head>
 			<SWRConfig
 				value={{
-					fetcher: (resource, init) =>
-						fetch(resource, init).then((res) => res.json()),
+					fetcher: (args) => fetch(args).then((res) => res.json()),
 				}}>
 				<Layout>
 					<Component {...pageProps} />

@@ -12,7 +12,6 @@ export default createGlobalStyle`
     --color-node-icon-pending: #ffef61;
     --color-node-icon-danger: #ff3838;
     --color-dashboard-border: #000;
-    --color-dashboard-border: #000;
 
 
   }

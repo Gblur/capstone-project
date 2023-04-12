@@ -4,6 +4,7 @@ import {Button} from "@mui/material";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import styled from "styled-components";
 import formControlStore from "../../store/formControls";
+import {useRouter} from "next/router";
 
 const Heading = styled.header`
 	text-align: center;
@@ -17,12 +18,17 @@ const HeaderContainer = styled.nav`
 `;
 
 export default function Header() {
+	const router = useRouter();
+
 	const openModal = formControlStore((state) => state.openModal);
 
 	return (
 		<Heading>
 			<HeaderContainer>
-				<Button variant="contained" sx={{fontSize: 16}}>
+				<Button
+					onClick={() => router.push("/maps")}
+					variant="contained"
+					sx={{fontSize: 16}}>
 					<span>Home</span>
 					<Home sx={{fontSize: 20}} />
 				</Button>

@@ -3,22 +3,9 @@ import nodeCreator from "../components/Canvas/hooks/nodeCreator";
 import nodeGenerator from "../components/Canvas/hooks/nodeGenerator";
 import {addEdge, addNode, applyNodeChanges, applyEdgeChanges} from "reactflow";
 import {mountStoreDevtool} from "simple-zustand-devtools";
-import {uid} from "uid";
-
-// invoke this function on Map Dashboard
-const handlePostData = async (map) => {
-	const response = await fetch(`/api`, {
-		method: "POST",
-		body: JSON.stringify(map),
-		headers: {"Content-Type": "application/json"},
-	});
-	if (response.ok) {
-		await response.json();
-	}
-};
 
 const handleUpdateData = async (node, id) => {
-	const response = await fetch(`/api`, {
+	const response = await fetch(`/api/${id}`, {
 		method: "PUT",
 		body: JSON.stringify(node),
 		headers: {"Content-Type": "application/json"},
@@ -62,16 +49,18 @@ const useStore = create((set, get) => {
 		nodes: initialNodes,
 		edges: initialEdges,
 		fetch: async (id) => {
-			const response = await fetch(`/api/`);
-			if (response.ok) {
-				const data = await response.json();
-				if (data) {
-					set({nodes: data.map.nodes, edges: data.map.edges});
+			if (id) {
+				const response = await fetch(`/api/${id}`);
+				if (response.ok) {
+					const data = await response.json();
+					if (data) {
+						set({nodes: data.map.nodes, edges: data.map.edges});
+					}
 				}
 			}
 		},
-		createProject: () => {
-			handlePostData(initialMap);
+		onPost: (map) => {
+			set({map: map});
 		},
 		onNodesChange: (changes) => {
 			set({
@@ -100,9 +89,6 @@ const useStore = create((set, get) => {
 			});
 		},
 		onUpdateMap: async (id) => {
-			// const nodesCreated = get().nodes.filter((node) => {
-			// 	return node.parentNode !== "1" && node.id !== "1";
-			// });
 			handleUpdateData(
 				{
 					...get().map,

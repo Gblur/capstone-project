@@ -36,7 +36,7 @@ const InformationContainer = styled.section`
 	flex-direction: column;
 `;
 
-const MapPreview = styled.section`
+const MapPreview = styled.div`
 	display: block;
 	height: 50%;
 	border: 2px solid var(--color-dashboard-border);
@@ -61,7 +61,6 @@ export default function Dashboard() {
 			<DashboardContainer>
 				<ProjectList>
 					<h2>Project list</h2>
-					<input type="text" />
 				</ProjectList>
 				<InformationContainer>
 					<MapPreview />

@@ -3,9 +3,10 @@ import mongoose from "mongoose";
 const {Schema} = mongoose;
 
 const MapSchema = new Schema({
-	id: mongoose.ObjectId,
 	name: String,
 	team: String,
+	template: String,
+	description: String,
 	mapType: String,
 	map: {
 		nodes: [
@@ -18,7 +19,6 @@ const MapSchema = new Schema({
 				},
 				id: {
 					type: String,
-					unique: true,
 				},
 				type: {
 					type: String,
@@ -34,7 +34,6 @@ const MapSchema = new Schema({
 			{
 				id: {
 					type: String,
-					unique: true,
 				},
 				target: String,
 				source: String,
