@@ -1,9 +1,13 @@
 import EnhancedTable from "../Dashboard/Table";
-import React from "react";
+import React, {useEffect} from "react";
 import styled from "styled-components";
-import {Modal, Box, Typography} from "@mui/material";
+import {Modal, Box, Typography, CircularProgress, Button} from "@mui/material";
 import formControlStore from "../../store/formControls";
 import ProjectForm from "../Form";
+import mapStore from "../../store";
+import {shallow} from "zustand/shallow";
+import useSWR from "swr";
+import {useRouter} from "next/router";
 
 const styleModalBox = {
 	position: "absolute",
@@ -55,12 +59,34 @@ const MapPreview = styled.div`
 export default function Dashboard() {
 	const modal = formControlStore((state) => state.modal);
 	const onClose = formControlStore((state) => state.closeModal);
+	const {data, isLoading} = useSWR("/api/");
+	const router = useRouter();
+
+	function onRouteChange(id) {
+		router.push(`maps/${id}`);
+	}
+
+	if (isLoading) return <CircularProgress />;
 
 	return (
 		<>
 			<DashboardContainer>
 				<ProjectList>
 					<h2>Project list</h2>
+					<ul>
+						{data.length &&
+							data.map(({_id, name}) => {
+								return (
+									<li key={_id}>
+										<Button
+											type="button"
+											onClick={() => onRouteChange(_id)}>
+											{name}
+										</Button>
+									</li>
+								);
+							})}
+					</ul>
 				</ProjectList>
 				<InformationContainer>
 					<MapPreview />

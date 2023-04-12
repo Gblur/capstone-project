@@ -3,6 +3,7 @@ import React from "react";
 import styled from "styled-components";
 import {useRouter} from "next/router";
 import useStore from "../../store";
+import {uid} from "uid";
 
 const Form = styled.form`
 	display: block;
@@ -25,6 +26,20 @@ const Form = styled.form`
 	}
 `;
 
+const initialNodes = [
+	{
+		id: uid(),
+		type: "parent",
+		data: {
+			label: "Root",
+			background: "var(--color-node-parent-bg)",
+			type: "root",
+			status: "unknown",
+		},
+		position: {x: 250, y: 25},
+	},
+];
+
 export default function ProjectForm() {
 	const router = useRouter();
 	const onPost = useStore((state) => state.onPost);
@@ -35,12 +50,15 @@ export default function ProjectForm() {
 		const data = Object.fromEntries(form);
 		const response = await fetch(`/api`, {
 			method: "POST",
-			body: JSON.stringify(data),
+			body: JSON.stringify({
+				...data,
+				nodes: initialNodes,
+				edges: [{id: uid()}],
+			}),
 			headers: {"Content-Type": "application/json"},
 		});
 		if (response.ok) {
 			const {_id} = await response.json();
-			onPost(data);
 			router.push(`/maps/${_id}`);
 		}
 	};
@@ -54,13 +72,13 @@ export default function ProjectForm() {
 					<input id="nameProject" name="name" type="text" required />
 					<label htmlFor="teamProject">Team</label>
 					<select name="type" id="teamProject" defaultValue="">
-						<option value="">DevOps</option>
-						<option value="">Frontend</option>
+						<option value="Devops">DevOps</option>
+						<option value="Frontend">Frontend</option>
 					</select>
 					<label htmlFor="typeProject">Type</label>
 					<select name="type" id="typeProject" defaultValue="">
-						<option value="">Repos</option>
-						<option value="">None</option>
+						<option value="Repos">Repos</option>
+						<option value="None">None</option>
 					</select>
 					<label htmlFor="descriptionProject">Description</label>
 					<textarea

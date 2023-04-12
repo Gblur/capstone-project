@@ -30,37 +30,24 @@ const initialNodes = [
 		deletable: false,
 	},
 ];
-const initialEdges = [];
-
-const initialMap = {
-	name: "Test",
-	team: "",
-	mapType: "",
-	map: {
-		nodes: initialNodes,
-		edges: initialEdges,
-	},
-};
 
 // this is our useStore hook that we can use in our components to get parts of the store and call actions
 const useStore = create((set, get) => {
 	return {
-		map: initialMap,
-		nodes: initialNodes,
-		edges: initialEdges,
+		map: {},
+		nodes: [],
+		edges: [],
 		fetch: async (id) => {
 			if (id) {
 				const response = await fetch(`/api/${id}`);
 				if (response.ok) {
 					const data = await response.json();
 					if (data) {
-						set({nodes: data.map.nodes, edges: data.map.edges});
+						set({nodes: data.nodes, edges: data.edges});
+						set({map: data});
 					}
 				}
 			}
-		},
-		onPost: (map) => {
-			set({map: map});
 		},
 		onNodesChange: (changes) => {
 			set({
@@ -77,10 +64,16 @@ const useStore = create((set, get) => {
 				edges: addEdge(connection, get().edges),
 			});
 		},
-		onGenerateNodes: (data) => {
+		onGenerateNodes: (data, parentID) => {
 			set({
-				nodes: [...get().nodes, ...nodeGenerator(data).addChilds()],
-				edges: [...get().edges, ...nodeGenerator(data).connectChilds()],
+				nodes: [
+					...get().nodes,
+					...nodeGenerator(data).addChilds(parentID),
+				],
+				edges: [
+					...get().edges,
+					...nodeGenerator(data).connectChilds(parentID),
+				],
 			});
 		},
 		onNodeCreate: (id) => {
@@ -92,10 +85,8 @@ const useStore = create((set, get) => {
 			handleUpdateData(
 				{
 					...get().map,
-					map: {
-						nodes: get().nodes,
-						edges: get().edges,
-					},
+					nodes: get().nodes,
+					edges: get().edges,
 				},
 				id
 			);

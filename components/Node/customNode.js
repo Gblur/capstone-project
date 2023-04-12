@@ -50,7 +50,7 @@ const MainNode = ({selected, data}) => {
 	);
 };
 
-const ChildNode = ({selected, data}) => {
+const ChildNode = ({selected, data, nodeType}) => {
 	return (
 		<>
 			<Node background={data.background} selected={selected}>

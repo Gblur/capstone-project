@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import {uid} from "uid";
 
 const {Schema} = mongoose;
 
@@ -8,38 +9,38 @@ const MapSchema = new Schema({
 	template: String,
 	description: String,
 	mapType: String,
-	map: {
-		nodes: [
-			{
-				data: {
-					label: String,
-					background: String,
-					nodeType: String,
-					status: String,
-				},
-				id: {
-					type: String,
-				},
-				type: {
-					type: String,
-				},
-				parent: String,
-				position: {
-					x: Number,
-					y: Number,
-				},
+	nodes: [
+		{
+			data: {
+				label: String,
+				background: String,
+				nodeType: String,
+				status: String,
 			},
-		],
-		edges: [
-			{
-				id: {
-					type: String,
-				},
-				target: String,
-				source: String,
+			id: {
+				type: String,
 			},
-		],
-	},
+			type: {
+				type: String,
+			},
+			parent: {
+				type: String,
+			},
+			position: {
+				x: Number,
+				y: Number,
+			},
+		},
+	],
+	edges: [
+		{
+			id: {
+				type: String,
+			},
+			target: String,
+			source: String,
+		},
+	],
 });
 
 const Map = mongoose.models.Map || mongoose.model("Map", MapSchema);

@@ -29,9 +29,8 @@ const styleModalBox = {
 	p: 4,
 };
 
-export default function Canvas({id}) {
+export default function Canvas({id, map}) {
 	const selector = (state) => ({
-		map: state.map,
 		nodes: state.nodes,
 		edges: state.edges,
 		fetch: state.fetch,
@@ -42,17 +41,14 @@ export default function Canvas({id}) {
 		onNodeCreate: state.onNodeCreate,
 		onGenerateNodes: state.onGenerateNodes,
 		onUpdateMap: state.onUpdateMap,
-		createProject: state.createProject,
 	});
 
 	const user = process.env.REACT_APP_USERNAME || "Gblur";
 	const url = `https://api.github.com/users/${user}/repos`;
 
 	const {
-		map,
 		nodes,
 		edges,
-		createProject,
 		fetch,
 		onNodesChange,
 		onEdgesChange,
@@ -64,10 +60,7 @@ export default function Canvas({id}) {
 
 	const {data, isLoading} = useSWR(url);
 	const [open, setOpen] = useState(false);
-	const [projectCreated, setProjectCreated] = useLocalStorageState(
-		"actionguards",
-		{defaultValue: false}
-	);
+
 	const [branchUrl, setbranchUrl] = useImmer("");
 	const branchData = useSWR(branchUrl);
 
@@ -81,20 +74,14 @@ export default function Canvas({id}) {
 	}
 
 	useEffect(() => {
-		// onGenerateNodes(data);
-		fetch(id);
-	}, [id]);
+		if (!isLoading && map) {
+			fetch(id);
+			// onGenerateNodes(data, map.nodes[0].id);
+		}
+	}, [isLoading, fetch]);
 
 	return (
 		<>
-			<Button
-				disabled={projectCreated}
-				onClick={() => {
-					createProject();
-					setProjectCreated(true);
-				}}>
-				Create Project
-			</Button>
 			<Button
 				onClick={() => {
 					onNodeCreate(uid());

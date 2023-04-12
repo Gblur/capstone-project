@@ -11,10 +11,7 @@ export default async function handler(req, res) {
 			return res.status(200).json(MapById);
 		case "POST":
 			try {
-				const newProject = await Map.create({
-					...data,
-					map: {nodes: [], edges: []},
-				});
+				const newProject = await Map.create(data);
 				await newProject.save();
 				return res
 					.status(200)
