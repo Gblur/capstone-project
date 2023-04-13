@@ -17,11 +17,10 @@ export default function MapDetailsPage() {
 
 	if (!router.isReady) return <CircularProgress />;
 
-	console.log(map.name);
-
 	return (
 		<main style={{height: `calc(100vh - 250px)`}}>
 			<h2>{map.name}</h2>
+			<p>{map.description}</p>
 			<Canvas map={map} id={id} filter={filter} />
 		</main>
 	);

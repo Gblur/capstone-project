@@ -42,7 +42,6 @@ const initialNodes = [
 
 export default function ProjectForm() {
 	const router = useRouter();
-	const onPost = useStore((state) => state.onPost);
 
 	const onSubmitForm = async (event) => {
 		event.preventDefault();

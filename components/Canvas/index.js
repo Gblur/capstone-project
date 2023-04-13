@@ -1,11 +1,5 @@
-import React, {useState, useEffect, useCallback, useRef} from "react";
-import ReactFlow, {
-	Background,
-	Controls,
-	ReactFlowProvider,
-	useNodesState,
-	useEdgesState,
-} from "reactflow";
+import React, {useEffect} from "react";
+import ReactFlow, {Background, Controls, ReactFlowProvider} from "reactflow";
 import {styles} from "./styles.js";
 import useSWR from "swr";
 import useStore from "../../store";
@@ -15,7 +9,6 @@ import {Modal, Box, Typography} from "@mui/material";
 import {useImmer} from "use-immer";
 import {nodeTypes} from "../../components/Node/customNode";
 import {uid} from "uid";
-import useLocalStorageState from "use-local-storage-state";
 
 const styleModalBox = {
 	position: "absolute",
@@ -59,8 +52,6 @@ export default function Canvas({id, map}) {
 	} = useStore(selector, shallow);
 
 	const {data, isLoading} = useSWR(url);
-	const [open, setOpen] = useState(false);
-
 	const [branchUrl, setbranchUrl] = useImmer("");
 	const branchData = useSWR(branchUrl);
 
