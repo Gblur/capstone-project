@@ -14,7 +14,6 @@ export default async function handler(req, res) {
 		case "PUT":
 			const updatedMaps = await Map.findByIdAndUpdate(id, {$set: data});
 			return res.status(200).json(updatedMaps);
-
 		default:
 			return res.status(301).json({message: "Method not allowed"});
 	}

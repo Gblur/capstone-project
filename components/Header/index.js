@@ -21,12 +21,16 @@ export default function Header() {
 	const router = useRouter();
 
 	const openModal = formControlStore((state) => state.openModal);
+	const closeModal = formControlStore((state) => state.closeModal);
 
 	return (
 		<Heading>
 			<HeaderContainer>
 				<Button
-					onClick={() => router.push("/maps")}
+					onClick={() => {
+						router.push("/maps");
+						closeModal();
+					}}
 					variant="contained"
 					sx={{fontSize: 16}}>
 					<span>Home</span>

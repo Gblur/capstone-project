@@ -69,7 +69,7 @@ export default function Canvas({id, map}) {
 			fetch(id);
 			// onGenerateNodes(data, map.nodes[0].id);
 		}
-	}, [isLoading, fetch]);
+	}, [isLoading, fetch, id]);
 
 	return (
 		<>
