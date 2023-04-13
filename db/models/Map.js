@@ -4,11 +4,10 @@ import {uid} from "uid";
 const {Schema} = mongoose;
 
 const MapSchema = new Schema({
-	name: String,
+	name: {type: String, required: true},
 	team: String,
-	template: String,
+	mapType: {type: String, required: true},
 	description: String,
-	mapType: String,
 	nodes: [
 		{
 			data: {

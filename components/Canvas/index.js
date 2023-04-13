@@ -95,7 +95,7 @@ export default function Canvas({id, map}) {
 				</ReactFlow>
 			</ReactFlowProvider>
 			<Modal
-				open={open}
+				open={false}
 				onClose={handleNodeClick}
 				aria-labelledby="modal-modal-title"
 				aria-describedby="modal-modal-description">

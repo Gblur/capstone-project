@@ -70,12 +70,16 @@ export default function ProjectForm() {
 					<label htmlFor="nameProject">Name</label>
 					<input id="nameProject" name="name" type="text" required />
 					<label htmlFor="teamProject">Team</label>
-					<select name="type" id="teamProject" defaultValue="">
-						<option value="Devops">DevOps</option>
+					<select
+						name="team"
+						id="teamProject"
+						defaultValue=""
+						required>
+						<option value="DevOps">DevOps</option>
 						<option value="Frontend">Frontend</option>
 					</select>
 					<label htmlFor="typeProject">Type</label>
-					<select name="type" id="typeProject" defaultValue="">
+					<select name="mapType" id="typeProject" defaultValue="">
 						<option value="Repos">Repos</option>
 						<option value="None">None</option>
 					</select>
