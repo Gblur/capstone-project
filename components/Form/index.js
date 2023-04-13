@@ -60,7 +60,6 @@ export default function ProjectForm() {
 				const {_id} = await response.json();
 				router.push(`/maps/${_id}`);
 			}
-			router.push(`/maps/${_id}`);
 		} catch (error) {
 			console.error(error);
 		}

@@ -65,10 +65,11 @@ export default function Canvas({id, map}) {
 	}
 
 	useEffect(() => {
-		if (!isLoading) {
+		if (id) {
 			fetch(id);
 		}
-	}, [isLoading]);
+		return () => {};
+	}, [id]);
 
 	return (
 		<>

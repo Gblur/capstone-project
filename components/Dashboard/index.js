@@ -64,8 +64,8 @@ export default function Dashboard() {
 		router.push(`maps/${id}`);
 	}
 
-	if (isLoading) return <CircularProgress />;
 	if (error) return <h1>Error fetching data</h1>;
+	if (isLoading) return <CircularProgress />;
 
 	return (
 		<>
