@@ -4,8 +4,6 @@ import styled from "styled-components";
 import {Modal, Box, Typography, CircularProgress, Button} from "@mui/material";
 import formControlStore from "../../store/formControls";
 import ProjectForm from "../Form";
-import mapStore from "../../store";
-import {shallow} from "zustand/shallow";
 import useSWR from "swr";
 import {useRouter} from "next/router";
 
@@ -74,7 +72,7 @@ export default function Dashboard() {
 				<ProjectList>
 					<h2>Project list</h2>
 					<ul>
-						{data.length ? (
+						{data || data.length ? (
 							data.map(({_id, name}) => {
 								return (
 									<li key={_id}>

@@ -7,8 +7,8 @@ export default async function handler(req, res) {
 	const data = req.body;
 	switch (req.method) {
 		case "GET":
-			const MapById = await Map.find();
-			return res.status(200).json(MapById);
+			const map = await Map.find();
+			return res.status(200).json(map);
 		case "POST":
 			try {
 				const newProject = await Map.create(data);
