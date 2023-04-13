@@ -48,18 +48,7 @@ const useStore = create((set, get) => {
 				edges: addEdge(connection, get().edges),
 			});
 		},
-		// onGenerateNodes: (data, parentID) => {
-		// 	set({
-		// 		nodes: [
-		// 			...get().nodes,
-		// 			...nodeGenerator(data).addChilds(parentID),
-		// 		],
-		// 		edges: [
-		// 			...get().edges,
-		// 			...nodeGenerator(data).connectChilds(parentID),
-		// 		],
-		// 	});
-		// },
+
 		onNodeCreate: (id) => {
 			set({
 				nodes: [...get().nodes, nodeCreator(id)],
@@ -101,5 +90,17 @@ const useStore = create((set, get) => {
 });
 
 mountStoreDevtool("store1", useStore);
+// onGenerateNodes: (data, parentID) => {
+// 	set({
+// 		nodes: [
+// 			...get().nodes,
+// 			...nodeGenerator(data).addChilds(parentID),
+// 		],
+// 		edges: [
+// 			...get().edges,
+// 			...nodeGenerator(data).connectChilds(parentID),
+// 		],
+// 	});
+// },
 
 export default useStore;

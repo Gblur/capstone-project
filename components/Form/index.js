@@ -2,7 +2,6 @@ import {Button} from "@mui/material";
 import React from "react";
 import styled from "styled-components";
 import {useRouter} from "next/router";
-import useStore from "../../store";
 import {uid} from "uid";
 
 const Form = styled.form`
@@ -26,39 +25,44 @@ const Form = styled.form`
 	}
 `;
 
-const initialNodes = [
-	{
-		id: "1",
-		type: "parent",
-		data: {
-			label: "Root",
-			background: "var(--color-node-parent-bg)",
-			type: "root",
-			status: "unknown",
-		},
-		position: {x: 250, y: 25},
-	},
-];
-
 export default function ProjectForm() {
+	const initialNodes = [
+		{
+			id: uid(),
+			type: "parent",
+			data: {
+				label: "Root",
+				background: "var(--color-node-parent-bg)",
+				type: "root",
+				status: "unknown",
+			},
+			position: {x: 250, y: 25},
+		},
+	];
 	const router = useRouter();
 
 	const onSubmitForm = async (event) => {
 		event.preventDefault();
 		const form = new FormData(event.target);
 		const data = Object.fromEntries(form);
-		const response = await fetch(`/api`, {
-			method: "POST",
-			body: JSON.stringify({
-				...data,
-				nodes: JSON.stringify(initialNodes),
-				edges: JSON.stringify([{id: uid()}]),
-			}),
-			headers: {"Content-Type": "application/json"},
-		});
-		if (response.ok) {
-			const {_id} = await response.json();
+		const newObject = {
+			...data,
+			nodes: JSON.stringify(initialNodes),
+			edges: JSON.stringify([{id: uid()}]),
+		};
+		try {
+			const response = await fetch(`/api/`, {
+				method: "POST",
+				body: JSON.stringify(newObject),
+				headers: {"Content-Type": "application/json"},
+			});
+			if (response.ok) {
+				const {_id} = await response.json();
+				router.push(`/maps/${_id}`);
+			}
 			router.push(`/maps/${_id}`);
+		} catch (error) {
+			console.error(error);
 		}
 	};
 

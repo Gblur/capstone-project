@@ -66,7 +66,6 @@ export default function Dashboard() {
 
 	if (isLoading) return <CircularProgress />;
 	if (error) return <h1>Error fetching data</h1>;
-	if (!data) return <li>No Entries</li>;
 
 	return (
 		<>
