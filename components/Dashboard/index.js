@@ -74,7 +74,7 @@ export default function Dashboard() {
 				<ProjectList>
 					<h2>Project list</h2>
 					<ul>
-						{data ? (
+						{data.length ? (
 							data.map(({_id, name}) => {
 								return (
 									<li key={_id}>
