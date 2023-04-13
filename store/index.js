@@ -25,10 +25,11 @@ const useStore = create((set, get) => {
 				const response = await fetch(`/api/${id}`);
 				if (response.ok) {
 					const data = await response.json();
-					if (data) {
-						set({nodes: data.nodes, edges: data.edges});
-						set({map: data});
-					}
+					set({
+						nodes: JSON.parse(data.nodes),
+						edges: JSON.parse(data.edges),
+					});
+					set({map: data});
 				}
 			}
 		},
@@ -47,18 +48,18 @@ const useStore = create((set, get) => {
 				edges: addEdge(connection, get().edges),
 			});
 		},
-		onGenerateNodes: (data, parentID) => {
-			set({
-				nodes: [
-					...get().nodes,
-					...nodeGenerator(data).addChilds(parentID),
-				],
-				edges: [
-					...get().edges,
-					...nodeGenerator(data).connectChilds(parentID),
-				],
-			});
-		},
+		// onGenerateNodes: (data, parentID) => {
+		// 	set({
+		// 		nodes: [
+		// 			...get().nodes,
+		// 			...nodeGenerator(data).addChilds(parentID),
+		// 		],
+		// 		edges: [
+		// 			...get().edges,
+		// 			...nodeGenerator(data).connectChilds(parentID),
+		// 		],
+		// 	});
+		// },
 		onNodeCreate: (id) => {
 			set({
 				nodes: [...get().nodes, nodeCreator(id)],
@@ -68,8 +69,8 @@ const useStore = create((set, get) => {
 			handleUpdateData(
 				{
 					...get().map,
-					nodes: get().nodes,
-					edges: get().edges,
+					nodes: JSON.stringify(get().nodes),
+					edges: JSON.stringify(get().edges),
 				},
 				id
 			);

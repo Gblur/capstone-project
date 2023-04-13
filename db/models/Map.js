@@ -8,38 +8,8 @@ const MapSchema = new Schema({
 	team: String,
 	mapType: {type: String, required: true},
 	description: String,
-	nodes: [
-		{
-			data: {
-				label: String,
-				background: String,
-				nodeType: String,
-				status: String,
-			},
-			id: {
-				type: String,
-			},
-			type: {
-				type: String,
-			},
-			parent: {
-				type: String,
-			},
-			position: {
-				x: Number,
-				y: Number,
-			},
-		},
-	],
-	edges: [
-		{
-			id: {
-				type: String,
-			},
-			target: String,
-			source: String,
-		},
-	],
+	nodes: String,
+	edges: String,
 });
 
 const Map = mongoose.models.Map || mongoose.model("Map", MapSchema);

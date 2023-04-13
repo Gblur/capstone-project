@@ -65,11 +65,11 @@ export default function Canvas({id, map}) {
 	}
 
 	useEffect(() => {
-		if (!isLoading && map) {
+		if (!isLoading) {
 			fetch(id);
 			// onGenerateNodes(data, map.nodes[0].id);
 		}
-	}, [isLoading, fetch, id]);
+	}, [isLoading]);
 
 	return (
 		<>

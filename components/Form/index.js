@@ -28,7 +28,7 @@ const Form = styled.form`
 
 const initialNodes = [
 	{
-		id: uid(),
+		id: "1",
 		type: "parent",
 		data: {
 			label: "Root",
@@ -51,8 +51,8 @@ export default function ProjectForm() {
 			method: "POST",
 			body: JSON.stringify({
 				...data,
-				nodes: initialNodes,
-				edges: [{id: uid()}],
+				nodes: JSON.stringify(initialNodes),
+				edges: JSON.stringify([{id: uid()}]),
 			}),
 			headers: {"Content-Type": "application/json"},
 		});

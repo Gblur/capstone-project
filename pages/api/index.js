@@ -11,7 +11,7 @@ export default async function handler(req, res) {
 			return res.status(200).json(map);
 		case "POST":
 			try {
-				const newProject = await Map.create(data);
+				const newProject = await new Map(data);
 				await newProject.save();
 				return res
 					.status(200)
