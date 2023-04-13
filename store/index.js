@@ -5,7 +5,7 @@ import {addEdge, addNode, applyNodeChanges, applyEdgeChanges} from "reactflow";
 import {mountStoreDevtool} from "simple-zustand-devtools";
 
 const handleUpdateData = async (node, id) => {
-	const response = await fetch(`/api/${id}`, {
+	const response = await fetch(`/api/maps/${id}`, {
 		method: "PUT",
 		body: JSON.stringify(node),
 		headers: {"Content-Type": "application/json"},
@@ -22,7 +22,7 @@ const useStore = create((set, get) => {
 		edges: [],
 		fetch: async (id) => {
 			if (id) {
-				const response = await fetch(`/api/${id}`);
+				const response = await fetch(`/api/maps/${id}`);
 				if (response.ok) {
 					const data = await response.json();
 					set({
@@ -89,7 +89,6 @@ const useStore = create((set, get) => {
 	};
 });
 
-mountStoreDevtool("store1", useStore);
 // onGenerateNodes: (data, parentID) => {
 // 	set({
 // 		nodes: [
@@ -102,5 +101,7 @@ mountStoreDevtool("store1", useStore);
 // 		],
 // 	});
 // },
+
+// mountStoreDevtool("store1", useStore);
 
 export default useStore;

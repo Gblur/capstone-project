@@ -1,13 +1,13 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import Map from "../../db/models/Map";
-import dbConnect from "../../db/connect.js";
+import Map from "../../../db/models/Map";
+import dbConnect from "../../../db/connect.js";
 
 export default async function handler(req, res) {
 	await dbConnect();
 	const data = req.body;
 	switch (req.method) {
 		case "GET":
-			const map = await Map.find();
+			const map = await Map.find({});
 			return res.status(200).json(map);
 		case "POST":
 			try {
@@ -15,7 +15,7 @@ export default async function handler(req, res) {
 				await newProject.save();
 				return res
 					.status(200)
-					.json({status: "new Map created", _id: newProject._id});
+					.json({status: "New Map created", _id: newProject._id});
 			} catch (error) {
 				return res.status(400).json({error: error.message});
 			}

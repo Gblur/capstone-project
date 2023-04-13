@@ -51,7 +51,7 @@ export default function ProjectForm() {
 			edges: JSON.stringify([{id: uid()}]),
 		};
 		try {
-			const response = await fetch(`/api/`, {
+			const response = await fetch(`/api/maps`, {
 				method: "POST",
 				body: JSON.stringify(newObject),
 				headers: {"Content-Type": "application/json"},

@@ -57,7 +57,7 @@ const MapPreview = styled.div`
 export default function Dashboard() {
 	const modal = formControlStore((state) => state.modal);
 	const onClose = formControlStore((state) => state.closeModal);
-	const {data, isLoading, error} = useSWR("/api/");
+	const {data, isLoading, error} = useSWR("/api/maps");
 	const router = useRouter();
 
 	function onRouteChange(id) {
