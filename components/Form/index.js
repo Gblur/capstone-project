@@ -39,6 +39,7 @@ export default function ProjectForm() {
 			position: {x: 250, y: 25},
 		},
 	];
+	const initialEdge = [{}];
 	const router = useRouter();
 
 	const onSubmitForm = async (event) => {
@@ -48,20 +49,16 @@ export default function ProjectForm() {
 		const newObject = {
 			...data,
 			nodes: JSON.stringify(initialNodes),
-			edges: JSON.stringify([{id: uid()}]),
+			edges: JSON.stringify(initialEdge),
 		};
-		try {
-			const response = await fetch(`/api/maps`, {
-				method: "POST",
-				body: JSON.stringify(newObject),
-				headers: {"Content-Type": "application/json"},
-			});
-			if (response.ok) {
-				const {_id} = await response.json();
-				router.push(`/maps/${_id}`);
-			}
-		} catch (error) {
-			console.error(error);
+		const response = await fetch(`/api/maps`, {
+			method: "POST",
+			body: JSON.stringify(newObject),
+			headers: {"Content-Type": "application/json"},
+		});
+		if (response.ok) {
+			const {_id} = await response.json();
+			router.push(`/maps/${_id}`);
 		}
 	};
 

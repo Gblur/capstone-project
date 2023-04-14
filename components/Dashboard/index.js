@@ -55,15 +55,14 @@ const MapPreview = styled.div`
 // `;
 
 export default function Dashboard() {
+	const router = useRouter();
+	const {data, isLoading, error} = useSWR("/api/maps");
 	const modal = formControlStore((state) => state.modal);
 	const onClose = formControlStore((state) => state.closeModal);
-	const {data, isLoading, error} = useSWR("/api/maps");
-	const router = useRouter();
 
 	function onRouteChange(id) {
 		router.push(`maps/${id}`);
 	}
-
 	if (error) return <h1>Error fetching data</h1>;
 	if (isLoading) return <CircularProgress />;
 
@@ -73,7 +72,7 @@ export default function Dashboard() {
 				<ProjectList>
 					<h2>Project list</h2>
 					<ul>
-						{data && data.length ? (
+						{data.length ? (
 							data.map(({_id, name}) => {
 								return (
 									<li key={_id}>
