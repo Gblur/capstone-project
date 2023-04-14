@@ -1,5 +1,5 @@
 import EnhancedTable from "../Dashboard/Table";
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import styled from "styled-components";
 import {Modal, Box, Typography, CircularProgress, Button} from "@mui/material";
 import formControlStore from "../../store/formControls";
@@ -56,15 +56,27 @@ const MapPreview = styled.div`
 
 export default function Dashboard() {
 	const router = useRouter();
-	const {data, isLoading, error} = useSWR("/api/maps");
+	const [data, setData] = useState();
+
+	async function getData() {
+		const response = await fetch("/api/maps");
+		const data = await response.json();
+		setData(data);
+	}
+
 	const modal = formControlStore((state) => state.modal);
 	const onClose = formControlStore((state) => state.closeModal);
 
 	function onRouteChange(id) {
 		router.push(`maps/${id}`);
 	}
-	if (error) return <h1>Error fetching data</h1>;
-	if (isLoading) return <CircularProgress />;
+
+	useEffect(() => {
+		getData();
+		return () => {};
+	}, []);
+
+	if (!data) return <CircularProgress />;
 
 	return (
 		<>
