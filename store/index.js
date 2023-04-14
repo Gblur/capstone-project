@@ -34,8 +34,17 @@ const initialEdge = [{}];
 const useStore = create((set, get) => {
 	return {
 		map: {},
+		maps: [],
 		nodes: [],
 		edges: [],
+		getData: async () => {
+			const response = await fetch("/api/maps");
+			if (response.ok) {
+				const data = await response.json();
+				console.log(data);
+				set({maps: data});
+			}
+		},
 		fetch: async (id) => {
 			if (id) {
 				const response = await fetch(`/api/maps/${id}`);
@@ -50,9 +59,14 @@ const useStore = create((set, get) => {
 			}
 		},
 		onPostCreate: async (data, router) => {
+			const newObject = {
+				...data,
+				nodes: JSON.stringify(initialNodes),
+				edges: JSON.stringify(initialEdge),
+			};
 			const response = await fetch(`/api/maps`, {
 				method: "POST",
-				body: JSON.stringify(data),
+				body: JSON.stringify(newObject),
 				headers: {"Content-Type": "application/json"},
 			});
 			if (response.ok) {

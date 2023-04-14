@@ -15,7 +15,6 @@ if (!cached) {
 
 async function dbConnect() {
 	try {
-		console.log({MONGODB_URI});
 		if (!MONGODB_URI) {
 			throw new Error(
 				"Please define the MONGODB_URI environment variable inside .env.local"
@@ -40,7 +39,6 @@ async function dbConnect() {
 
 		cached.conn = await cached.promise;
 	} catch (e) {
-		console.log(e);
 		cached.promise = null;
 		throw e;
 	}

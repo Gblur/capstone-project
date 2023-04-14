@@ -1,35 +1,28 @@
 import Dashboard from "../../components/Dashboard";
 import React, {useState, useEffect} from "react";
-import Modal from "../../components/Modal";
-import ProjectForm from "../../components/Form";
 import {CircularProgress} from "@mui/material";
 import {useRouter} from "next/router";
 import CustomModal from "../../components/Modal";
+import useStore from "../../store";
 
 export default function MapsPage() {
+	const fetch = useStore((state) => state.getData);
+	const maps = useStore((state) => state.maps);
 	const router = useRouter();
-	const [data, setData] = useState();
-
-	async function getData() {
-		const response = await fetch("/api/maps");
-		const data = await response.json();
-		setData(data);
-	}
-
 	function onRouteChange(id) {
 		router.push(`maps/${id}`);
 	}
 
 	useEffect(() => {
-		getData();
+		fetch();
 		return () => {};
 	}, []);
 
-	if (!data) return <CircularProgress />;
+	if (!maps.length) return <CircularProgress />;
 
 	return (
 		<main>
-			<Dashboard data={data} onRouteChange={onRouteChange} />
+			<Dashboard data={maps} onRouteChange={onRouteChange} />
 			<CustomModal />
 		</main>
 	);
