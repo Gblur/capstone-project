@@ -1,11 +1,10 @@
 import React, {useEffect, useState} from "react";
-import Canvas from "../../components/Canvas";
+import Canvas from "../../../components/Canvas";
 import "reactflow/dist/style.css";
 // import Filter from "../../components/Canvas/FilterData";
 import {CircularProgress} from "@mui/material";
 import {useRouter} from "next/router";
-import useSWR from "swr";
-import useStore from "../../store";
+import useStore from "../../../store";
 
 export default function MapDetailsPage() {
 	const [filter, setFilter] = useState("HTML");
