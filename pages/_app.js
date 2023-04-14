@@ -1,20 +1,26 @@
 import GlobalStyle from "../styles";
 import Head from "next/head";
 import Layout from "../components/Layout";
-import {SWRConfig} from "swr/_internal";
-import {KayakingSharp} from "@mui/icons-material";
+import {SWRConfig} from "swr";
 
 export default function App({Component, pageProps}) {
 	return (
 		<>
 			<GlobalStyle />
 			<Head>
-				<title>Capstone Project</title>
+				<title>Mindmap</title>
 			</Head>
 			<SWRConfig
 				value={{
-					fetcher: (resource) =>
-						fetch(resource).then((res) => res.json()),
+					fetcher: async (...args) => {
+						const response = await fetch(...args);
+						if (!response.ok) {
+							throw new Error(
+								`Request with ${JSON.stringify(args)} failed.`
+							);
+						}
+						return await response.json();
+					},
 				}}>
 				<Layout>
 					<Component {...pageProps} />
