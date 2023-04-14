@@ -2,7 +2,7 @@ import {Button} from "@mui/material";
 import React from "react";
 import styled from "styled-components";
 import {useRouter} from "next/router";
-import {uid} from "uid";
+import useStore from "../../store";
 
 const Form = styled.form`
 	display: block;
@@ -26,45 +26,18 @@ const Form = styled.form`
 `;
 
 export default function ProjectForm() {
-	const initialNodes = [
-		{
-			id: uid(),
-			type: "parent",
-			data: {
-				label: "Root",
-				background: "var(--color-node-parent-bg)",
-				type: "root",
-				status: "unknown",
-			},
-			position: {x: 250, y: 25},
-		},
-	];
-	const initialEdge = [{}];
+	const createPost = useStore((state) => state.onPostCreate);
 	const router = useRouter();
-
-	const onSubmitForm = async (event) => {
+	const onSubmitForm = (event) => {
 		event.preventDefault();
 		const form = new FormData(event.target);
 		const data = Object.fromEntries(form);
-		const newObject = {
-			...data,
-			nodes: JSON.stringify(initialNodes),
-			edges: JSON.stringify(initialEdge),
-		};
-		const response = await fetch(`/api/maps`, {
-			method: "POST",
-			body: JSON.stringify(newObject),
-			headers: {"Content-Type": "application/json"},
-		});
-		if (response.ok) {
-			const {_id} = await response.json();
-			router.push(`/maps/${_id}`);
-		}
+		createPost(data, router);
 	};
 
 	return (
 		<>
-			<Form method="POST" onSubmit={onSubmitForm}>
+			<Form onSubmit={onSubmitForm}>
 				<fieldset>
 					<legend>Create Project</legend>
 					<label htmlFor="nameProject">Name</label>

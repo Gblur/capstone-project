@@ -1,6 +1,7 @@
 import React from "react";
-import {Box} from "@mui/material";
+import {Box, Modal} from "@mui/material";
 import formControlStore from "../../store/formControls";
+import ProjectForm from "../Form";
 
 const styleModalBox = {
 	position: "absolute",
@@ -14,7 +15,7 @@ const styleModalBox = {
 	p: 4,
 };
 
-export default function Modal({children}) {
+export default function CustomModal() {
 	const modal = formControlStore((state) => state.modal);
 	const onClose = formControlStore((state) => state.closeModal);
 
@@ -24,7 +25,9 @@ export default function Modal({children}) {
 			onClose={onClose}
 			aria-labelledby="modal-modal-title"
 			aria-describedby="modal-modal-description">
-			<Box sx={styleModalBox}>{children}</Box>
+			<Box sx={styleModalBox}>
+				<ProjectForm />
+			</Box>
 		</Modal>
 	);
 }
