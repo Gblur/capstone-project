@@ -1,5 +1,5 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import Map from "../../../db/models/Map";
+import Map from "../../../db/models/Map.js";
 import dbConnect from "../../../db/connect.js";
 
 export default async function handler(req, res) {
