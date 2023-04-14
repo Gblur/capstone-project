@@ -3,6 +3,8 @@ import Map from "../../../db/models/Map";
 import dbConnect from "../../../db/connect.js";
 
 export default async function handler(req, res) {
+	console.log("Wird das angezeigt?");
+	return res.status(200).json({msg: "ok"});
 	await dbConnect();
 	const data = req.body;
 	switch (req.method) {
