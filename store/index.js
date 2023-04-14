@@ -50,14 +50,9 @@ const useStore = create((set, get) => {
 			}
 		},
 		onPostCreate: async (data, router) => {
-			const newObject = {
-				...data,
-				nodes: JSON.stringify(initialNodes),
-				edges: JSON.stringify(initialEdge),
-			};
 			const response = await fetch(`/api/maps`, {
 				method: "POST",
-				body: JSON.stringify(newObject),
+				body: JSON.stringify(data),
 				headers: {"Content-Type": "application/json"},
 			});
 			if (response.ok) {
