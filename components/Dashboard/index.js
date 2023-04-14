@@ -2,22 +2,6 @@ import EnhancedTable from "../Dashboard/Table";
 import React, {useEffect, useState} from "react";
 import styled from "styled-components";
 import {Modal, Box, Typography, CircularProgress, Button} from "@mui/material";
-import formControlStore from "../../store/formControls";
-import ProjectForm from "../Form";
-import useSWR from "swr";
-import {useRouter} from "next/router";
-
-const styleModalBox = {
-	position: "absolute",
-	top: "50%",
-	left: "50%",
-	transform: "translate(-50%, -50%)",
-	width: "50%",
-	bgcolor: "background.paper",
-	border: "2px solid #000",
-	boxShadow: 24,
-	p: 4,
-};
 
 const DashboardContainer = styled.div`
 	display: grid;
@@ -54,67 +38,33 @@ const MapPreview = styled.div`
 // 	padding: 20px;
 // `;
 
-export default function Dashboard() {
-	const router = useRouter();
-	const [data, setData] = useState();
-
-	async function getData() {
-		const response = await fetch("/api/maps");
-		const data = await response.json();
-		setData(data);
-	}
-
-	const modal = formControlStore((state) => state.modal);
-	const onClose = formControlStore((state) => state.closeModal);
-
-	function onRouteChange(id) {
-		router.push(`maps/${id}`);
-	}
-
-	useEffect(() => {
-		getData();
-		return () => {};
-	}, []);
-
-	if (!data) return <CircularProgress />;
-
+export default function Dashboard({data, onRouteChange}) {
 	return (
-		<>
-			<DashboardContainer>
-				<ProjectList>
-					<h2>Project list</h2>
-					<ul>
-						{data.length ? (
-							data.map(({_id, name}) => {
-								return (
-									<li key={_id}>
-										<Button
-											type="button"
-											onClick={() => onRouteChange(_id)}>
-											{name}
-										</Button>
-									</li>
-								);
-							})
-						) : (
-							<li>No Entry</li>
-						)}
-					</ul>
-				</ProjectList>
-				<InformationContainer>
-					<MapPreview />
-					<EnhancedTable />
-				</InformationContainer>
-			</DashboardContainer>
-			<Modal
-				open={modal}
-				onClose={onClose}
-				aria-labelledby="modal-modal-title"
-				aria-describedby="modal-modal-description">
-				<Box sx={styleModalBox}>
-					<ProjectForm />
-				</Box>
-			</Modal>
-		</>
+		<DashboardContainer>
+			<ProjectList>
+				<h2>Project list</h2>
+				<ul>
+					{data.length ? (
+						data.map(({_id, name}) => {
+							return (
+								<li key={_id}>
+									<Button
+										type="button"
+										onClick={() => onRouteChange(_id)}>
+										{name}
+									</Button>
+								</li>
+							);
+						})
+					) : (
+						<li>No Entry</li>
+					)}
+				</ul>
+			</ProjectList>
+			<InformationContainer>
+				<MapPreview />
+				<EnhancedTable />
+			</InformationContainer>
+		</DashboardContainer>
 	);
 }
