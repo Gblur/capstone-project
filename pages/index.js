@@ -2,6 +2,7 @@ import Canvas from "../components/Canvas";
 import Filter from "../components/Canvas/FilterData";
 import "reactflow/dist/style.css";
 import {useState} from "react";
+import Dashboard from "../components/Dashboard";
 
 export default function Home() {
 	const [filter, setFilter] = useState("HTML");
@@ -12,7 +13,7 @@ export default function Home() {
 
 	return (
 		<main style={{height: `calc(100vh - 250px)`}}>
-			<h2>Mapname</h2>
+			<Dashboard />
 		</main>
 	);
 }
