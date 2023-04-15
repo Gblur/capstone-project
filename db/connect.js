@@ -27,7 +27,10 @@ async function dbConnect() {
 
 		if (!cached.promise) {
 			const opts = {
-				bufferCommands: false,
+				useNewUrlParser: true,
+				useUnifiedTopology: true,
+				useCreateIndex: true,
+				useFindAndModify: false,
 			};
 
 			cached.promise = mongoose
