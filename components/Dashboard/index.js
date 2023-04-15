@@ -10,7 +10,7 @@ const DashboardContainer = styled.div`
 	gap: 20px;
 `;
 
-const ProjectList = styled.section`
+const ProjectListContainer = styled.section`
 	display: block;
 	border: 2px solid var(--color-dashboard-border);
 	overflow-y: auto;
@@ -30,6 +30,20 @@ const MapPreview = styled.div`
 	overflow: hidden;
 `;
 
+const ProjectList = styled.ul`
+	list-style: none;
+	padding: 0;
+`;
+
+const ProjectListItem = styled.li`
+	border-radius: 5px;
+	padding: 10px;
+	cursor: pointer;
+	&:hover {
+		background: var(--color-node-unbound-bg);
+	}
+`;
+
 // const Table = styled.section`
 // 	display: table;
 // 	height: 100%;
@@ -41,29 +55,31 @@ const MapPreview = styled.div`
 export default function Dashboard({data, onRouteChange}) {
 	return (
 		<DashboardContainer>
-			<ProjectList>
+			<ProjectListContainer>
 				<h2>Project list</h2>
-				<ul>
-					{data.length ? (
-						data.map(({_id, name}) => {
-							return (
-								<li key={_id}>
-									<Button
-										type="button"
+				{!data ? (
+					<CircularProgress />
+				) : (
+					<ProjectList>
+						{data.length ? (
+							data.map(({_id, name}) => {
+								return (
+									<ProjectListItem
+										key={_id}
 										onClick={() => onRouteChange(_id)}>
 										{name}
-									</Button>
-								</li>
-							);
-						})
-					) : (
-						<li>No Entry</li>
-					)}
-				</ul>
-			</ProjectList>
+										<hr />
+									</ProjectListItem>
+								);
+							})
+						) : (
+							<ProjectListItem>No Entry</ProjectListItem>
+						)}
+					</ProjectList>
+				)}
+			</ProjectListContainer>
 			<InformationContainer>
 				<MapPreview />
-				<EnhancedTable />
 			</InformationContainer>
 		</DashboardContainer>
 	);

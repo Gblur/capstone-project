@@ -1,14 +1,12 @@
 import React, {useEffect} from "react";
 import ReactFlow, {Background, Controls, ReactFlowProvider} from "reactflow";
 import {styles} from "./styles.js";
-import useSWR from "swr";
 import useStore from "../../store";
 import {shallow} from "zustand/shallow";
 import {Button} from "@mui/material";
 import {Modal, Box, Typography} from "@mui/material";
-import {useImmer} from "use-immer";
 import {nodeTypes} from "../../components/Node/customNode";
-import {uid} from "uid";
+import {uuid} from "uuidv4";
 
 const styleModalBox = {
 	position: "absolute",
@@ -37,7 +35,7 @@ export default function Canvas({id, map}) {
 	});
 
 	const user = process.env.REACT_APP_USERNAME || "Gblur";
-	const url = `https://api.github.com/users/${user}/repos`;
+	// const url = `https://api.github.com/users/${user}/repos`;
 
 	const {
 		nodes,
@@ -51,18 +49,14 @@ export default function Canvas({id, map}) {
 		onUpdateMap,
 	} = useStore(selector, shallow);
 
-	const {data, isLoading} = useSWR(url);
-	const [branchUrl, setbranchUrl] = useImmer("");
-	const branchData = useSWR(branchUrl);
-
-	function handleNodeClick(event) {
-		const currentNode = nodes.find((node) => {
-			return node.id === event.currentTarget.getAttribute("data-id");
-		});
-		if (currentNode?.branches) {
-			setbranchUrl(currentNode["branches"].replace("{/branch}", ""));
-		}
-	}
+	// function handleNodeClick(event) {
+	// 	const currentNode = nodes.find((node) => {
+	// 		return node.id === event.currentTarget.getAttribute("data-id");
+	// 	});
+	// 	if (currentNode?.branches) {
+	// 		setbranchUrl(currentNode["branches"].replace("{/branch}", ""));
+	// 	}
+	// }
 
 	useEffect(() => {
 		if (id) {
@@ -75,7 +69,7 @@ export default function Canvas({id, map}) {
 		<>
 			<Button
 				onClick={() => {
-					onNodeCreate(uid());
+					onNodeCreate(uuid());
 				}}>
 				Create Node
 			</Button>
@@ -87,43 +81,12 @@ export default function Canvas({id, map}) {
 					onEdgesChange={onEdgesChange}
 					onNodesChange={onNodesChange}
 					onConnect={onConnect}
-					onNodeClick={handleNodeClick}
 					nodeTypes={nodeTypes}
 					fitView>
 					<Background style={{background: styles["color-bg"]}} />
 					<Controls />
 				</ReactFlow>
 			</ReactFlowProvider>
-			<Modal
-				open={false}
-				onClose={handleNodeClick}
-				aria-labelledby="modal-modal-title"
-				aria-describedby="modal-modal-description">
-				<Box sx={styleModalBox}>
-					<Typography
-						id="modal-modal-title"
-						variant="h6"
-						component="h2">
-						Text in a modal
-					</Typography>
-					<Typography
-						id="modal-modal-description"
-						sx={{mt: 2}}></Typography>
-					<ul>
-						{branchData?.data &&
-							branchData.data.map((branch) => {
-								return (
-									<li key={branch.commit.sha}>
-										<a
-											href={
-												branch.commit.url
-											}>{`link to ${branch.name}`}</a>
-									</li>
-								);
-							})}
-					</ul>
-				</Box>
-			</Modal>
 		</>
 	);
 }

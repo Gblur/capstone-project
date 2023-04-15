@@ -18,8 +18,6 @@ export default function MapsPage() {
 		return () => {};
 	}, []);
 
-	if (!maps.length) return <CircularProgress />;
-
 	return (
 		<main>
 			<Dashboard data={maps} onRouteChange={onRouteChange} />

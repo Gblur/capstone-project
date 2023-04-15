@@ -2,8 +2,7 @@ import {create} from "zustand";
 import nodeCreator from "../components/Canvas/hooks/nodeCreator";
 import nodeGenerator from "../components/Canvas/hooks/nodeGenerator";
 import {addEdge, addNode, applyNodeChanges, applyEdgeChanges} from "reactflow";
-import {mountStoreDevtool} from "simple-zustand-devtools";
-import {uid} from "uid";
+import {uuid} from "uuidv4";
 
 const handleUpdateData = async (node, id) => {
 	const response = await fetch(`/api/maps/${id}`, {
@@ -18,7 +17,7 @@ const handleUpdateData = async (node, id) => {
 
 const initialNodes = [
 	{
-		id: uid(),
+		id: uuid(),
 		type: "parent",
 		data: {
 			label: "Root",
