@@ -14,32 +14,29 @@ if (!cached) {
 }
 
 async function dbConnect() {
+	if (!MONGODB_URI) {
+		throw new Error(
+			"Please define the MONGODB_URI environment variable inside .env.local"
+		);
+	}
+
+	if (cached.conn) {
+		return cached.conn;
+	}
+
+	if (!cached.promise) {
+		const opts = {
+			bufferCommands: true,
+		};
+
+		cached.promise = mongoose
+			.connect(MONGODB_URI, opts)
+			.then((mongoose) => {
+				return mongoose;
+			});
+	}
+
 	try {
-		if (!MONGODB_URI) {
-			throw new Error(
-				"Please define the MONGODB_URI environment variable inside .env.local"
-			);
-		}
-
-		if (cached.conn) {
-			return cached.conn;
-		}
-
-		if (!cached.promise) {
-			const opts = {
-				useNewUrlParser: true,
-				useUnifiedTopology: true,
-				useCreateIndex: true,
-				useFindAndModify: false,
-			};
-
-			cached.promise = mongoose
-				.connect(MONGODB_URI, opts)
-				.then((mongoose) => {
-					return mongoose;
-				});
-		}
-
 		cached.conn = await cached.promise;
 	} catch (e) {
 		cached.promise = null;
