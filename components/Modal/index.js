@@ -1,5 +1,6 @@
 import React from "react";
-import {Box, Modal} from "@mui/material";
+import Box from "@mui/material/Button";
+import Modal from "@mui/material/Modal";
 import formControlStore from "../../store/formControls";
 import ProjectForm from "../Form";
 

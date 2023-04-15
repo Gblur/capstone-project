@@ -1,4 +1,5 @@
-import {MenuItem, Select} from "@mui/material";
+import Select from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
 import React from "react";
 
 export default function Filter({setFilterValue, first, second, third, id}) {

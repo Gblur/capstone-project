@@ -1,7 +1,6 @@
-import EnhancedTable from "../Dashboard/Table";
-import React, {useEffect, useState} from "react";
+import React from "react";
 import styled from "styled-components";
-import {Modal, Box, Typography, CircularProgress, Button} from "@mui/material";
+import CircularProgress from "@mui/material/CircularProgress";
 
 const DashboardContainer = styled.div`
 	display: grid;

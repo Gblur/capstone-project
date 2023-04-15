@@ -3,8 +3,7 @@ import ReactFlow, {Background, Controls, ReactFlowProvider} from "reactflow";
 import {styles} from "./styles.js";
 import useStore from "../../store";
 import {shallow} from "zustand/shallow";
-import {Button} from "@mui/material";
-import {Modal, Box, Typography} from "@mui/material";
+import Button from "@mui/material/Button";
 import {nodeTypes} from "../../components/Node/customNode";
 import {v4 as uuidv4} from "uuid";
 

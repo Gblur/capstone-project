@@ -1,8 +1,8 @@
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import Canvas from "../../../components/Canvas";
 import "reactflow/dist/style.css";
 // import Filter from "../../components/Canvas/FilterData";
-import {CircularProgress} from "@mui/material";
+import CircularProgress from "@mui/material/CircularProgress";
 import {useRouter} from "next/router";
 import useStore from "../../../store";
 
