@@ -56,7 +56,7 @@ export default function Dashboard({data, onRouteChange}) {
 		<DashboardContainer>
 			<ProjectListContainer>
 				<h2>Project list</h2>
-				{!data ? (
+				{!data.length ? (
 					<CircularProgress />
 				) : (
 					<ProjectList>
