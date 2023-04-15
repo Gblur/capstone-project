@@ -21,7 +21,6 @@ export default function MapsPage() {
 	return (
 		<main>
 			<Dashboard data={maps} onRouteChange={onRouteChange} />
-			<CustomModal />
 		</main>
 	);
 }
