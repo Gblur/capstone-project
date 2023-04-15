@@ -6,7 +6,7 @@ import {shallow} from "zustand/shallow";
 import {Button} from "@mui/material";
 import {Modal, Box, Typography} from "@mui/material";
 import {nodeTypes} from "../../components/Node/customNode";
-import {uuid} from "uuidv4";
+import {v4 as uuidv4} from "uuid";
 
 const styleModalBox = {
 	position: "absolute",
@@ -69,7 +69,7 @@ export default function Canvas({id, map}) {
 		<>
 			<Button
 				onClick={() => {
-					onNodeCreate(uuid());
+					onNodeCreate(uuidv4());
 				}}>
 				Create Node
 			</Button>
