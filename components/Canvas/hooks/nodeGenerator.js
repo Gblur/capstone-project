@@ -16,7 +16,7 @@ export default function generator(data) {
 
 	const filterData = filteredData(data, "HTML");
 
-	function addChilds() {
+	function addChilds(parentID) {
 		return filterData.map((item) => {
 			return {
 				id: item["node_id"],
@@ -31,7 +31,7 @@ export default function generator(data) {
 					x: filterData.length > 10 ? 0 : (base += 200),
 					y: filterData.length > 10 ? (base += 100) : 200,
 				},
-				parentNode: "1",
+				parentNode: parentID,
 				type: "child",
 				deletable: false,
 				branches: item["branches_url"],
@@ -39,11 +39,11 @@ export default function generator(data) {
 		});
 	}
 
-	function connectChilds() {
+	function connectChilds(parentID) {
 		return filterData.map((item) => {
 			return {
 				id: item["node_id"],
-				source: "1",
+				source: parentID,
 				target: item["node_id"],
 				animated: true,
 			};

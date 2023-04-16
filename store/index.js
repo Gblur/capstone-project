@@ -2,23 +2,10 @@ import {create} from "zustand";
 import nodeCreator from "../components/Canvas/hooks/nodeCreator";
 import nodeGenerator from "../components/Canvas/hooks/nodeGenerator";
 import {addEdge, addNode, applyNodeChanges, applyEdgeChanges} from "reactflow";
-import {mountStoreDevtool} from "simple-zustand-devtools";
-import {uid} from "uid";
-
-// invoke this function on Map Dashboard
-const handlePostData = async (map) => {
-	const response = await fetch(`/api`, {
-		method: "POST",
-		body: JSON.stringify(map),
-		headers: {"Content-Type": "application/json"},
-	});
-	if (response.ok) {
-		await response.json();
-	}
-};
+import {v4 as uuidv4} from "uuid";
 
 const handleUpdateData = async (node, id) => {
-	const response = await fetch(`/api`, {
+	const response = await fetch(`/api/maps/${id}`, {
 		method: "PUT",
 		body: JSON.stringify(node),
 		headers: {"Content-Type": "application/json"},
@@ -30,48 +17,61 @@ const handleUpdateData = async (node, id) => {
 
 const initialNodes = [
 	{
-		id: "1",
+		id: uuidv4(),
 		type: "parent",
 		data: {
-			label: "Map Name",
+			label: "Root",
 			background: "var(--color-node-parent-bg)",
 			type: "root",
 			status: "unknown",
 		},
 		position: {x: 250, y: 25},
-		selectable: false,
-		deletable: false,
 	},
 ];
-const initialEdges = [];
+const initialEdge = [{}];
 
-const initialMap = {
-	name: "Test",
-	team: "",
-	mapType: "",
-	map: {
-		nodes: initialNodes,
-		edges: initialEdges,
-	},
-};
-
-// this is our useStore hook that we can use in our components to get parts of the store and call actions
 const useStore = create((set, get) => {
 	return {
-		map: initialMap,
-		nodes: initialNodes,
-		edges: initialEdges,
-		fetch: async (id) => {
-			const response = await fetch(`/api/`);
+		map: {},
+		maps: [],
+		nodes: [],
+		edges: [],
+		getData: async () => {
+			const response = await fetch("/api/maps");
 			if (response.ok) {
 				const data = await response.json();
-				if (data) {
-					set({nodes: data.map.nodes, edges: data.map.edges});
+				console.log(data);
+				set({maps: data});
+			}
+		},
+		fetch: async (id) => {
+			if (id) {
+				const response = await fetch(`/api/maps/${id}`);
+				if (response.ok) {
+					const data = await response.json();
+					set({
+						nodes: JSON.parse(data.nodes),
+						edges: JSON.parse(data.edges),
+					});
+					set({map: data});
 				}
 			}
 		},
-		createProject: () => {
-			handlePostData(initialMap);
+		onPostCreate: async (data, router) => {
+			const newObject = {
+				...data,
+				nodes: JSON.stringify(initialNodes),
+				edges: JSON.stringify(initialEdge),
+			};
+			const response = await fetch(`/api/maps`, {
+				method: "POST",
+				body: JSON.stringify(newObject),
+				headers: {"Content-Type": "application/json"},
+			});
+			if (response.ok) {
+				const {_id} = await response.json();
+				router.push(`/maps/${_id}`);
+			}
 		},
 		onNodesChange: (changes) => {
 			set({
@@ -88,28 +88,18 @@ const useStore = create((set, get) => {
 				edges: addEdge(connection, get().edges),
 			});
 		},
-		onGenerateNodes: (data) => {
-			set({
-				nodes: [...get().nodes, ...nodeGenerator(data).addChilds()],
-				edges: [...get().edges, ...nodeGenerator(data).connectChilds()],
-			});
-		},
+
 		onNodeCreate: (id) => {
 			set({
 				nodes: [...get().nodes, nodeCreator(id)],
 			});
 		},
 		onUpdateMap: async (id) => {
-			// const nodesCreated = get().nodes.filter((node) => {
-			// 	return node.parentNode !== "1" && node.id !== "1";
-			// });
 			handleUpdateData(
 				{
 					...get().map,
-					map: {
-						nodes: get().nodes,
-						edges: get().edges,
-					},
+					nodes: JSON.stringify(get().nodes),
+					edges: JSON.stringify(get().edges),
 				},
 				id
 			);
@@ -139,6 +129,19 @@ const useStore = create((set, get) => {
 	};
 });
 
-mountStoreDevtool("store1", useStore);
+// onGenerateNodes: (data, parentID) => {
+// 	set({
+// 		nodes: [
+// 			...get().nodes,
+// 			...nodeGenerator(data).addChilds(parentID),
+// 		],
+// 		edges: [
+// 			...get().edges,
+// 			...nodeGenerator(data).connectChilds(parentID),
+// 		],
+// 	});
+// },
+
+// mountStoreDevtool("store1", useStore);
 
 export default useStore;

@@ -1,21 +1,11 @@
-import React, {useState, useEffect, useCallback, useRef} from "react";
-import ReactFlow, {
-	Background,
-	Controls,
-	ReactFlowProvider,
-	useNodesState,
-	useEdgesState,
-} from "reactflow";
+import React, {useEffect} from "react";
+import ReactFlow, {Background, Controls, ReactFlowProvider} from "reactflow";
 import {styles} from "./styles.js";
-import useSWR from "swr";
 import useStore from "../../store";
 import {shallow} from "zustand/shallow";
-import {Button, CircularProgress} from "@mui/material";
-import {Modal, Box, Typography} from "@mui/material";
-import {useImmer} from "use-immer";
+import Button from "@mui/material/Button";
 import {nodeTypes} from "../../components/Node/customNode";
-import {uid} from "uid";
-import useLocalStorageState from "use-local-storage-state";
+import {v4 as uuidv4} from "uuid";
 
 const styleModalBox = {
 	position: "absolute",
@@ -29,9 +19,8 @@ const styleModalBox = {
 	p: 4,
 };
 
-export default function Canvas({id}) {
+export default function Canvas({id, map}) {
 	const selector = (state) => ({
-		map: state.map,
 		nodes: state.nodes,
 		edges: state.edges,
 		fetch: state.fetch,
@@ -42,17 +31,14 @@ export default function Canvas({id}) {
 		onNodeCreate: state.onNodeCreate,
 		onGenerateNodes: state.onGenerateNodes,
 		onUpdateMap: state.onUpdateMap,
-		createProject: state.createProject,
 	});
 
 	const user = process.env.REACT_APP_USERNAME || "Gblur";
-	const url = `https://api.github.com/users/${user}/repos`;
+	// const url = `https://api.github.com/users/${user}/repos`;
 
 	const {
-		map,
 		nodes,
 		edges,
-		createProject,
 		fetch,
 		onNodesChange,
 		onEdgesChange,
@@ -62,51 +48,31 @@ export default function Canvas({id}) {
 		onUpdateMap,
 	} = useStore(selector, shallow);
 
-	const {data, isLoading} = useSWR(url);
-	const [open, setOpen] = useState(false);
-	const [projectCreated, setProjectCreated] = useLocalStorageState(
-		"actionguards",
-		{defaultValue: false}
-	);
-	const [branchUrl, setbranchUrl] = useImmer("");
-	const branchData = useSWR(branchUrl);
-
-	function handleNodeClick(event) {
-		const currentNode = nodes.find((node) => {
-			return node.id === event.currentTarget.getAttribute("data-id");
-		});
-		if (currentNode?.branches) {
-			setbranchUrl(currentNode["branches"].replace("{/branch}", ""));
-		}
-	}
+	// function handleNodeClick(event) {
+	// 	const currentNode = nodes.find((node) => {
+	// 		return node.id === event.currentTarget.getAttribute("data-id");
+	// 	});
+	// 	if (currentNode?.branches) {
+	// 		setbranchUrl(currentNode["branches"].replace("{/branch}", ""));
+	// 	}
+	// }
 
 	useEffect(() => {
-		if (!isLoading && nodes) {
-			onGenerateNodes(data);
-			fetch();
+		if (id) {
+			fetch(id);
 		}
 		return () => {};
-	}, [isLoading]);
-
-	if (isLoading) return <CircularProgress />;
+	}, [id]);
 
 	return (
 		<>
 			<Button
-				disabled={projectCreated}
 				onClick={() => {
-					createProject();
-					setProjectCreated(true);
-				}}>
-				Create Project
-			</Button>
-			<Button
-				onClick={() => {
-					onNodeCreate(uid());
+					onNodeCreate(uuidv4());
 				}}>
 				Create Node
 			</Button>
-			<Button onClick={() => onUpdateMap()}>Save Map</Button>
+			<Button onClick={() => onUpdateMap(id)}>Save Map</Button>
 			<ReactFlowProvider>
 				<ReactFlow
 					nodes={nodes}
@@ -114,43 +80,12 @@ export default function Canvas({id}) {
 					onEdgesChange={onEdgesChange}
 					onNodesChange={onNodesChange}
 					onConnect={onConnect}
-					onNodeClick={handleNodeClick}
 					nodeTypes={nodeTypes}
 					fitView>
 					<Background style={{background: styles["color-bg"]}} />
 					<Controls />
 				</ReactFlow>
 			</ReactFlowProvider>
-			<Modal
-				open={open}
-				onClose={handleNodeClick}
-				aria-labelledby="modal-modal-title"
-				aria-describedby="modal-modal-description">
-				<Box sx={styleModalBox}>
-					<Typography
-						id="modal-modal-title"
-						variant="h6"
-						component="h2">
-						Text in a modal
-					</Typography>
-					<Typography
-						id="modal-modal-description"
-						sx={{mt: 2}}></Typography>
-					<ul>
-						{branchData?.data &&
-							branchData.data.map((branch) => {
-								return (
-									<li key={branch.commit.sha}>
-										<a
-											href={
-												branch.commit.url
-											}>{`link to ${branch.name}`}</a>
-									</li>
-								);
-							})}
-					</ul>
-				</Box>
-			</Modal>
 		</>
 	);
 }
