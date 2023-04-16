@@ -2,6 +2,7 @@ import {createGlobalStyle} from "styled-components";
 
 export default createGlobalStyle`
   :root{
+    // Nodes
     --color-node-parent-bg: #ffd17d;
     --color-node-child-bg: #7dafff;
     --color-node-unbound-bg: #ffa8ba;
@@ -11,7 +12,9 @@ export default createGlobalStyle`
     --color-node-icon-success: #38fc41;
     --color-node-icon-pending: #ffef61;
     --color-node-icon-danger: #ff3838;
+    // Dashboard
     --color-dashboard-border: #000;
+    --color-hover-item: #ccffe5
 
 
   }
@@ -20,8 +23,11 @@ export default createGlobalStyle`
   *::after {
     box-sizing: border-box;
   }
+  #__next {
+  }
   body {
-    margin: 0;
+    margin: 0 auto;
+    max-width: 768px;
     font-family: system-ui;
     padding: 50px;
   }

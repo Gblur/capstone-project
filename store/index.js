@@ -36,15 +36,14 @@ const useStore = create((set, get) => {
 		maps: [],
 		nodes: [],
 		edges: [],
-		getData: async () => {
+		fetchMaps: async () => {
 			const response = await fetch("/api/maps");
 			if (response.ok) {
 				const data = await response.json();
-				console.log(data);
 				set({maps: data});
 			}
 		},
-		fetch: async (id) => {
+		fetchMap: async (id) => {
 			if (id) {
 				const response = await fetch(`/api/maps/${id}`);
 				if (response.ok) {

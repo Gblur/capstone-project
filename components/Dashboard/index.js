@@ -1,11 +1,16 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import styled from "styled-components";
 import CircularProgress from "@mui/material/CircularProgress";
+import EnhancedTable from "./Table";
+import {styles} from "../Canvas/styles";
+import ReactFlow, {Background, Controls, ReactFlowProvider} from "reactflow";
+import {nodeTypes} from "../Node/customNode";
+import {selectClasses} from "@mui/material";
 
 const DashboardContainer = styled.div`
 	display: grid;
 	grid-template-columns: 250px 1fr;
-	height: calc(100vh - 150px);
+	height: calc(100vh - 200px);
 	gap: 20px;
 `;
 
@@ -16,6 +21,11 @@ const ProjectListContainer = styled.section`
 	padding: 20px;
 `;
 
+const ProjectList = styled.ul`
+	list-style: none;
+	padding: 0;
+`;
+
 const InformationContainer = styled.section`
 	display: flex;
 	flex-direction: column;
@@ -23,15 +33,10 @@ const InformationContainer = styled.section`
 
 const MapPreview = styled.div`
 	display: block;
-	height: 50%;
+	min-height: 500px;
 	border: 2px solid var(--color-dashboard-border);
 	margin-bottom: 20px;
 	overflow: hidden;
-`;
-
-const ProjectList = styled.ul`
-	list-style: none;
-	padding: 0;
 `;
 
 const ProjectListItem = styled.li`
@@ -39,7 +44,10 @@ const ProjectListItem = styled.li`
 	padding: 10px;
 	cursor: pointer;
 	&:hover {
-		background: var(--color-node-unbound-bg);
+		background: var(--color-hover-item);
+	}
+	&.selected {
+		background: var(--color-hover-item);
 	}
 `;
 
@@ -51,7 +59,14 @@ const ProjectListItem = styled.li`
 // 	padding: 20px;
 // `;
 
-export default function Dashboard({data, onRouteChange}) {
+export default function Dashboard({
+	data,
+	map,
+	selectedItem,
+	handleMapSelect,
+	nodes,
+	edges,
+}) {
 	return (
 		<DashboardContainer>
 			<ProjectListContainer>
@@ -61,12 +76,19 @@ export default function Dashboard({data, onRouteChange}) {
 				) : (
 					<ProjectList>
 						{data.length ? (
-							data.map(({_id, name}) => {
+							data.map((item) => {
 								return (
 									<ProjectListItem
-										key={_id}
-										onClick={() => onRouteChange(_id)}>
-										{name}
+										className={
+											selectedItem === item
+												? "selected"
+												: ""
+										}
+										key={item._id}
+										onClick={() =>
+											handleMapSelect(item, item._id)
+										}>
+										<a>{item.name}</a>
 										<hr />
 									</ProjectListItem>
 								);
@@ -78,7 +100,17 @@ export default function Dashboard({data, onRouteChange}) {
 				)}
 			</ProjectListContainer>
 			<InformationContainer>
-				<MapPreview />
+				<MapPreview>
+					<ReactFlow
+						nodes={nodes}
+						edges={edges}
+						nodeTypes={nodeTypes}
+						fitView>
+						<Background style={{background: styles["color-bg"]}} />
+						<Controls />
+					</ReactFlow>
+				</MapPreview>
+				<EnhancedTable map={map} />
 			</InformationContainer>
 		</DashboardContainer>
 	);

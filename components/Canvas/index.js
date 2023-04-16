@@ -7,23 +7,11 @@ import Button from "@mui/material/Button";
 import {nodeTypes} from "../../components/Node/customNode";
 import {v4 as uuidv4} from "uuid";
 
-const styleModalBox = {
-	position: "absolute",
-	top: "50%",
-	left: "50%",
-	transform: "translate(-50%, -50%)",
-	width: "50%",
-	bgcolor: "background.paper",
-	border: "2px solid #000",
-	boxShadow: 24,
-	p: 4,
-};
-
-export default function Canvas({id, map}) {
+export default function Canvas({id}) {
 	const selector = (state) => ({
 		nodes: state.nodes,
 		edges: state.edges,
-		fetch: state.fetch,
+		fetchMap: state.fetchMap,
 		post: state.post,
 		onNodesChange: state.onNodesChange,
 		onEdgesChange: state.onEdgesChange,
@@ -39,7 +27,7 @@ export default function Canvas({id, map}) {
 	const {
 		nodes,
 		edges,
-		fetch,
+		fetchMap,
 		onNodesChange,
 		onEdgesChange,
 		onConnect,
@@ -59,7 +47,7 @@ export default function Canvas({id, map}) {
 
 	useEffect(() => {
 		if (id) {
-			fetch(id);
+			fetchMap(id);
 		}
 		return () => {};
 	}, [id]);

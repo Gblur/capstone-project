@@ -5,7 +5,6 @@ import dbConnect from "../../../db/connect.js";
 export default async function handler(req, res) {
 	try {
 		await dbConnect();
-		console.log("Connected");
 		const data = req.body;
 		switch (req.method) {
 			case "GET":
