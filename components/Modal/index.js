@@ -1,8 +1,9 @@
 import React from "react";
-import Box from "@mui/material/Button";
+import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import formControlStore from "../../store/formControls";
 import ProjectForm from "../Form";
+import {Typography} from "@mui/material";
 
 const styleModalBox = {
 	position: "absolute",
@@ -22,6 +23,7 @@ export default function CustomModal() {
 
 	return (
 		<Modal
+			component="section"
 			open={modal}
 			onClose={onClose}
 			aria-labelledby="modal-modal-title"

@@ -3,6 +3,7 @@ import React from "react";
 import styled from "styled-components";
 import {useRouter} from "next/router";
 import useStore from "../../store";
+import Stack from "@mui/material/Stack";
 
 const Form = styled.form`
 	display: block;
@@ -22,6 +23,9 @@ const Form = styled.form`
 	}
 	textarea {
 		margin: 5px 0;
+	}
+	button {
+		float: right;
 	}
 `;
 
@@ -64,7 +68,18 @@ export default function ProjectForm() {
 						type="text"
 					/>
 				</fieldset>
-				<Button type="submit">Submit</Button>
+				<Stack
+					justifyContent={"flex-end"}
+					spacing={2}
+					marginTop={2}
+					direction="row">
+					<Button variant="contained" type="submit">
+						Submit
+					</Button>
+					<Button variant="contained" type="reset">
+						Clear
+					</Button>
+				</Stack>
 			</Form>
 		</>
 	);
