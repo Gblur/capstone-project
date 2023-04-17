@@ -1,9 +1,8 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import {Schemas} from "../../../db/models/Map.js";
+import Map from "../../../db/models/Map.js";
 import dbConnect from "../../../db/connect.js";
 
 export default async function handler(req, res) {
-	const {Map, User} = Schemas;
 	try {
 		await dbConnect();
 		const data = req.body;
