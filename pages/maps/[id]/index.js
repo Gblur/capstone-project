@@ -4,7 +4,6 @@ import "reactflow/dist/style.css";
 import {shallow} from "zustand/shallow";
 import Button from "@mui/material/Button";
 import styled from "styled-components";
-// import Filter from "../../components/Canvas/FilterData";
 import CircularProgress from "@mui/material/CircularProgress";
 import {useRouter} from "next/router";
 import useStore from "../../../store";
