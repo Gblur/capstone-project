@@ -13,7 +13,6 @@ import "reactflow/dist/style.css";
 const DashboardContainer = styled.div`
 	display: grid;
 	grid-template-columns: 250px 1fr;
-	height: calc(100vh - 200px);
 	gap: 20px;
 `;
 
@@ -22,6 +21,7 @@ const ProjectListContainer = styled.section`
 	border: 1px solid var(--color-dashboard-border);
 	border-radius: 4px;
 	overflow-y: auto;
+	height: 100%;
 	padding: 5px;
 	background: rgba(255, 255, 255, 0.9);
 `;
@@ -77,17 +77,16 @@ export default function Dashboard({
 	handleDelete,
 	nodes,
 	edges,
+	isloading,
 }) {
 	return (
 		<DashboardContainer>
 			<ProjectListContainer>
 				<h2>Project list</h2>
 				<hr />
-				{!data ? (
-					<CircularProgress />
-				) : (
+				{!isloading ? (
 					<ProjectList>
-						{data.length ? (
+						{data.length > 0 ? (
 							data.map((item) => {
 								return (
 									<ProjectListItem
@@ -126,6 +125,8 @@ export default function Dashboard({
 							<ProjectListItem>No Entry</ProjectListItem>
 						)}
 					</ProjectList>
+				) : (
+					<CircularProgress />
 				)}
 			</ProjectListContainer>
 			<InformationContainer>

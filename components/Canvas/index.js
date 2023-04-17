@@ -21,6 +21,13 @@ export default function Canvas({
 	// 	}
 	// }
 
+	useEffect(() => {
+		if (id) {
+			fetchMap(id);
+		}
+		return () => {};
+	}, []);
+
 	return (
 		<>
 			<ReactFlowProvider>

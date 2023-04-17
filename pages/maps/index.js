@@ -14,14 +14,14 @@ const selector = (state) => {
 		deleteMap: state.deleteMap,
 		nodes: state.nodes,
 		edges: state.edges,
+		loading: state.loading,
 	};
 };
 
 export default function MapsPage() {
-	const {maps, fetchMap, fetchMaps, deleteMap, map, nodes, edges} = useStore(
-		selector,
-		shallow
-	);
+	const {maps, fetchMap, fetchMaps, deleteMap, map, nodes, edges, loading} =
+		useStore(selector, shallow);
+
 	const [selectedItem, setSelectedItem] = useState(null);
 	function handleMapSelect(item, id) {
 		fetchMap(id);
@@ -42,6 +42,7 @@ export default function MapsPage() {
 				selectedItem={selectedItem}
 				handleMapSelect={handleMapSelect}
 				handleDelete={deleteMap}
+				isloading={loading}
 			/>
 			<CustomModal />
 		</main>
