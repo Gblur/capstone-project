@@ -1,8 +1,9 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import Map from "../../../db/models/Map.js";
+import {Schemas} from "../../../db/models/Map.js";
 import dbConnect from "../../../db/connect.js";
 
 export default async function handler(req, res) {
+	const {Map, User} = Schemas;
 	try {
 		await dbConnect();
 		const data = req.body;
@@ -18,6 +19,13 @@ export default async function handler(req, res) {
 					return res
 						.status(200)
 						.json({status: "New Map created", _id: newProject._id});
+				} catch (error) {
+					return res.status(400).json({error: error.message});
+				}
+			case "DELETE":
+				try {
+					const mapToDelete = await Map.findByIdAndDelete(data);
+					return res.status(200).json(mapToDelete);
 				} catch (error) {
 					return res.status(400).json({error: error.message});
 				}

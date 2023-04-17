@@ -11,6 +11,15 @@ const MapSchema = new Schema({
 	edges: String,
 });
 
-const Map = mongoose.models.Map || mongoose.model("Map", MapSchema);
+const UserSchema = new Schema({
+	name: String,
+	email: String,
+});
 
-export default Map;
+const Map = mongoose.models.Map || mongoose.model("Map", MapSchema);
+const User = mongoose.models.User || mongoose.model("User", UserSchema);
+
+export const Schemas = {
+	Map,
+	User,
+};

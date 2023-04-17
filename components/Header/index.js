@@ -26,39 +26,23 @@ export default function Header() {
 	return (
 		<Heading>
 			<HeaderContainer>
-				<Stack direction="row" spacing={1}>
-					<Button
-						onClick={() => {
-							router.push("/maps");
-							closeModal();
-						}}
-						variant="contained"
-						sx={{fontSize: 16}}>
-						<span>Home</span>
-						<Icon.Home sx={{fontSize: 20}} />
-					</Button>
-					<Button
-						onClick={() => {}}
-						variant="contained"
-						sx={{fontSize: 16}}>
-						<span>Edit Map</span>
-						<Icon.EditIcon sx={{fontSize: 20}} />
-					</Button>
-					<Button
-						onClick={() => {}}
-						variant="contained"
-						sx={{fontSize: 16}}>
-						<span>Delete Map</span>
-						<Icon.DeleteIcon sx={{fontSize: 20}} />
-					</Button>
-					<Button
-						onClick={openModal}
-						variant="contained"
-						sx={{fontSize: 16}}>
-						<span>Create New Project</span>
-						<Icon.AddCircleOutlineIcon sx={{fontSize: 25}} />
-					</Button>
-				</Stack>
+				<Button
+					onClick={() => {
+						router.push("/maps");
+						closeModal();
+					}}
+					variant="contained"
+					sx={{fontSize: 16}}>
+					<span>Home</span>
+					<Icon.Home sx={{fontSize: 20}} />
+				</Button>
+				<Button
+					onClick={openModal}
+					variant="contained"
+					sx={{fontSize: 16}}>
+					<span>Create New Project</span>
+					<Icon.AddCircleOutlineIcon sx={{fontSize: 25}} />
+				</Button>
 			</HeaderContainer>
 		</Heading>
 	);

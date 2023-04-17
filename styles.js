@@ -13,8 +13,11 @@ export default createGlobalStyle`
     --color-node-icon-pending: #ffef61;
     --color-node-icon-danger: #ff3838;
     // Dashboard
-    --color-dashboard-border: #000;
-    --color-hover-item: #ccffe5
+    --color-dashboard-border: gray;
+    --color-hover-item: #ccffe5;
+    --color-background-item: #5adb99;
+    // Details Page
+    --color-bg-box-info: rgba(255,255,255,0.9);
 
 
   }
@@ -22,6 +25,7 @@ export default createGlobalStyle`
   *::before,
   *::after {
     box-sizing: border-box;
+
   }
   #__next {
   }
@@ -30,5 +34,7 @@ export default createGlobalStyle`
     max-width: 768px;
     font-family: system-ui;
     padding: 50px;
+    background: url("/images/map_bg_color.jpeg") no-repeat center;
+    background-size: cover;
   }
 `;

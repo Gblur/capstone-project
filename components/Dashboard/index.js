@@ -3,9 +3,10 @@ import styled from "styled-components";
 import CircularProgress from "@mui/material/CircularProgress";
 import EnhancedTable from "./Table";
 import {styles} from "../Canvas/styles";
-import ReactFlow, {Background, Controls, ReactFlowProvider} from "reactflow";
+import {Icon} from "../Icons";
+import ReactFlow, {Background, Controls} from "reactflow";
 import {nodeTypes} from "../Node/customNode";
-import {selectClasses} from "@mui/material";
+import {router} from "next/router";
 
 const DashboardContainer = styled.div`
 	display: grid;
@@ -16,9 +17,11 @@ const DashboardContainer = styled.div`
 
 const ProjectListContainer = styled.section`
 	display: block;
-	border: 2px solid var(--color-dashboard-border);
+	border: 1px solid var(--color-dashboard-border);
+	border-radius: 4px;
 	overflow-y: auto;
-	padding: 20px;
+	padding: 5px;
+	background: rgba(255, 255, 255, 0.9);
 `;
 
 const ProjectList = styled.ul`
@@ -34,20 +37,25 @@ const InformationContainer = styled.section`
 const MapPreview = styled.div`
 	display: block;
 	min-height: 500px;
-	border: 2px solid var(--color-dashboard-border);
+	border: 1px solid var(--color-dashboard-border);
 	margin-bottom: 20px;
 	overflow: hidden;
+	border-radius: 4px;
 `;
 
 const ProjectListItem = styled.li`
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
 	border-radius: 5px;
 	padding: 10px;
+	margin-bottom: 5px;
 	cursor: pointer;
 	&:hover {
 		background: var(--color-hover-item);
 	}
 	&.selected {
-		background: var(--color-hover-item);
+		background: var(--color-background-item);
 	}
 `;
 
@@ -64,6 +72,7 @@ export default function Dashboard({
 	map,
 	selectedItem,
 	handleMapSelect,
+	handleDelete,
 	nodes,
 	edges,
 }) {
@@ -71,7 +80,8 @@ export default function Dashboard({
 		<DashboardContainer>
 			<ProjectListContainer>
 				<h2>Project list</h2>
-				{!data.length ? (
+				<hr />
+				{!data ? (
 					<CircularProgress />
 				) : (
 					<ProjectList>
@@ -89,7 +99,24 @@ export default function Dashboard({
 											handleMapSelect(item, item._id)
 										}>
 										<a>{item.name}</a>
-										<hr />
+										{selectedItem === item && (
+											<span>
+												<Icon.EditIcon
+													onClick={() => {
+														router.push(
+															`/maps/${item._id}`
+														);
+													}}
+													color="primary"
+												/>
+												<Icon.DeleteIcon
+													onClick={() => {
+														handleDelete(item._id);
+													}}
+													color="error"
+												/>
+											</span>
+										)}
 									</ProjectListItem>
 								);
 							})

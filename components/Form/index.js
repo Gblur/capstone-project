@@ -30,7 +30,7 @@ const Form = styled.form`
 `;
 
 export default function ProjectForm() {
-	const createPost = useStore((state) => state.onPostCreate);
+	const createPost = useStore((state) => state.createMap);
 	const router = useRouter();
 	const onSubmitForm = (event) => {
 		event.preventDefault();
