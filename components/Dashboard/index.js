@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React from "react";
 import styled from "styled-components";
 import CircularProgress from "@mui/material/CircularProgress";
 import EnhancedTable from "./Table";
@@ -7,6 +7,8 @@ import {Icon} from "../Icons";
 import ReactFlow, {Background, Controls} from "reactflow";
 import {nodeTypes} from "../Node/customNode";
 import {router} from "next/router";
+import Canvas from "../Canvas";
+import "reactflow/dist/style.css";
 
 const DashboardContainer = styled.div`
 	display: grid;
@@ -128,14 +130,18 @@ export default function Dashboard({
 			</ProjectListContainer>
 			<InformationContainer>
 				<MapPreview>
-					<ReactFlow
-						nodes={nodes}
-						edges={edges}
-						nodeTypes={nodeTypes}
-						fitView>
-						<Background style={{background: styles["color-bg"]}} />
-						<Controls />
-					</ReactFlow>
+					<>
+						<ReactFlow
+							nodes={nodes}
+							edges={edges}
+							nodeTypes={nodeTypes}
+							fitView>
+							<Background
+								style={{background: styles["color-bg"]}}
+							/>
+							<Controls />
+						</ReactFlow>
+					</>
 				</MapPreview>
 				<EnhancedTable map={map} />
 			</InformationContainer>

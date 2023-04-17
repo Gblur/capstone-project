@@ -58,7 +58,9 @@ const useStore = create((set, get) => {
 			const response = await fetch("/api/maps");
 			if (response.ok) {
 				const data = await response.json();
-				set({maps: data});
+				set({
+					maps: data,
+				});
 			}
 		},
 		fetchMap: async (id) => {
@@ -68,10 +70,10 @@ const useStore = create((set, get) => {
 					const data = await response.json();
 					if (data) {
 						set({
+							map: data,
 							nodes: JSON.parse(data?.nodes),
 							edges: JSON.parse(data?.edges),
 						});
-						set({map: data});
 					}
 				}
 			}

@@ -34,7 +34,7 @@ export default createGlobalStyle`
     max-width: 768px;
     font-family: system-ui;
     padding: 50px;
-    background: url("/images/map_bg_color.jpeg") no-repeat center;
+    background: url("/images/map_bg_color.jpeg") center;
     background-size: cover;
   }
 `;
