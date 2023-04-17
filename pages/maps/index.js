@@ -1,6 +1,5 @@
 import Dashboard from "../../components/Dashboard";
 import React, {useEffect, useState} from "react";
-import {useRouter} from "next/router";
 import CustomModal from "../../components/Modal";
 import useStore from "../../store";
 import {shallow} from "zustand/shallow";
@@ -21,7 +20,6 @@ const selector = (state) => {
 export default function MapsPage() {
 	const {maps, fetchMap, fetchMaps, deleteMap, map, nodes, edges, loading} =
 		useStore(selector, shallow);
-
 	const [selectedItem, setSelectedItem] = useState(null);
 	function handleMapSelect(item, id) {
 		fetchMap(id);
