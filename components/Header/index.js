@@ -1,10 +1,10 @@
 import React from "react";
-import Home from "@mui/icons-material/Home";
-import Button from "@mui/material/Button";
-import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import styled from "styled-components";
+import Button from "@mui/material/Button";
+import {Icon} from "../Icons";
 import formControlStore from "../../store/formControls";
 import {useRouter} from "next/router";
+import Stack from "@mui/material/Stack";
 
 const Heading = styled.header`
 	text-align: center;
@@ -34,14 +34,14 @@ export default function Header() {
 					variant="contained"
 					sx={{fontSize: 16}}>
 					<span>Home</span>
-					<Home sx={{fontSize: 20}} />
+					<Icon.Home sx={{fontSize: 20}} />
 				</Button>
 				<Button
 					onClick={openModal}
 					variant="contained"
 					sx={{fontSize: 16}}>
 					<span>Create New Project</span>
-					<AddCircleOutlineIcon sx={{fontSize: 25}} />
+					<Icon.AddCircleOutlineIcon sx={{fontSize: 25}} />
 				</Button>
 			</HeaderContainer>
 		</Heading>

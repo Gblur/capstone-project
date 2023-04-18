@@ -15,6 +15,24 @@ const handleUpdateData = async (node, id) => {
 	}
 };
 
+const handleDelete = async (id, update) => {
+	try {
+		const response = await fetch(`/api/maps`, {
+			method: "DELETE",
+			body: JSON.stringify(id),
+			headers: {"Content-Type": "application/json"},
+		});
+		if (response.ok) {
+			await response.json();
+			update();
+		} else {
+			console.error("Failed to delete data");
+		}
+	} catch (error) {
+		console.error(error);
+	}
+};
+
 const initialNodes = [
 	{
 		id: uuidv4(),
@@ -32,32 +50,38 @@ const initialEdge = [{}];
 
 const useStore = create((set, get) => {
 	return {
+		loading: null,
 		map: {},
 		maps: [],
 		nodes: [],
 		edges: [],
-		getData: async () => {
+		fetchMaps: async () => {
 			const response = await fetch("/api/maps");
+			set({loading: true});
 			if (response.ok) {
 				const data = await response.json();
-				console.log(data);
-				set({maps: data});
+				set({
+					maps: data,
+					loading: false,
+				});
 			}
 		},
-		fetch: async (id) => {
-			if (id) {
+		fetchMap: async (id) => {
+			if (id !== null) {
 				const response = await fetch(`/api/maps/${id}`);
 				if (response.ok) {
 					const data = await response.json();
-					set({
-						nodes: JSON.parse(data.nodes),
-						edges: JSON.parse(data.edges),
-					});
-					set({map: data});
+					if (data) {
+						set({
+							nodes: JSON.parse(data?.nodes),
+							edges: JSON.parse(data?.edges),
+							map: data,
+						});
+					}
 				}
 			}
 		},
-		onPostCreate: async (data, router) => {
+		createMap: async (data, router) => {
 			const newObject = {
 				...data,
 				nodes: JSON.stringify(initialNodes),
@@ -72,6 +96,9 @@ const useStore = create((set, get) => {
 				const {_id} = await response.json();
 				router.push(`/maps/${_id}`);
 			}
+		},
+		deleteMap: (id) => {
+			handleDelete(id, get().fetchMaps);
 		},
 		onNodesChange: (changes) => {
 			set({
