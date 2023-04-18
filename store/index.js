@@ -99,14 +99,6 @@ const useStore = create((set, get) => {
 		},
 		deleteMap: (id) => {
 			handleDelete(id, get().fetchMaps);
-			// const filteredMaps = get().maps.filter((map) => {
-			// 	return map._id !== id;
-			// });
-
-			// console.log(filteredMaps);
-			// set({
-			// 	maps: filteredMaps,
-			// });
 		},
 		onNodesChange: (changes) => {
 			set({

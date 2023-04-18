@@ -33,7 +33,7 @@ export default createGlobalStyle`
     margin: 0 auto;
     max-width: 768px;
     font-family: system-ui;
-    padding: 50px;
+    padding: 20px;
     background: url("/images/map_bg_color.jpeg") center;
     background-size: cover;
   }
