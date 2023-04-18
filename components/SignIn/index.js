@@ -28,7 +28,7 @@ const SignInSection = styled.section`
 export default function SignIn() {
 	const {data: session} = useSession();
 	const router = useRouter();
-
+	console.log("Hello");
 	if (session) {
 		router.push("/maps");
 	}
