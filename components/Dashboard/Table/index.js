@@ -10,7 +10,9 @@ import Paper from "@mui/material/Paper";
 export default function BasicTable({map}) {
 	return (
 		<TableContainer component={Paper}>
-			<Table sx={{minWidth: 350}} aria-label="simple table">
+			<Table
+				sx={{minWidth: 350, minHeight: 115}}
+				aria-label="simple table">
 				<TableHead>
 					<TableRow>
 						<TableCell>User</TableCell>
@@ -27,7 +29,7 @@ export default function BasicTable({map}) {
 							{map.name || ""}
 						</TableCell>
 						<TableCell align="left">{map.team || ""}</TableCell>
-						<TableCell align="left">{map.mapType || ""}</TableCell>
+						<TableCell align="left">{map.date || ""}</TableCell>
 					</TableRow>
 				</TableBody>
 			</Table>

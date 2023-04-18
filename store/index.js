@@ -50,14 +50,13 @@ const initialEdge = [{}];
 
 const useStore = create((set, get) => {
 	return {
-		loading: null,
+		loading: true,
 		map: {},
 		maps: [],
 		nodes: [],
 		edges: [],
 		fetchMaps: async () => {
 			const response = await fetch("/api/maps");
-			set({loading: true});
 			if (response.ok) {
 				const data = await response.json();
 				set({
@@ -82,8 +81,13 @@ const useStore = create((set, get) => {
 			}
 		},
 		createMap: async (data, router) => {
+			const date = new Date(Date.now());
+			const options = {day: "numeric", month: "long", year: "numeric"};
+			const formattedDate = date.toLocaleDateString("de-DE", options);
+			console.log(formattedDate);
 			const newObject = {
 				...data,
+				date: formattedDate,
 				nodes: JSON.stringify(initialNodes),
 				edges: JSON.stringify(initialEdge),
 			};

@@ -12,7 +12,7 @@ import "reactflow/dist/style.css";
 
 const DashboardContainer = styled.div`
 	display: grid;
-	grid-template-columns: 250px 1fr;
+	grid-template-columns: 1fr;
 	gap: 20px;
 `;
 
@@ -34,6 +34,7 @@ const ProjectList = styled.ul`
 const InformationContainer = styled.section`
 	display: flex;
 	flex-direction: column;
+	gap: 20px;
 `;
 
 const MapPreview = styled.div`
@@ -130,6 +131,7 @@ export default function Dashboard({
 				)}
 			</ProjectListContainer>
 			<InformationContainer>
+				<EnhancedTable map={map} />
 				<MapPreview>
 					<>
 						<ReactFlow
@@ -144,7 +146,6 @@ export default function Dashboard({
 						</ReactFlow>
 					</>
 				</MapPreview>
-				<EnhancedTable map={map} />
 			</InformationContainer>
 		</DashboardContainer>
 	);

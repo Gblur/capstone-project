@@ -11,9 +11,15 @@ import {v4 as uuidv4} from "uuid";
 
 const MapInfoBox = styled.div`
 	display: flex;
+	flex-direction: column;
 	justify-content: space-between;
 	padding: 15px;
 	background: var(--color-bg-box-info);
+`;
+
+const MapInfoBoxText = styled.div`
+	display: block;
+	padding: 10px;
 `;
 
 export default function MapDetailsPage() {
@@ -54,10 +60,10 @@ export default function MapDetailsPage() {
 	return (
 		<main style={{height: `calc(100vh - 250px)`}}>
 			<MapInfoBox>
-				<div>
+				<MapInfoBoxText>
 					<h2>{map.name}</h2>
 					<p>{map.description}</p>
-				</div>
+				</MapInfoBoxText>
 				<div>
 					<Button
 						onClick={() => {
