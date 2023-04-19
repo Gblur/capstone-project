@@ -11,8 +11,8 @@ export default function BasicTable({map}) {
 	return (
 		<TableContainer component={Paper}>
 			<Table
-				sx={{minWidth: 350, minHeight: 115}}
-				aria-label="simple table">
+				sx={{minWidth: 330, minHeight: 115}}
+				aria-label="table for map info">
 				<TableHead>
 					<TableRow>
 						<TableCell>User</TableCell>

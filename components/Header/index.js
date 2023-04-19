@@ -8,18 +8,22 @@ import Profile from "../SignIn/Profile";
 
 const Heading = styled.header`
 	text-align: center;
+	position: sticky;
+	top: 0;
 `;
 
 const HeaderContainer = styled.nav`
 	display: flex;
 	width: 100%;
-	color: white;
+	padding: 10px;
+	background: var(--color-bg-box-info);
 	justify-content: space-between;
 	margin-bottom: 20px;
-	position: sticky;
+
 	button {
 		flex-direction: column;
 		justify-content: space-between;
+		font-size: 12px;
 	}
 	span {
 		font-size: 12px;
@@ -43,11 +47,11 @@ export default function Header() {
 					variant="text"
 					color="inherit">
 					<Icon.Home sx={{fontSize: 36}} />
-					<span>Dashboard</span>
+					Dashboard
 				</Button>
 				<Button onClick={openModal} variant="text" color="inherit">
 					<Icon.AddCircleOutlineIcon sx={{fontSize: 36}} />
-					<span>Create New Project</span>
+					New Project
 				</Button>
 				<Profile />
 			</HeaderContainer>

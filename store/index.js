@@ -84,7 +84,6 @@ const useStore = create((set, get) => {
 			const date = new Date(Date.now());
 			const options = {day: "numeric", month: "long", year: "numeric"};
 			const formattedDate = date.toLocaleDateString("de-DE", options);
-			console.log(formattedDate);
 			const newObject = {
 				...data,
 				date: formattedDate,

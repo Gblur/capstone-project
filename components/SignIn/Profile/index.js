@@ -15,21 +15,9 @@ export default function Profile() {
 	const {data: session, status} = useSession();
 
 	return (
-		<>
-			{session ? (
-				<Button
-					variant="text"
-					color="inherit"
-					onClick={() => signOut()}>
-					<ProfileImage src={session?.user?.image} alt="#" />
-					<span>Sign out</span>
-				</Button>
-			) : (
-				<Button variant="text" color="inherit" onClick={() => signIn()}>
-					<AccountCircleIcon color="inherit" sx={24} />
-					<span>Sign In</span>
-				</Button>
-			)}
-		</>
+		<Button variant="text" color="inherit" onClick={() => signOut()}>
+			<ProfileImage src={session?.user?.image} alt="User Account" />
+			Sign out
+		</Button>
 	);
 }

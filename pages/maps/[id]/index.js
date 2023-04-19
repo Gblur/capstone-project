@@ -17,8 +17,7 @@ const MapInfoBox = styled.div`
 	background: var(--color-bg-box-info);
 `;
 
-const MapInfoBoxText = styled.div`
-	display: block;
+const MapInfoBoxHead = styled.article`
 	padding: 10px;
 `;
 
@@ -60,10 +59,10 @@ export default function MapDetailsPage() {
 	return (
 		<main style={{height: `calc(100vh - 250px)`}}>
 			<MapInfoBox>
-				<MapInfoBoxText>
+				<MapInfoBoxHead>
 					<h2>{map.name}</h2>
 					<p>{map.description}</p>
-				</MapInfoBoxText>
+				</MapInfoBoxHead>
 				<div>
 					<Button
 						onClick={() => {

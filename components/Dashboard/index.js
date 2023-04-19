@@ -20,15 +20,16 @@ const ProjectListContainer = styled.section`
 	display: block;
 	border: 1px solid var(--color-dashboard-border);
 	border-radius: 4px;
-	overflow-y: auto;
-	height: 100%;
-	padding: 5px;
+	padding: 10px;
 	background: rgba(255, 255, 255, 0.9);
 `;
 
 const ProjectList = styled.ul`
 	list-style: none;
 	padding: 0;
+	min-height: 50px;
+	max-height: 100px;
+	overflow-y: auto;
 `;
 
 const InformationContainer = styled.section`
