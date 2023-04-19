@@ -17,6 +17,7 @@ export default function BasicTable({map}) {
 					<TableRow>
 						<TableCell>User</TableCell>
 						<TableCell align="left">Team</TableCell>
+						<TableCell align="left">Template</TableCell>
 						<TableCell align="left">Date</TableCell>
 					</TableRow>
 				</TableHead>
@@ -29,6 +30,7 @@ export default function BasicTable({map}) {
 							{map.name || ""}
 						</TableCell>
 						<TableCell align="left">{map.team || ""}</TableCell>
+						<TableCell align="left">{map.mapType || ""}</TableCell>
 						<TableCell align="left">{map.date || ""}</TableCell>
 					</TableRow>
 				</TableBody>

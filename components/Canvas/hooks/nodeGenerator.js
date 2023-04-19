@@ -1,5 +1,3 @@
-import {useEffect, useCallback} from "react";
-
 export default function generator(data) {
 	let base = -300;
 

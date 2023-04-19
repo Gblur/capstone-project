@@ -2,13 +2,15 @@ import React from "react";
 import styled from "styled-components";
 import Button from "@mui/material/Button";
 import {Icon} from "../Icons";
-import formControlStore from "../../store/formControls";
+import formControlStore from "../../store/modalControls";
 import {useRouter} from "next/router";
 import Profile from "../SignIn/Profile";
 
 const Heading = styled.header`
 	text-align: center;
 	position: sticky;
+	z-index: 30;
+	backdrop-filter: blur(4px);
 	top: 0;
 `;
 
@@ -24,6 +26,7 @@ const HeaderContainer = styled.nav`
 		flex-direction: column;
 		justify-content: space-between;
 		font-size: 12px;
+		box-shadow: 0 0 4px #000;
 	}
 	span {
 		font-size: 12px;
@@ -32,7 +35,6 @@ const HeaderContainer = styled.nav`
 
 export default function Header() {
 	const router = useRouter();
-
 	const openModal = formControlStore((state) => state.openModal);
 	const closeModal = formControlStore((state) => state.closeModal);
 

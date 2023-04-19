@@ -27,8 +27,8 @@ const ProjectListContainer = styled.section`
 const ProjectList = styled.ul`
 	list-style: none;
 	padding: 0;
-	min-height: 50px;
-	max-height: 100px;
+	min-height: 80px;
+	max-height: 120px;
 	overflow-y: auto;
 `;
 
@@ -55,11 +55,17 @@ const ProjectListItem = styled.li`
 	padding: 10px;
 	margin-bottom: 5px;
 	cursor: pointer;
+	scale: 1;
+	margin: 10px;
+	transition: ease-in-out 200ms;
+	box-shadow: 0 0 3px #000;
 	&:hover {
 		background: var(--color-hover-item);
 	}
 	&.selected {
 		background: var(--color-background-item);
+		box-shadow: 0 0 8px #000;
+		scale: 1.02;
 	}
 `;
 

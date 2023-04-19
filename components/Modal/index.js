@@ -1,7 +1,7 @@
 import React from "react";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
-import formControlStore from "../../store/formControls";
+import formControlStore from "../../store/modalControls";
 import ProjectForm from "../Form";
 
 const styledModalBox = {
@@ -11,16 +11,13 @@ const styledModalBox = {
 	transform: "translate(-50%, -50%)",
 	width: "80%",
 	maxWidth: "500px",
+	borderRadius: "5px",
 	bgcolor: "background.paper",
-	border: "2px solid #000",
 	boxShadow: 24,
 	p: 2,
 };
 
-export default function CustomModal() {
-	const modal = formControlStore((state) => state.modal);
-	const onClose = formControlStore((state) => state.closeModal);
-
+export default function CustomModal({modal, onClose, children, openModal}) {
 	return (
 		<Modal
 			component="section"
@@ -28,9 +25,7 @@ export default function CustomModal() {
 			onClose={onClose}
 			aria-labelledby="modal-modal-title"
 			aria-describedby="modal-modal-description">
-			<Box sx={styledModalBox}>
-				<ProjectForm />
-			</Box>
+			<Box sx={styledModalBox}>{children}</Box>
 		</Modal>
 	);
 }

@@ -1,7 +1,9 @@
 import Dashboard from "../../components/Dashboard";
 import React, {useEffect, useState} from "react";
 import CustomModal from "../../components/Modal";
+import ProjectForm from "../../components/Form";
 import useStore from "../../store";
+import modalControlsStore from "../../store/modalControls";
 import {shallow} from "zustand/shallow";
 
 const selector = (state) => {
@@ -20,6 +22,8 @@ const selector = (state) => {
 export default function MapsPage() {
 	const {maps, fetchMap, fetchMaps, deleteMap, map, nodes, edges, loading} =
 		useStore(selector, shallow);
+	const modal = modalControlsStore((state) => state.modal);
+	const onClose = modalControlsStore((state) => state.closeModal);
 	const [selectedItem, setSelectedItem] = useState(null);
 	function handleMapSelect(item, id) {
 		fetchMap(id);
@@ -42,7 +46,9 @@ export default function MapsPage() {
 				handleDelete={deleteMap}
 				isloading={loading}
 			/>
-			<CustomModal />
+			<CustomModal modal={modal} onClose={onClose}>
+				<ProjectForm />
+			</CustomModal>
 		</main>
 	);
 }

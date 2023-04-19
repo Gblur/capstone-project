@@ -7,6 +7,7 @@ import Stack from "@mui/material/Stack";
 
 const Form = styled.form`
 	display: block;
+	position: relative;
 	flex-direction: column;
 	justify-content: center;
 
@@ -50,13 +51,16 @@ export default function ProjectForm() {
 					<select
 						name="team"
 						id="teamProject"
-						defaultValue=""
+						defaultValue="DevOps"
 						required>
 						<option value="DevOps">DevOps</option>
 						<option value="Frontend">Frontend</option>
 					</select>
 					<label htmlFor="typeProject">Type</label>
-					<select name="mapType" id="typeProject" defaultValue="">
+					<select
+						name="mapType"
+						id="typeProject"
+						defaultValue="Repos">
 						<option value="Repos">Repos</option>
 						<option value="None">None</option>
 					</select>

@@ -1,6 +1,9 @@
 import {createGlobalStyle} from "styled-components";
 
 export default createGlobalStyle`
+  html{
+    scroll: smooth
+  }
   :root{
     // Nodes
     --color-node-parent-bg: #ffd17d;

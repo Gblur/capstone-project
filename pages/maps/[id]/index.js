@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import Canvas from "../../../components/Canvas";
 import "reactflow/dist/style.css";
 import {shallow} from "zustand/shallow";
@@ -7,7 +7,9 @@ import styled from "styled-components";
 import CircularProgress from "@mui/material/CircularProgress";
 import {useRouter} from "next/router";
 import useStore from "../../../store";
+import useSWR from "swr";
 import {v4 as uuidv4} from "uuid";
+import {useSession} from "next-auth/react";
 
 const MapInfoBox = styled.div`
 	display: flex;
@@ -15,30 +17,40 @@ const MapInfoBox = styled.div`
 	justify-content: space-between;
 	padding: 15px;
 	background: var(--color-bg-box-info);
+	word-wrap: break-word;
+	margin-bottom: 20px;
+	border-radius: 4px;
 `;
 
 const MapInfoBoxHead = styled.article`
-	padding: 10px;
+	padding: 0 10px;
 `;
 
+const selector = (state) => ({
+	loading: state.loading,
+	map: state.map,
+	nodes: state.nodes,
+	edges: state.edges,
+	fetchMap: state.fetchMap,
+	fetchRepos: state.fetchRepos,
+	repos: state.repos,
+	post: state.post,
+	onNodesChange: state.onNodesChange,
+	onEdgesChange: state.onEdgesChange,
+	onConnect: state.onConnect,
+	onNodeCreate: state.onNodeCreate,
+	onGenerateNodes: state.onGenerateNodes,
+	onUpdateMap: state.onUpdateMap,
+});
 export default function MapDetailsPage() {
-	const selector = (state) => ({
-		nodes: state.nodes,
-		edges: state.edges,
-		fetchMap: state.fetchMap,
-		post: state.post,
-		onNodesChange: state.onNodesChange,
-		onEdgesChange: state.onEdgesChange,
-		onConnect: state.onConnect,
-		onNodeCreate: state.onNodeCreate,
-		onGenerateNodes: state.onGenerateNodes,
-		onUpdateMap: state.onUpdateMap,
-	});
-
 	const {
+		loading,
+		map,
 		nodes,
 		edges,
+		repos,
 		fetchMap,
+		fetchRepos,
 		onNodesChange,
 		onEdgesChange,
 		onConnect,
@@ -48,42 +60,66 @@ export default function MapDetailsPage() {
 	} = useStore(selector, shallow);
 
 	const [filter, setFilter] = useState("HTML");
-	const map = useStore((state) => state.map);
+	const {data: session, status} = useSession();
+
 	const router = useRouter();
 	const {
 		query: {id},
 	} = router;
 
+	function checkIfTemplateAvailable(template, repos, parentID) {
+		if (template === "Repos" && parentID) {
+			fetchRepos(
+				`https://api.github.com/users/${session?.user?.name}/repos`
+			);
+			onGenerateNodes(repos, filter, parentID);
+		} else return;
+	}
+
+	useEffect(() => {
+		if (id) {
+			fetchMap(id);
+		}
+		if (!nodes[1]?.type) {
+			if (!loading) {
+				setTimeout(() => {
+					checkIfTemplateAvailable(map.mapType, repos, nodes[0]?.id);
+				}, 1500);
+			}
+		}
+		return () => {};
+	}, []);
+
 	if (!router.isReady) return <CircularProgress />;
 
 	return (
-		<main style={{height: `calc(100vh - 250px)`}}>
+		<main
+			style={{
+				height: `100vh`,
+			}}>
 			<MapInfoBox>
 				<MapInfoBoxHead>
-					<h2>{map.name}</h2>
+					<h3>{map.name}</h3>
 					<p>{map.description}</p>
 				</MapInfoBoxHead>
-				<div>
-					<Button
-						onClick={() => {
-							onNodeCreate(uuidv4());
-						}}>
-						Create Node
-					</Button>
+			</MapInfoBox>
+			<section style={{height: "65%"}}>
+				<div style={{background: "rgba(244,244,244,0.9)"}}>
 					<Button onClick={() => onUpdateMap(id)}>Save Map</Button>
 				</div>
-			</MapInfoBox>
-			<Canvas
-				nodes={nodes}
-				edges={edges}
-				onConnect={onConnect}
-				fetchMap={fetchMap}
-				onEdgesChange={onEdgesChange}
-				onNodesChange={onNodesChange}
-				map={map}
-				id={id}
-				filter={filter}
-			/>
+				<Canvas
+					nodes={nodes}
+					edges={edges}
+					onConnect={onConnect}
+					onNodeCreate={onNodeCreate}
+					fetchMap={fetchMap}
+					onEdgesChange={onEdgesChange}
+					onNodesChange={onNodesChange}
+					map={map}
+					id={id}
+					filter={filter}
+				/>
+			</section>
 		</main>
 	);
 }
