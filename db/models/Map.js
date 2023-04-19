@@ -7,6 +7,7 @@ const MapSchema = new Schema({
 	team: String,
 	mapType: {type: String, required: true},
 	description: String,
+	date: {type: String},
 	nodes: String,
 	edges: String,
 });

@@ -12,7 +12,7 @@ import "reactflow/dist/style.css";
 
 const DashboardContainer = styled.div`
 	display: grid;
-	grid-template-columns: 250px 1fr;
+	grid-template-columns: 1fr;
 	gap: 20px;
 `;
 
@@ -20,20 +20,22 @@ const ProjectListContainer = styled.section`
 	display: block;
 	border: 1px solid var(--color-dashboard-border);
 	border-radius: 4px;
-	overflow-y: auto;
-	height: 100%;
-	padding: 5px;
+	padding: 10px;
 	background: rgba(255, 255, 255, 0.9);
 `;
 
 const ProjectList = styled.ul`
 	list-style: none;
 	padding: 0;
+	min-height: 50px;
+	max-height: 100px;
+	overflow-y: auto;
 `;
 
 const InformationContainer = styled.section`
 	display: flex;
 	flex-direction: column;
+	gap: 20px;
 `;
 
 const MapPreview = styled.div`
@@ -130,6 +132,7 @@ export default function Dashboard({
 				)}
 			</ProjectListContainer>
 			<InformationContainer>
+				<EnhancedTable map={map} />
 				<MapPreview>
 					<>
 						<ReactFlow
@@ -144,7 +147,6 @@ export default function Dashboard({
 						</ReactFlow>
 					</>
 				</MapPreview>
-				<EnhancedTable map={map} />
 			</InformationContainer>
 		</DashboardContainer>
 	);

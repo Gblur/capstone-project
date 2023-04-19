@@ -4,17 +4,30 @@ import Button from "@mui/material/Button";
 import {Icon} from "../Icons";
 import formControlStore from "../../store/formControls";
 import {useRouter} from "next/router";
-import Stack from "@mui/material/Stack";
+import Profile from "../SignIn/Profile";
 
 const Heading = styled.header`
 	text-align: center;
+	position: sticky;
+	top: 0;
 `;
 
 const HeaderContainer = styled.nav`
 	display: flex;
 	width: 100%;
+	padding: 10px;
+	background: var(--color-bg-box-info);
 	justify-content: space-between;
 	margin-bottom: 20px;
+
+	button {
+		flex-direction: column;
+		justify-content: space-between;
+		font-size: 12px;
+	}
+	span {
+		font-size: 12px;
+	}
 `;
 
 export default function Header() {
@@ -31,18 +44,16 @@ export default function Header() {
 						router.push("/maps");
 						closeModal();
 					}}
-					variant="contained"
-					sx={{fontSize: 16}}>
-					<span>Home</span>
-					<Icon.Home sx={{fontSize: 20}} />
+					variant="text"
+					color="inherit">
+					<Icon.Home sx={{fontSize: 36}} />
+					Dashboard
 				</Button>
-				<Button
-					onClick={openModal}
-					variant="contained"
-					sx={{fontSize: 16}}>
-					<span>Create New Project</span>
-					<Icon.AddCircleOutlineIcon sx={{fontSize: 25}} />
+				<Button onClick={openModal} variant="text" color="inherit">
+					<Icon.AddCircleOutlineIcon sx={{fontSize: 36}} />
+					New Project
 				</Button>
+				<Profile />
 			</HeaderContainer>
 		</Heading>
 	);
