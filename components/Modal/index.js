@@ -3,7 +3,6 @@ import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import formControlStore from "../../store/formControls";
 import ProjectForm from "../Form";
-import {Typography} from "@mui/material";
 
 const styledModalBox = {
 	position: "absolute",
