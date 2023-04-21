@@ -37,6 +37,7 @@ export default function Header() {
 	const router = useRouter();
 	const openModal = formControlStore((state) => state.openModal);
 	const closeModal = formControlStore((state) => state.closeModal);
+	const pathname = router.pathname;
 
 	return (
 		<Heading>
@@ -51,10 +52,12 @@ export default function Header() {
 					<Icon.Home sx={{fontSize: 36}} />
 					Dashboard
 				</Button>
-				<Button onClick={openModal} variant="text" color="inherit">
-					<Icon.AddCircleOutlineIcon sx={{fontSize: 36}} />
-					New Project
-				</Button>
+				{pathname === "/maps" && (
+					<Button onClick={openModal} variant="text" color="inherit">
+						<Icon.AddCircleOutlineIcon sx={{fontSize: 36}} />
+						New Project
+					</Button>
+				)}
 				<Profile />
 			</HeaderContainer>
 		</Heading>

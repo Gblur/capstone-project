@@ -10,6 +10,7 @@ import useStore from "../../../store";
 import useSWR from "swr";
 import {v4 as uuidv4} from "uuid";
 import {useSession} from "next-auth/react";
+import modalControlsStore from "../../../store/modalControls";
 
 const MapInfoBox = styled.div`
 	display: flex;
@@ -59,6 +60,10 @@ export default function MapDetailsPage() {
 		onUpdateMap,
 	} = useStore(selector, shallow);
 
+	const modal = modalControlsStore((state) => state.modal);
+	const closeModal = modalControlsStore((state) => state.closeModal);
+	const openModal = modalControlsStore((state) => state.openModal);
+
 	const [filter, setFilter] = useState("HTML");
 	const {data: session, status} = useSession();
 
@@ -80,6 +85,7 @@ export default function MapDetailsPage() {
 		if (id) {
 			fetchMap(id);
 		}
+		closeModal();
 		if (!nodes[1]?.type) {
 			if (!loading) {
 				setTimeout(() => {
@@ -118,6 +124,9 @@ export default function MapDetailsPage() {
 					map={map}
 					id={id}
 					filter={filter}
+					modal={modal}
+					closeModal={closeModal}
+					openModal={openModal}
 				/>
 			</section>
 		</main>
