@@ -64,7 +64,6 @@ export default function MapDetailsPage() {
 	const closeModal = modalControlsStore((state) => state.closeModal);
 	const openModal = modalControlsStore((state) => state.openModal);
 
-	const [filter, setFilter] = useState("HTML");
 	const {data: session, status} = useSession();
 
 	const router = useRouter();
@@ -77,7 +76,7 @@ export default function MapDetailsPage() {
 			fetchRepos(
 				`https://api.github.com/users/${session?.user?.name}/repos`
 			);
-			onGenerateNodes(repos, filter, parentID);
+			onGenerateNodes(repos, parentID);
 		} else return;
 	}
 
@@ -90,7 +89,7 @@ export default function MapDetailsPage() {
 			if (!loading) {
 				setTimeout(() => {
 					checkIfTemplateAvailable(map.mapType, repos, nodes[0]?.id);
-				}, 1500);
+				}, 2000);
 			}
 		}
 		return () => {};
@@ -123,7 +122,6 @@ export default function MapDetailsPage() {
 					onNodesChange={onNodesChange}
 					map={map}
 					id={id}
-					filter={filter}
 					modal={modal}
 					closeModal={closeModal}
 					openModal={openModal}

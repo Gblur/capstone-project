@@ -143,11 +143,11 @@ const useStore = create((set, get) => {
 				edges: [...get().edges, nodeCreator(parent, id).edge],
 			});
 		},
-		onGenerateNodes: (data, filter, parentID) => {
+		onGenerateNodes: (data, parentID) => {
 			set({
 				nodes: [
 					...get().nodes,
-					...nodeGenerator(data, filter).addChilds(parentID),
+					...nodeGenerator(data).addChilds(parentID),
 				],
 				edges: [
 					...get().edges,

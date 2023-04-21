@@ -27,11 +27,11 @@ export default function BasicTable({map}) {
 							"&:last-child td, &:last-child th": {border: 0},
 						}}>
 						<TableCell component="th" scope="row">
-							{map.name || ""}
+							{map?.name?.substring(0, 7) + "..." || ""}
 						</TableCell>
-						<TableCell align="left">{map.team || ""}</TableCell>
-						<TableCell align="left">{map.mapType || ""}</TableCell>
-						<TableCell align="left">{map.date || ""}</TableCell>
+						<TableCell align="left">{map?.team || ""}</TableCell>
+						<TableCell align="left">{map?.mapType || ""}</TableCell>
+						<TableCell align="left">{map?.date || ""}</TableCell>
 					</TableRow>
 				</TableBody>
 			</Table>

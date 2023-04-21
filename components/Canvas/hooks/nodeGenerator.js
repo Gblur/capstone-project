@@ -12,7 +12,7 @@ export default function generator(data) {
 		}
 	}
 
-	const filterData = filteredData(data, "HTML");
+	const filterData = filteredData(data, "JavaScript");
 
 	function addChilds(parentID) {
 		return filterData.map((item) => {
