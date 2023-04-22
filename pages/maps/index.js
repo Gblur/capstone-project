@@ -1,5 +1,5 @@
 import Dashboard from "../../components/Dashboard";
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useState, useRef} from "react";
 import CustomModal from "../../components/Modal";
 import ProjectForm from "../../components/Form";
 import useStore from "../../store";
@@ -24,20 +24,26 @@ export default function MapsPage() {
 		useStore(selector, shallow);
 	const modal = modalControlsStore((state) => state.modal);
 	const onClose = modalControlsStore((state) => state.closeModal);
-	const [selectedItem, setSelectedItem] = useState(maps && maps[0]);
+	const [selectedItem, setSelectedItem] = useState();
+	const prevMyStateValueRef = useRef();
 	function handleMapSelect(item, id) {
 		setSelectedItem(item);
 		fetchMap(id);
 	}
 
 	useEffect(() => {
-		if (!maps.length) {
+		prevMyStateValueRef.current = maps;
+	});
+	const prevMyStateValue = prevMyStateValueRef.current;
+
+	useEffect(() => {
+		if (!maps.length || maps !== prevMyStateValue) {
 			fetchMaps();
 		}
 		if (!selectedItem) {
 			setTimeout(() => {
 				handleMapSelect(maps[0]);
-			}, 200);
+			}, 500);
 		}
 	}, [map._id]);
 

@@ -75,8 +75,8 @@ const useStore = create((set, get) => {
 			}
 		},
 		fetchMap: async (id) => {
-			const defaultId = get().maps[0]._id;
-			const response = await fetch(`/api/maps/${id || defaultId}`);
+			const defaultId = id ?? get().maps[0]._id;
+			const response = await fetch(`/api/maps/${defaultId}`);
 			if (response.ok) {
 				const data = await response.json();
 				if (data) {
@@ -95,7 +95,8 @@ const useStore = create((set, get) => {
 				method: "GET",
 			});
 			const data = await response.json();
-			set({repos: data.data, loading: false});
+			set({repos: data.data});
+			set({loading: false});
 		},
 		createMap: async (data, router) => {
 			const date = new Date(Date.now());
@@ -136,13 +137,13 @@ const useStore = create((set, get) => {
 			});
 		},
 
-		onNodeCreate: (parent) => {
+		onNodeCreate: (parent, id) => {
 			set({
 				nodes: [...get().nodes, nodeCreator(parent, id).node],
 				edges: [...get().edges, nodeCreator(parent, id).edge],
 			});
 		},
-		onGenerateNodes: (data, parentID) => {
+		onGenerateNodes: (data) => {
 			set({
 				nodes: [
 					...get().nodes,

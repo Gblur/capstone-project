@@ -71,24 +71,22 @@ export default function MapDetailsPage() {
 		query: {id},
 	} = router;
 
-	function fetchAndGenerate(repos) {
-		fetchRepos(`/api/auth/github`);
-		onGenerateNodes(repos);
-	}
-
 	useEffect(() => {
 		closeModal();
 		if (id) {
 			fetchMap(id);
+			console.log(
+				"General Check",
+				map.mapType === "Repos" && !map.nodes.includes("child")
+			);
+			if (map.mapType === "Repos" && !map.nodes.includes("child")) {
+				fetchRepos(`/api/auth/github`);
+				setTimeout(() => {
+					if (!loading) onGenerateNodes(repos);
+				}, 300);
+			}
 		}
-		console.log(!map.nodes.includes("child"));
-		if (map.mapType === "Repos" && !map.nodes.includes("child")) {
-			setTimeout(() => {
-				fetchAndGenerate(repos);
-			}, 500);
-		}
-		return () => {};
-	}, []);
+	}, [map._id]);
 
 	if (!router.isReady) return <CircularProgress />;
 
