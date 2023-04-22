@@ -83,7 +83,7 @@ export default function MapDetailsPage() {
 				fetchRepos(`/api/auth/github`);
 				setTimeout(() => {
 					if (!loading) onGenerateNodes(repos);
-				}, 300);
+				}, 600);
 			}
 		}
 	}, [map._id]);

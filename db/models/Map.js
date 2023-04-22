@@ -8,6 +8,7 @@ const MapSchema = new Schema({
 	mapType: {type: String, required: true},
 	description: String,
 	date: {type: String},
+	user: String,
 	nodes: String,
 	edges: String,
 });

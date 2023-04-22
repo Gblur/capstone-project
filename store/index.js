@@ -75,8 +75,8 @@ const useStore = create((set, get) => {
 			}
 		},
 		fetchMap: async (id) => {
-			const defaultId = id ?? get().maps[0]._id;
-			const response = await fetch(`/api/maps/${defaultId}`);
+			const defaultId = id ?? get().maps[0]?._id;
+			const response = await fetch(`/api/maps/${defaultId || null}`);
 			if (response.ok) {
 				const data = await response.json();
 				if (data) {
@@ -98,13 +98,14 @@ const useStore = create((set, get) => {
 			set({repos: data.data});
 			set({loading: false});
 		},
-		createMap: async (data, router) => {
+		createMap: async (data, router, user) => {
 			const date = new Date(Date.now());
 			const options = {day: "numeric", month: "long", year: "numeric"};
 			const formattedDate = date.toLocaleDateString("de-DE", options);
 			const newObject = {
 				...data,
 				date: formattedDate,
+				user: user,
 				nodes: JSON.stringify(initialNodes),
 				edges: JSON.stringify(initialEdge),
 			};

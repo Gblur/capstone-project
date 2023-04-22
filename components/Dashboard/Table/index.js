@@ -11,7 +11,7 @@ export default function BasicTable({map}) {
 	return (
 		<TableContainer component={Paper}>
 			<Table
-				sx={{minWidth: 330, minHeight: 115}}
+				sx={{minWidth: 300, minHeight: 115}}
 				aria-label="table for map info">
 				<TableHead>
 					<TableRow>
@@ -27,7 +27,7 @@ export default function BasicTable({map}) {
 							"&:last-child td, &:last-child th": {border: 0},
 						}}>
 						<TableCell component="th" scope="row">
-							{map?.name?.substring(0, 7) + "..." || ""}
+							{map?.user}
 						</TableCell>
 						<TableCell align="left">{map?.team || ""}</TableCell>
 						<TableCell align="left">{map?.mapType || ""}</TableCell>

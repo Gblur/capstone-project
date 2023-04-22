@@ -21,7 +21,7 @@ const ProjectListContainer = styled.section`
 	border: 1px solid var(--color-dashboard-border);
 	border-radius: 4px;
 	padding: 10px;
-	min-height: 200px;
+	min-height: 250px;
 	background: rgba(255, 255, 255, 0.9);
 `;
 

@@ -4,6 +4,7 @@ import styled from "styled-components";
 import {useRouter} from "next/router";
 import useStore from "../../store";
 import Stack from "@mui/material/Stack";
+import {useSession} from "next-auth/react";
 
 const Form = styled.form`
 	display: block;
@@ -33,11 +34,13 @@ const Form = styled.form`
 export default function ProjectForm() {
 	const createPost = useStore((state) => state.createMap);
 	const router = useRouter();
+	const {data: session} = useSession();
+	console.log(session);
 	const onSubmitForm = (event) => {
 		event.preventDefault();
 		const form = new FormData(event.target);
 		const data = Object.fromEntries(form);
-		createPost(data, router);
+		createPost(data, router, session?.user?.name);
 	};
 
 	return (
