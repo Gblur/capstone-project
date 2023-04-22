@@ -71,26 +71,21 @@ export default function MapDetailsPage() {
 		query: {id},
 	} = router;
 
-	function checkIfTemplateAvailable(template, repos, parentID) {
-		if (template === "Repos" && parentID) {
-			fetchRepos(
-				`https://api.github.com/users/${session?.user?.name}/repos`
-			);
-			onGenerateNodes(repos, parentID);
-		} else return;
+	function fetchAndGenerate(repos) {
+		fetchRepos(`/api/auth/github`);
+		onGenerateNodes(repos);
 	}
 
 	useEffect(() => {
+		closeModal();
 		if (id) {
 			fetchMap(id);
 		}
-		closeModal();
-		if (!nodes[1]?.type) {
-			if (!loading) {
-				setTimeout(() => {
-					checkIfTemplateAvailable(map.mapType, repos, nodes[0]?.id);
-				}, 2000);
-			}
+		console.log(!map.nodes.includes("child"));
+		if (map.mapType === "Repos" && !map.nodes.includes("child")) {
+			setTimeout(() => {
+				fetchAndGenerate(repos);
+			}, 500);
 		}
 		return () => {};
 	}, []);
@@ -113,6 +108,7 @@ export default function MapDetailsPage() {
 					<Button onClick={() => onUpdateMap(id)}>Save Map</Button>
 				</div>
 				<Canvas
+					user={session?.user?.name}
 					nodes={nodes}
 					edges={edges}
 					onConnect={onConnect}

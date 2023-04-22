@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import styled from "styled-components";
 import CircularProgress from "@mui/material/CircularProgress";
 import EnhancedTable from "./Table";
@@ -92,14 +92,14 @@ export default function Dashboard({
 			<ProjectListContainer>
 				<h2>Project list</h2>
 				<hr />
-				{!isloading ? (
+				{!isloading && selectedItem ? (
 					<ProjectList>
 						{data.length > 0 ? (
 							data.map((item) => {
 								return (
 									<ProjectListItem
 										className={
-											selectedItem === item
+											selectedItem._id === item._id
 												? "selected"
 												: ""
 										}

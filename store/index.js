@@ -75,18 +75,17 @@ const useStore = create((set, get) => {
 			}
 		},
 		fetchMap: async (id) => {
-			if (id !== null) {
-				const response = await fetch(`/api/maps/${id}`);
-				if (response.ok) {
-					const data = await response.json();
-					if (data) {
-						set((prev) => ({
-							...prev,
-							nodes: JSON.parse(data?.nodes),
-							edges: JSON.parse(data?.edges),
-							map: data,
-						}));
-					}
+			const defaultId = get().maps[0]._id;
+			const response = await fetch(`/api/maps/${id || defaultId}`);
+			if (response.ok) {
+				const data = await response.json();
+				if (data) {
+					set((prev) => ({
+						...prev,
+						nodes: JSON.parse(data?.nodes),
+						edges: JSON.parse(data?.edges),
+						map: data,
+					}));
 				}
 			}
 		},
@@ -96,7 +95,7 @@ const useStore = create((set, get) => {
 				method: "GET",
 			});
 			const data = await response.json();
-			set({repos: data, loading: false});
+			set({repos: data.data, loading: false});
 		},
 		createMap: async (data, router) => {
 			const date = new Date(Date.now());
@@ -137,7 +136,7 @@ const useStore = create((set, get) => {
 			});
 		},
 
-		onNodeCreate: (parent, id) => {
+		onNodeCreate: (parent) => {
 			set({
 				nodes: [...get().nodes, nodeCreator(parent, id).node],
 				edges: [...get().edges, nodeCreator(parent, id).edge],
@@ -147,11 +146,11 @@ const useStore = create((set, get) => {
 			set({
 				nodes: [
 					...get().nodes,
-					...nodeGenerator(data).addChilds(parentID),
+					...nodeGenerator(data).addChilds(get().nodes[0].id),
 				],
 				edges: [
 					...get().edges,
-					...nodeGenerator(data).connectChilds(parentID),
+					...nodeGenerator(data).connectChilds(get().nodes[0].id),
 				],
 			});
 		},

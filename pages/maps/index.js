@@ -24,15 +24,22 @@ export default function MapsPage() {
 		useStore(selector, shallow);
 	const modal = modalControlsStore((state) => state.modal);
 	const onClose = modalControlsStore((state) => state.closeModal);
-	const [selectedItem, setSelectedItem] = useState(null);
+	const [selectedItem, setSelectedItem] = useState(maps && maps[0]);
 	function handleMapSelect(item, id) {
-		fetchMap(id);
 		setSelectedItem(item);
+		fetchMap(id);
 	}
 
 	useEffect(() => {
-		fetchMaps();
-	}, []);
+		if (!maps.length) {
+			fetchMaps();
+		}
+		if (!selectedItem) {
+			setTimeout(() => {
+				handleMapSelect(maps[0]);
+			}, 200);
+		}
+	}, [map._id]);
 
 	return (
 		<main>
