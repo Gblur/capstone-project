@@ -86,7 +86,7 @@ export default function MapDetailsPage() {
 				}, 600);
 			}
 		}
-	}, [map._id]);
+	}, [map._id, id]);
 
 	if (!router.isReady) return <CircularProgress />;
 

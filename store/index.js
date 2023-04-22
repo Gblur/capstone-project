@@ -34,12 +34,12 @@ const handleDelete = async (id, update) => {
 	}
 };
 
-const initialNodes = [
+const initialNodes = (label) => [
 	{
 		id: uuidv4(),
 		type: "parent",
 		data: {
-			label: "Root",
+			label: label,
 			background: "var(--color-node-parent-bg)",
 			type: "root",
 			status: "unknown",
@@ -106,7 +106,9 @@ const useStore = create((set, get) => {
 				...data,
 				date: formattedDate,
 				user: user,
-				nodes: JSON.stringify(initialNodes),
+				nodes: JSON.stringify(
+					initialNodes(data.mapType === "Repos" ? "Repos" : "Root")
+				),
 				edges: JSON.stringify(initialEdge),
 			};
 			const response = await fetch(`/api/maps`, {

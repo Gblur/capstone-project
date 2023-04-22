@@ -3,6 +3,13 @@ import {createGlobalStyle} from "styled-components";
 export default createGlobalStyle`
   html{
     scroll: smooth
+    -ms-overflow-style: none; /* for Internet Explorer, Edge */
+    scrollbar-width: none; /* for Firefox */
+    overflow-y: scroll; 
+  }
+
+  html::-webkit-scrollbar {
+      display: none; /* for Chrome, Safari, and Opera */
   }
   :root{
     // Nodes
