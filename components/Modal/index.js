@@ -1,8 +1,6 @@
 import React from "react";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
-import formControlStore from "../../store/modalControls";
-import ProjectForm from "../Form";
 
 const styledModalBox = {
 	position: "absolute",
@@ -17,7 +15,7 @@ const styledModalBox = {
 	p: 2,
 };
 
-export default function CustomModal({modal, onClose, children, openModal}) {
+export default function CustomModal({modal, onClose, children}) {
 	return (
 		<Modal
 			component="section"

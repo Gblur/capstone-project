@@ -46,11 +46,12 @@ export default function Canvas({
 		const currentNode = nodes.find((node) => {
 			return node.id === event.currentTarget.getAttribute("data-id");
 		});
-		openModal();
-		if (currentNode?.branches) {
-			setBranchUrl(currentNode["branches"].replace("{/branch}", ""));
-		}
+		// if (currentNode?.branches) {
+		// 	setBranchUrl(currentNode["branches"].replace("{/branch}", ""));
+		// }
 		if (currentNode?.type === "unbound") {
+			openModal();
+
 			// build data
 			const data = currentNode;
 			setCurrentData(data);
@@ -117,7 +118,7 @@ export default function Canvas({
 									labelId="status-label"
 									id="maptype-select"
 									name="type"
-									value={currentData.data.nodeType}
+									defaultValue={currentData.data.nodeType}
 									// defaultValue={currentData.data.nodeType}
 									onChange={(e) => {
 										updateNodeType(
@@ -138,7 +139,7 @@ export default function Canvas({
 									labelId="status-label"
 									id="maptype-select"
 									name="status"
-									value={currentData.data.status}
+									defaultValue={currentData.data.status}
 									// defaultValue={currentData.data.nodeType}
 									onChange={(e) => {
 										updateNodeStatus(
