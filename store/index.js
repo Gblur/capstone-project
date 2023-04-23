@@ -1,4 +1,5 @@
 import {create} from "zustand";
+import {mountStoreDevtool} from "simple-zustand-devtools";
 import nodeCreator from "../components/Canvas/hooks/nodeCreator";
 import nodeGenerator from "../components/Canvas/hooks/nodeGenerator";
 import {addEdge, addNode, applyNodeChanges, applyEdgeChanges} from "reactflow";
@@ -33,12 +34,12 @@ const handleDelete = async (id, update) => {
 	}
 };
 
-const initialNodes = [
+const initialNodes = (label) => [
 	{
 		id: uuidv4(),
 		type: "parent",
 		data: {
-			label: "Root",
+			label: label,
 			background: "var(--color-node-parent-bg)",
 			type: "root",
 			status: "unknown",
@@ -46,7 +47,7 @@ const initialNodes = [
 		position: {x: 250, y: 25},
 	},
 ];
-const initialEdge = [{}];
+const initialEdge = [];
 
 const useStore = create((set, get) => {
 	return {
@@ -55,39 +56,63 @@ const useStore = create((set, get) => {
 		maps: [],
 		nodes: [],
 		edges: [],
+		repos: [],
+		filterMaps: (searchString) => {
+			set({
+				maps: get().maps.filter((map) => {
+					return map.name.includes(searchString);
+				}),
+			});
+		},
 		fetchMaps: async () => {
 			const response = await fetch("/api/maps");
 			if (response.ok) {
 				const data = await response.json();
 				set({
 					maps: data,
-					loading: false,
 				});
+				set({loading: false});
 			}
 		},
 		fetchMap: async (id) => {
-			if (id !== null) {
-				const response = await fetch(`/api/maps/${id}`);
+			if (!get().loading) {
+				const response = await fetch(
+					`/api/maps/${id || get().maps[0]._id}`
+				);
 				if (response.ok) {
 					const data = await response.json();
 					if (data) {
-						set({
+						set((prev) => ({
+							...prev,
 							nodes: JSON.parse(data?.nodes),
 							edges: JSON.parse(data?.edges),
 							map: data,
-						});
+						}));
 					}
 				}
 			}
 		},
-		createMap: async (data, router) => {
+		fetchRepos: async (url) => {
+			set({loading: true});
+			const response = await fetch(url, {
+				method: "GET",
+			});
+			const data = await response.json();
+			set({loading: false});
+			get().onGenerateNodes(data.data);
+			set({repos: data.data});
+		},
+		createMap: async (data, router, user) => {
 			const date = new Date(Date.now());
 			const options = {day: "numeric", month: "long", year: "numeric"};
 			const formattedDate = date.toLocaleDateString("de-DE", options);
 			const newObject = {
 				...data,
 				date: formattedDate,
-				nodes: JSON.stringify(initialNodes),
+				user: user,
+				nodes: JSON.stringify(
+					initialNodes(data.mapType === "Repos" ? "Repos" : "Root")
+				),
 				edges: JSON.stringify(initialEdge),
 			};
 			const response = await fetch(`/api/maps`, {
@@ -119,9 +144,22 @@ const useStore = create((set, get) => {
 			});
 		},
 
-		onNodeCreate: (id) => {
+		onNodeCreate: (parent, id) => {
 			set({
-				nodes: [...get().nodes, nodeCreator(id)],
+				nodes: [...get().nodes, nodeCreator(parent, id).node],
+				edges: [...get().edges, nodeCreator(parent, id).edge],
+			});
+		},
+		onGenerateNodes: (data) => {
+			set({
+				nodes: [
+					...get().nodes,
+					...nodeGenerator(data).addChilds(get().nodes[0].id),
+				],
+				edges: [
+					...get().edges,
+					...nodeGenerator(data).connectChilds(get().nodes[0].id),
+				],
 			});
 		},
 		onUpdateMap: async (id) => {
@@ -156,22 +194,20 @@ const useStore = create((set, get) => {
 				}),
 			});
 		},
+		updateNodeStatus: (nodeId, status) => {
+			set({
+				nodes: get().nodes.map((node) => {
+					if (node.id === nodeId) {
+						node.data = {...node.data, status};
+					}
+
+					return node;
+				}),
+			});
+		},
 	};
 });
 
-// onGenerateNodes: (data, parentID) => {
-// 	set({
-// 		nodes: [
-// 			...get().nodes,
-// 			...nodeGenerator(data).addChilds(parentID),
-// 		],
-// 		edges: [
-// 			...get().edges,
-// 			...nodeGenerator(data).connectChilds(parentID),
-// 		],
-// 	});
-// },
-
-// mountStoreDevtool("store1", useStore);
+mountStoreDevtool("store1", useStore);
 
 export default useStore;

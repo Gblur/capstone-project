@@ -3,6 +3,9 @@ import {Handle, Position} from "reactflow";
 import useStore from "../../store";
 import styled from "styled-components";
 import TripOriginOutlinedIcon from "@mui/icons-material/TripOriginOutlined";
+import BugReportIcon from "@mui/icons-material/BugReport";
+import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
+import CircleIcon from "@mui/icons-material/Circle";
 
 const Node = styled.div`
 	padding: 10px 20px;
@@ -26,12 +29,19 @@ const Node = styled.div`
 	}
 	.icon_label {
 		display: flex;
-		justify-content: flex-end;
+		justify-content: center;
 		align-items: center;
+		background: rgba(255, 255, 255, 0.4);
+	}
+
+	i {
+		color: dark-gray;
+		margin-right: 5px;
 	}
 
 	p,
-	input {
+	input,
+	.icon_label {
 		background: rgba(255, 255, 255, 0.8);
 		border-radius: 4px;
 		padding: 5px;
@@ -67,34 +77,18 @@ const ChildNode = ({selected, data, nodeType}) => {
 };
 
 const CreatedNode = ({selected, data, id}) => {
-	const updateNodeLabel = useStore((state) => state.updateNodeLabel);
-	const updateNodeType = useStore((state) => state.updateNodeType);
-
 	return (
 		<>
 			<Node background={data.background} selected={selected}>
 				<Handle type="target" position={Position.Top} />
-				{selected ? (
-					<input
-						value={data.label}
-						onChange={(event) => {
-							updateNodeLabel(id, event?.target?.value);
-						}}
-					/>
-				) : (
-					<p>{data.label}</p>
-				)}
+				<p>{data.label}</p>
 				<div className="icon_label">
-					<select
-						onChange={(event) =>
-							updateNodeType(id, event?.target?.value)
-						}
-						name="typenode"
-						value={data.nodeType}
-						id="select__type">
-						<option value="Issue">Issue</option>
-						<option value="Branch">Branch</option>
-					</select>
+					<i>{data.nodeType}</i>
+					{data.status === "started" ? (
+						<CircleIcon fontSize="8px" color="success" />
+					) : (
+						<CircleIcon fontSize="8px" color="warning" />
+					)}
 				</div>
 				<Handle type="source" position={Position.Bottom} />
 			</Node>

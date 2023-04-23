@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import styled from "styled-components";
 import CircularProgress from "@mui/material/CircularProgress";
 import EnhancedTable from "./Table";
@@ -21,14 +21,15 @@ const ProjectListContainer = styled.section`
 	border: 1px solid var(--color-dashboard-border);
 	border-radius: 4px;
 	padding: 10px;
+	min-height: 250px;
 	background: rgba(255, 255, 255, 0.9);
 `;
 
 const ProjectList = styled.ul`
 	list-style: none;
 	padding: 0;
-	min-height: 50px;
-	max-height: 100px;
+	min-height: 80px;
+	max-height: 120px;
 	overflow-y: auto;
 `;
 
@@ -55,11 +56,17 @@ const ProjectListItem = styled.li`
 	padding: 10px;
 	margin-bottom: 5px;
 	cursor: pointer;
+	scale: 1;
+	margin: 10px;
+	transition: ease-in-out 200ms;
+	box-shadow: 0 0 3px #000;
 	&:hover {
 		background: var(--color-hover-item);
 	}
 	&.selected {
 		background: var(--color-background-item);
+		box-shadow: 0 0 8px #000;
+		scale: 1.02;
 	}
 `;
 
@@ -86,14 +93,14 @@ export default function Dashboard({
 			<ProjectListContainer>
 				<h2>Project list</h2>
 				<hr />
-				{!isloading ? (
+				{!isloading && selectedItem && data ? (
 					<ProjectList>
 						{data.length > 0 ? (
 							data.map((item) => {
 								return (
 									<ProjectListItem
 										className={
-											selectedItem === item
+											selectedItem._id === item._id
 												? "selected"
 												: ""
 										}

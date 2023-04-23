@@ -1,5 +1,3 @@
-import {useEffect, useCallback} from "react";
-
 export default function generator(data) {
 	let base = -300;
 
@@ -14,7 +12,7 @@ export default function generator(data) {
 		}
 	}
 
-	const filterData = filteredData(data, "HTML");
+	const filterData = filteredData(data, "JavaScript");
 
 	function addChilds(parentID) {
 		return filterData.map((item) => {

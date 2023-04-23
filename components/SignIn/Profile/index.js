@@ -2,7 +2,6 @@ import React from "react";
 import {useSession, signOut} from "next-auth/react";
 import styled from "styled-components";
 import Button from "@mui/material/Button";
-import {useRouter} from "next/router";
 
 const ProfileImage = styled.img`
 	border-radius: 50%;
@@ -12,7 +11,6 @@ const ProfileImage = styled.img`
 
 export default function Profile() {
 	const {data: session, status} = useSession();
-	const router = useRouter();
 
 	return (
 		<Button

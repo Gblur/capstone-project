@@ -4,11 +4,10 @@ import {useSession, signIn} from "next-auth/react";
 import Button from "@mui/material/Button";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import {useRouter} from "next/router";
+import Google from "@mui/icons-material/Google";
 
 const SignInSection = styled.section`
 	display: grid;
-	flex-direction: column;
-	justify-content: center;
 	align-items: center;
 	position: absolute;
 	top: 50%;
@@ -17,11 +16,16 @@ const SignInSection = styled.section`
 	background: rgba(244, 244, 244, 0.7);
 	width: 300px;
 	height: 300px;
-	margin: auto;
 	border-radius: 7px;
 	backdrop-filter: blur(4px);
-	span {
-		margin-left: 5px;
+	div {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		button {
+			margin-bottom: 10px;
+			width: 180px;
+		}
 	}
 `;
 
@@ -34,15 +38,27 @@ export default function SignIn() {
 
 	return (
 		<SignInSection>
-			<Button
-				variant="contained"
-				color="primary"
-				onClick={() => {
-					signIn();
-				}}>
-				<GitHubIcon sx={{fontSize: "24px"}} />
-				<span>Sign with Github</span>
-			</Button>
+			<div>
+				<h2>Sign in with</h2>
+				<Button
+					variant="contained"
+					color="primary"
+					onClick={() => {
+						signIn();
+					}}>
+					Github
+					<GitHubIcon sx={{fontSize: 24, marginLeft: "5px"}} />
+				</Button>
+				<Button
+					variant="contained"
+					color="primary"
+					onClick={() => {
+						signIn();
+					}}>
+					Google
+					<Google sx={{fontSize: 24, marginLeft: "5px"}} />
+				</Button>
+			</div>
 		</SignInSection>
 	);
 }

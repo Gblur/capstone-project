@@ -1,7 +1,9 @@
 import Dashboard from "../../components/Dashboard";
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useState, useRef} from "react";
 import CustomModal from "../../components/Modal";
+import ProjectForm from "../../components/Form";
 import useStore from "../../store";
+import modalControlsStore from "../../store/modalControls";
 import {shallow} from "zustand/shallow";
 
 const selector = (state) => {
@@ -20,15 +22,29 @@ const selector = (state) => {
 export default function MapsPage() {
 	const {maps, fetchMap, fetchMaps, deleteMap, map, nodes, edges, loading} =
 		useStore(selector, shallow);
-	const [selectedItem, setSelectedItem] = useState(null);
+	const modal = modalControlsStore((state) => state.modal);
+	const onClose = modalControlsStore((state) => state.closeModal);
+	const [selectedItem, setSelectedItem] = useState();
+	const prevMyStateValueRef = useRef();
 	function handleMapSelect(item, id) {
-		fetchMap(id);
 		setSelectedItem(item);
+		fetchMap(id);
 	}
 
 	useEffect(() => {
-		fetchMaps();
+		prevMyStateValueRef.current = maps;
+	});
+	const prevMyStateValue = prevMyStateValueRef.current;
+
+	useEffect(() => {
+		if (!maps.length || maps !== prevMyStateValue) fetchMaps();
 	}, []);
+
+	useEffect(() => {
+		if (!selectedItem) {
+			handleMapSelect(maps[0]);
+		}
+	}, [loading]);
 
 	return (
 		<main>
@@ -42,7 +58,9 @@ export default function MapsPage() {
 				handleDelete={deleteMap}
 				isloading={loading}
 			/>
-			<CustomModal />
+			<CustomModal modal={modal} onClose={onClose}>
+				<ProjectForm />
+			</CustomModal>
 		</main>
 	);
 }
