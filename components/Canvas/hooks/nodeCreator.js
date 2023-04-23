@@ -7,12 +7,12 @@ export default function nodeCreator(parent, id) {
 	// const onConnectEnd = (event) => {};
 	const node = {
 		id,
-		position: {x: 0, y: 300},
+		position: {x: 0, y: 150},
 		data: {
 			label: `Node`,
 			background: "var(--color-node-unbound-bg)",
 			nodeType: "Issue",
-			status: "documentation",
+			status: "not started",
 		},
 		parentNode: parent,
 		type: "unbound",

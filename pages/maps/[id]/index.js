@@ -79,18 +79,6 @@ export default function MapDetailsPage() {
 		query: {id},
 	} = router;
 
-	const notionPost = {
-		title: "new created thing",
-	};
-
-	async function handleGetNotionDB() {
-		const response = await fetch("/api/notion");
-		if (response.ok) {
-			const data = await response.json();
-			setNotionObject(data);
-		}
-	}
-
 	async function handlePostToNotion(notionPost) {
 		const response = await fetch("/api/notion/client", {
 			method: "POST",

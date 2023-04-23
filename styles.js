@@ -38,9 +38,11 @@ export default createGlobalStyle`
 
   }
   #__next {
-    min-height: calc(100vh - 40px)
+    min-height: calc(100vh)
+
   }
   body {
+
     margin: 0 auto;
     max-width: 768px;
     font-family: system-ui;

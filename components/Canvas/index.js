@@ -148,10 +148,10 @@ export default function Canvas({
 											e.target.value
 										);
 									}}>
-									<MenuItem value="bug">Bug</MenuItem>
-									<MenuItem value="documentation">
-										Doc
+									<MenuItem value="not started">
+										Not Started
 									</MenuItem>
+									<MenuItem value="started">Started</MenuItem>
 								</Select>
 							</FormControl>
 							<FormControl margin="normal" fullWidth>

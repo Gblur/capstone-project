@@ -5,6 +5,7 @@ import styled from "styled-components";
 import TripOriginOutlinedIcon from "@mui/icons-material/TripOriginOutlined";
 import BugReportIcon from "@mui/icons-material/BugReport";
 import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
+import CircleIcon from "@mui/icons-material/Circle";
 
 const Node = styled.div`
 	padding: 10px 20px;
@@ -83,10 +84,10 @@ const CreatedNode = ({selected, data, id}) => {
 				<p>{data.label}</p>
 				<div className="icon_label">
 					<i>{data.nodeType}</i>
-					{data.status === "documentation" ? (
-						<LibraryBooksIcon fontSize="8px" color="primary" />
+					{data.status === "started" ? (
+						<CircleIcon fontSize="8px" color="success" />
 					) : (
-						<BugReportIcon fontSize="8px" color="warning" />
+						<CircleIcon fontSize="8px" color="warning" />
 					)}
 				</div>
 				<Handle type="source" position={Position.Bottom} />
