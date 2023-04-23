@@ -194,6 +194,17 @@ const useStore = create((set, get) => {
 				}),
 			});
 		},
+		updateNodeStatus: (nodeId, status) => {
+			set({
+				nodes: get().nodes.map((node) => {
+					if (node.id === nodeId) {
+						node.data = {...node.data, status};
+					}
+
+					return node;
+				}),
+			});
+		},
 	};
 });
 

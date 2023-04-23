@@ -12,7 +12,7 @@ export default function nodeCreator(parent, id) {
 			label: `Node`,
 			background: "var(--color-node-unbound-bg)",
 			nodeType: "Issue",
-			status: "",
+			status: "documentation",
 		},
 		parentNode: parent,
 		type: "unbound",

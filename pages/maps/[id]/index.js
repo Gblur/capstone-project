@@ -45,6 +45,7 @@ const selector = (state) => ({
 	onUpdateMap: state.onUpdateMap,
 	updateNodeType: state.updateNodeType,
 	updateNodeLabel: state.updateNodeLabel,
+	updateNodeStatus: state.updateNodeStatus,
 });
 export default function MapDetailsPage() {
 	const {
@@ -63,6 +64,7 @@ export default function MapDetailsPage() {
 		onUpdateMap,
 		updateNodeLabel,
 		updateNodeType,
+		updateNodeStatus,
 	} = useStore(selector, shallow);
 
 	const modal = modalControlsStore((state) => state.modal);
@@ -89,7 +91,7 @@ export default function MapDetailsPage() {
 		}
 	}
 
-	async function handlePostToNotion() {
+	async function handlePostToNotion(notionPost) {
 		const response = await fetch("/api/notion/client", {
 			method: "POST",
 			body: JSON.stringify(notionPost),
@@ -138,15 +140,10 @@ export default function MapDetailsPage() {
 							onClick={() => onUpdateMap(id)}>
 							Save Map
 						</Button>
-						<Button onClick={handlePostToNotion}>
-							Send To Notion
-						</Button>
-						<Button onClick={handleGetNotionDB}>
-							GET Notion DB
-						</Button>
 					</Stack>
 				</div>
 				<Canvas
+					handlePostToNotion={handlePostToNotion}
 					user={session?.user?.name}
 					nodes={nodes}
 					edges={edges}
@@ -163,6 +160,7 @@ export default function MapDetailsPage() {
 					openModal={openModal}
 					updateNodeLabel={updateNodeLabel}
 					updateNodeType={updateNodeType}
+					updateNodeStatus={updateNodeStatus}
 				/>
 			</section>
 		</main>

@@ -10,8 +10,8 @@ import MenuItem from "@mui/material/MenuItem";
 import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
 import TextField from "@mui/material/TextField";
-import BugReportIcon from "@mui/icons-material/BugReport";
 import styled from "styled-components";
+import Stack from "@mui/material/Stack";
 
 const NodeWindow = styled.div`
 	display: flex;
@@ -33,11 +33,14 @@ export default function Canvas({
 	user,
 	updateNodeLabel,
 	updateNodeType,
+	updateNodeStatus,
+	handlePostToNotion,
 }) {
 	let handle = useRef(null);
 
 	const [branchUrl, setBranchUrl] = useState();
 	const [currentData, setCurrentData] = useState();
+	const [message, setMessage] = useState();
 
 	function handleNodeClick(event) {
 		const currentNode = nodes.find((node) => {
@@ -55,7 +58,14 @@ export default function Canvas({
 		}
 	}
 
-	function handleUpdateNodeData(event) {}
+	function handleSubmitNodeData(e) {
+		e.preventDefault();
+		const form = new FormData(e.target);
+		const data = Object.fromEntries(form);
+		console.log(data);
+		handlePostToNotion(data);
+		closeModal();
+	}
 
 	function onConnectStart(event) {
 		handle.current = event.currentTarget.getAttribute("data-nodeid");
@@ -91,8 +101,9 @@ export default function Canvas({
 			<Modal modal={modal} onClose={closeModal} openModal={openModal}>
 				<NodeWindow>
 					{currentData ? (
-						<form action="">
+						<form onSubmit={handleSubmitNodeData}>
 							<TextField
+								name="title"
 								defaultValue={currentData.data.label}
 								onChange={(e) => {
 									updateNodeLabel(
@@ -102,15 +113,14 @@ export default function Canvas({
 								}}
 							/>
 							<FormControl margin="normal" fullWidth>
-								<InputLabel id="status-label">
-									Status
-								</InputLabel>
+								<InputLabel id="status-label">Type</InputLabel>
 								<Select
 									label="status"
 									labelId="status-label"
 									id="maptype-select"
-									name="status"
-									defaultValue={currentData.data.nodeType}
+									name="type"
+									value={currentData.data.nodeType}
+									// defaultValue={currentData.data.nodeType}
 									onChange={(e) => {
 										updateNodeType(
 											currentData.id,
@@ -121,27 +131,48 @@ export default function Canvas({
 									<MenuItem value="Branch">Branch</MenuItem>
 								</Select>
 							</FormControl>
-							<Button>Send to Notion</Button>
+							<FormControl margin="normal" fullWidth>
+								<InputLabel id="status-label">
+									Status
+								</InputLabel>
+								<Select
+									label="status"
+									labelId="status-label"
+									id="maptype-select"
+									name="status"
+									value={currentData.data.status}
+									// defaultValue={currentData.data.nodeType}
+									onChange={(e) => {
+										updateNodeStatus(
+											currentData.id,
+											e.target.value
+										);
+									}}>
+									<MenuItem value="bug">Bug</MenuItem>
+									<MenuItem value="documentation">
+										Doc
+									</MenuItem>
+								</Select>
+							</FormControl>
 							<FormControl margin="normal" fullWidth>
 								<TextField
 									label="message"
-									onChange={(e) => setName(e.target.value)}
+									value={message}
+									onChange={(e) => setMessage(e.target.value)}
 									required
 									name="message"
 								/>
 							</FormControl>
+							<Stack margin={2} justifyContent="flex-end">
+								<Button type="submit" variant="contained">
+									Send to Notion
+								</Button>
+							</Stack>
 						</form>
 					) : (
 						<p>No Data</p>
 					)}
 				</NodeWindow>
-				{/* {data && !isLoading ? (
-					data.map((branch) => {
-						return <p key={branch.name}>{branch.name}</p>;
-					})
-				) : (
-					<h1>Fetch Data...</h1>
-				)} */}
 			</Modal>
 		</>
 	);
