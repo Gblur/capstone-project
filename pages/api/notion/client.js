@@ -3,15 +3,15 @@ const {Client} = require("@notionhq/client");
 const notion = new Client({
 	auth: process.env.NOTION_SECRET,
 });
+const databaseId = process.env.DATABASE_ID;
 
 export default async function handler(req, res) {
-	const databaseId = "110e69c5-6cca-426f-84a4-ec5b6be3ec6f";
 	const data = req.body;
 
 	if (req.method === "POST") {
 		try {
 			// Create a new page in Notion
-			const response = await notion.pages.create({
+			await notion.pages.create({
 				parent: {
 					database_id: databaseId,
 				},
