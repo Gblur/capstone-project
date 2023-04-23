@@ -6,7 +6,6 @@ export default async function handler(req, res) {
 		auth: process.env.GITHUB_ADMIN_TOKEN,
 	});
 
-	// console.log(user);
 	switch (req.method) {
 		case "GET":
 			const repos = await octokit.request(`/users/Gblur/repos`);

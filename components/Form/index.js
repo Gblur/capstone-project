@@ -41,7 +41,6 @@ export default function ProjectForm() {
 	const [mapType, setMapType] = useState("Repos");
 	const [description, setDescription] = useState("");
 
-	console.log(session);
 	const handleSubmitForm = (event) => {
 		event.preventDefault();
 		const form = new FormData(event.target);

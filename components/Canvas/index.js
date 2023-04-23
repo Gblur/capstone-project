@@ -54,7 +54,6 @@ export default function Canvas({
 			// build data
 			const data = currentNode;
 			setCurrentData(data);
-			console.log(data);
 		}
 	}
 
@@ -62,7 +61,6 @@ export default function Canvas({
 		e.preventDefault();
 		const form = new FormData(e.target);
 		const data = Object.fromEntries(form);
-		console.log(data);
 		handlePostToNotion(data);
 		closeModal();
 	}

@@ -32,6 +32,6 @@ export default async function handler(req, res) {
 				return res.status(301).json({message: "Method not allowed"});
 		}
 	} catch (error) {
-		console.log(error);
+		console.error(error);
 	}
 }

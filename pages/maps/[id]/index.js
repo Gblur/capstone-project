@@ -93,10 +93,8 @@ export default function MapDetailsPage() {
 	useEffect(() => {
 		closeModal();
 		if (id) {
-			console.log(loading);
 			fetchMap(id);
 			if (map.mapType === "Repos" && !map.nodes.includes("child")) {
-				console.log("generate");
 				fetchRepos(`/api/auth/github`);
 			}
 		}
