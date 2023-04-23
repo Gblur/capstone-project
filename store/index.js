@@ -54,7 +54,6 @@ const useStore = create((set, get) => {
 		loading: true,
 		map: {},
 		maps: [],
-		repos: [],
 		nodes: [],
 		edges: [],
 		filterMaps: (searchString) => {
@@ -70,22 +69,25 @@ const useStore = create((set, get) => {
 				const data = await response.json();
 				set({
 					maps: data,
-					loading: false,
 				});
+				set({loading: false});
 			}
 		},
 		fetchMap: async (id) => {
-			const defaultId = id ?? get().maps[0]?._id;
-			const response = await fetch(`/api/maps/${defaultId || null}`);
-			if (response.ok) {
-				const data = await response.json();
-				if (data) {
-					set((prev) => ({
-						...prev,
-						nodes: JSON.parse(data?.nodes),
-						edges: JSON.parse(data?.edges),
-						map: data,
-					}));
+			if (!get().loading) {
+				const response = await fetch(
+					`/api/maps/${id || get().maps[0]._id}`
+				);
+				if (response.ok) {
+					const data = await response.json();
+					if (data) {
+						set((prev) => ({
+							...prev,
+							nodes: JSON.parse(data?.nodes),
+							edges: JSON.parse(data?.edges),
+							map: data,
+						}));
+					}
 				}
 			}
 		},
@@ -95,8 +97,8 @@ const useStore = create((set, get) => {
 				method: "GET",
 			});
 			const data = await response.json();
-			set({repos: data.data});
 			set({loading: false});
+			get().onGenerateNodes(data.data);
 		},
 		createMap: async (data, router, user) => {
 			const date = new Date(Date.now());

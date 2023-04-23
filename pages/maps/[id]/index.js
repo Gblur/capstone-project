@@ -65,25 +65,44 @@ export default function MapDetailsPage() {
 	const openModal = modalControlsStore((state) => state.openModal);
 
 	const {data: session, status} = useSession();
+	const [notionObject, setNotionObject] = useState(null);
 
 	const router = useRouter();
 	const {
 		query: {id},
 	} = router;
 
+	const notionPost = {
+		title: "new created thing",
+	};
+
+	async function handleGetNotionDB() {
+		const response = await fetch("/api/notion");
+		if (response.ok) {
+			const data = await response.json();
+			setNotionObject(data);
+		}
+	}
+
+	async function handlePostToNotion() {
+		const response = await fetch("/api/notion/client", {
+			method: "POST",
+			body: JSON.stringify(notionPost),
+			headers: {"Content-Type": "application/json"},
+		});
+		if (response.ok) {
+			await response.json();
+		}
+	}
+
 	useEffect(() => {
 		closeModal();
 		if (id) {
+			console.log(loading);
 			fetchMap(id);
-			console.log(
-				"General Check",
-				map.mapType === "Repos" && !map.nodes.includes("child")
-			);
 			if (map.mapType === "Repos" && !map.nodes.includes("child")) {
+				console.log("generate");
 				fetchRepos(`/api/auth/github`);
-				setTimeout(() => {
-					if (!loading) onGenerateNodes(repos);
-				}, 600);
 			}
 		}
 	}, [map._id, id]);
@@ -104,6 +123,8 @@ export default function MapDetailsPage() {
 			<section style={{height: "65%"}}>
 				<div style={{background: "rgba(244,244,244,0.9)"}}>
 					<Button onClick={() => onUpdateMap(id)}>Save Map</Button>
+					<Button onClick={handlePostToNotion}>Send To Notion</Button>
+					<Button onClick={handleGetNotionDB}>GET Notion DB</Button>
 				</div>
 				<Canvas
 					user={session?.user?.name}

@@ -93,7 +93,7 @@ export default function Dashboard({
 			<ProjectListContainer>
 				<h2>Project list</h2>
 				<hr />
-				{!isloading && selectedItem ? (
+				{!isloading && selectedItem && data ? (
 					<ProjectList>
 						{data.length > 0 ? (
 							data.map((item) => {

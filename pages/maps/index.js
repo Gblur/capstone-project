@@ -37,15 +37,14 @@ export default function MapsPage() {
 	const prevMyStateValue = prevMyStateValueRef.current;
 
 	useEffect(() => {
-		if (!maps.length || maps !== prevMyStateValue) {
-			fetchMaps();
-		}
+		if (!maps.length || maps !== prevMyStateValue) fetchMaps();
+	}, []);
+
+	useEffect(() => {
 		if (!selectedItem) {
-			setTimeout(() => {
-				handleMapSelect(maps[0]);
-			}, 500);
+			handleMapSelect(maps[0]);
 		}
-	}, [map._id]);
+	}, [loading]);
 
 	return (
 		<main>

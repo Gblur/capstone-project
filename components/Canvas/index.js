@@ -6,8 +6,6 @@ import Modal from "../Modal";
 import {v4 as uuidv4} from "uuid";
 import useSWR from "swr";
 
-// const fetcher = (url, user) => fetch(url, user).then((r) => r.json());
-
 export default function Canvas({
 	nodes,
 	edges,
@@ -20,10 +18,7 @@ export default function Canvas({
 	openModal,
 	user,
 }) {
-	const [branchUrl, setBranchUrl] = useState(null);
 	let handle = useRef(null);
-
-	// const {data, isLoading} = useSWR(["/api/auth/github", user], fetcher);
 
 	function handleNodeClick(event) {
 		const currentNode = nodes.find((node) => {
@@ -67,7 +62,7 @@ export default function Canvas({
 				</ReactFlow>
 			</ReactFlowProvider>
 			<Modal modal={modal} onClose={closeModal} openModal={openModal}>
-				{/* {branchUrl && data && !isLoading ? (
+				{/* {data && !isLoading ? (
 					data.map((branch) => {
 						return <p key={branch.name}>{branch.name}</p>;
 					})
