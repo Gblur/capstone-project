@@ -56,6 +56,7 @@ const useStore = create((set, get) => {
 		maps: [],
 		nodes: [],
 		edges: [],
+		repos: [],
 		filterMaps: (searchString) => {
 			set({
 				maps: get().maps.filter((map) => {
@@ -99,6 +100,7 @@ const useStore = create((set, get) => {
 			const data = await response.json();
 			set({loading: false});
 			get().onGenerateNodes(data.data);
+			set({repos: data.data});
 		},
 		createMap: async (data, router, user) => {
 			const date = new Date(Date.now());

@@ -10,6 +10,7 @@ import useStore from "../../../store";
 import useSWR from "swr";
 import {v4 as uuidv4} from "uuid";
 import {useSession} from "next-auth/react";
+import Stack from "@mui/material/Stack";
 import modalControlsStore from "../../../store/modalControls";
 
 const MapInfoBox = styled.div`
@@ -42,6 +43,8 @@ const selector = (state) => ({
 	onNodeCreate: state.onNodeCreate,
 	onGenerateNodes: state.onGenerateNodes,
 	onUpdateMap: state.onUpdateMap,
+	updateNodeType: state.updateNodeType,
+	updateNodeLabel: state.updateNodeLabel,
 });
 export default function MapDetailsPage() {
 	const {
@@ -58,6 +61,8 @@ export default function MapDetailsPage() {
 		onNodeCreate,
 		onGenerateNodes,
 		onUpdateMap,
+		updateNodeLabel,
+		updateNodeType,
 	} = useStore(selector, shallow);
 
 	const modal = modalControlsStore((state) => state.modal);
@@ -121,10 +126,25 @@ export default function MapDetailsPage() {
 				</MapInfoBoxHead>
 			</MapInfoBox>
 			<section style={{height: "65%"}}>
-				<div style={{background: "rgba(244,244,244,0.9)"}}>
-					<Button onClick={() => onUpdateMap(id)}>Save Map</Button>
-					<Button onClick={handlePostToNotion}>Send To Notion</Button>
-					<Button onClick={handleGetNotionDB}>GET Notion DB</Button>
+				<div
+					style={{
+						background: "rgba(244,244,244,0.9)",
+						borderRadius: "6px 6px 0 0",
+					}}>
+					<Stack spacing={2}>
+						<Button
+							sx={{borderRadius: "5px 5px 0 0"}}
+							variant="contained"
+							onClick={() => onUpdateMap(id)}>
+							Save Map
+						</Button>
+						<Button onClick={handlePostToNotion}>
+							Send To Notion
+						</Button>
+						<Button onClick={handleGetNotionDB}>
+							GET Notion DB
+						</Button>
+					</Stack>
 				</div>
 				<Canvas
 					user={session?.user?.name}
@@ -137,9 +157,12 @@ export default function MapDetailsPage() {
 					onNodesChange={onNodesChange}
 					map={map}
 					id={id}
+					repos={repos}
 					modal={modal}
 					closeModal={closeModal}
 					openModal={openModal}
+					updateNodeLabel={updateNodeLabel}
+					updateNodeType={updateNodeType}
 				/>
 			</section>
 		</main>

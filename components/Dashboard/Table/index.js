@@ -14,8 +14,8 @@ export default function BasicTable({map}) {
 				sx={{minWidth: 300, minHeight: 115}}
 				aria-label="table for map info">
 				<TableHead>
-					<TableRow>
-						<TableCell>User</TableCell>
+					<TableRow sx={{background: "var(--color-background-item)"}}>
+						<TableCell align="left">User</TableCell>
 						<TableCell align="left">Team</TableCell>
 						<TableCell align="left">Template</TableCell>
 						<TableCell align="left">Date</TableCell>

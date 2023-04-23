@@ -74,18 +74,9 @@ const CreatedNode = ({selected, data, id}) => {
 		<>
 			<Node background={data.background} selected={selected}>
 				<Handle type="target" position={Position.Top} />
-				{selected ? (
-					<input
-						value={data.label}
-						onChange={(event) => {
-							updateNodeLabel(id, event?.target?.value);
-						}}
-					/>
-				) : (
-					<p>{data.label}</p>
-				)}
+				<p>{data.label}</p>
 				<div className="icon_label">
-					<select
+					{/* <select
 						onChange={(event) =>
 							updateNodeType(id, event?.target?.value)
 						}
@@ -94,7 +85,9 @@ const CreatedNode = ({selected, data, id}) => {
 						id="select__type">
 						<option value="Issue">Issue</option>
 						<option value="Branch">Branch</option>
-					</select>
+					</select> */}
+					<i>{data.nodeType}</i>
+					{/* <TripOriginOutlinedIcon fontSize="8px" color="secondary" /> */}
 				</div>
 				<Handle type="source" position={Position.Bottom} />
 			</Node>
