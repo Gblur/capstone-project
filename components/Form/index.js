@@ -1,36 +1,15 @@
-import Button from "@mui/material/Button";
 import React, {useState} from "react";
-import styled from "styled-components";
 import {useRouter} from "next/router";
-import useStore from "../../store";
-import Stack from "@mui/material/Stack";
 import {useSession} from "next-auth/react";
-import Box from "@mui/material/Box";
+import styled from "styled-components";
+import Button from "@mui/material/Button";
+import Stack from "@mui/material/Stack";
+import useStore from "../../store";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
 import TextField from "@mui/material/TextField";
-
-const Form = styled.form`
-	// fieldset {
-	// 	display: flex;
-	// 	flex-direction: column;
-	// }
-
-	// input,
-	// select {
-	// 	margin: 5px 0;
-	// 	border: none;
-	// 	border-bottom: 1px solid var(--color-dashboard-border);
-	// }
-	// textarea {
-	// 	margin: 5px 0;
-	// }
-	// button {
-	// 	float: right;
-	// }
-`;
 
 export default function ProjectForm() {
 	const createPost = useStore((state) => state.createMap);
