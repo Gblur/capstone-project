@@ -30,7 +30,6 @@ export default function Canvas({
 	modal,
 	closeModal,
 	openModal,
-	user,
 	updateNodeLabel,
 	updateNodeType,
 	updateNodeStatus,
@@ -38,21 +37,17 @@ export default function Canvas({
 }) {
 	let handle = useRef(null);
 
-	const [branchUrl, setBranchUrl] = useState();
-	const [currentData, setCurrentData] = useState();
-	const [message, setMessage] = useState();
+	const [currentData, setCurrentData] = useState(null);
+	const [message, setMessage] = useState("");
+	const formRef = useRef(null);
 
 	function handleNodeClick(event) {
 		const currentNode = nodes.find((node) => {
 			return node.id === event.currentTarget.getAttribute("data-id");
 		});
-		// if (currentNode?.branches) {
-		// 	setBranchUrl(currentNode["branches"].replace("{/branch}", ""));
-		// }
 		if (currentNode?.type === "unbound") {
 			openModal();
 
-			// build data
 			const data = currentNode;
 			setCurrentData(data);
 		}
@@ -63,6 +58,7 @@ export default function Canvas({
 		const form = new FormData(e.target);
 		const data = Object.fromEntries(form);
 		handlePostToNotion(data);
+		formRef.current.reset();
 		closeModal();
 	}
 
@@ -100,7 +96,7 @@ export default function Canvas({
 			<Modal modal={modal} onClose={closeModal} openModal={openModal}>
 				<NodeWindow>
 					{currentData ? (
-						<form onSubmit={handleSubmitNodeData}>
+						<form ref={formRef} onSubmit={handleSubmitNodeData}>
 							<TextField
 								name="title"
 								defaultValue={currentData.data.label}
@@ -119,7 +115,6 @@ export default function Canvas({
 									id="maptype-select"
 									name="type"
 									defaultValue={currentData.data.nodeType}
-									// defaultValue={currentData.data.nodeType}
 									onChange={(e) => {
 										updateNodeType(
 											currentData.id,
@@ -140,7 +135,6 @@ export default function Canvas({
 									id="maptype-select"
 									name="status"
 									defaultValue={currentData.data.status}
-									// defaultValue={currentData.data.nodeType}
 									onChange={(e) => {
 										updateNodeStatus(
 											currentData.id,
@@ -156,7 +150,6 @@ export default function Canvas({
 							<FormControl margin="normal" fullWidth>
 								<TextField
 									label="message"
-									value={message}
 									onChange={(e) => setMessage(e.target.value)}
 									required
 									name="message"
