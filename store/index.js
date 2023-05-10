@@ -91,9 +91,8 @@ const useStore = create((set, get) => {
       }
     },
     getMap: (id) => {
-      if (!get().loading && get().maps) {
+      if (!get().loading && get().maps.length) {
         const filteredMap = [...get().maps].find((map) => map._id === id);
-        console.log(filteredMap);
         if (filteredMap) {
           set((prev) => ({
             ...prev,
@@ -114,14 +113,13 @@ const useStore = create((set, get) => {
       get().onGenerateNodes(data.data);
       set({repos: data.data});
     },
-    createMap: async (data, router, user) => {
+    createMap: async (data, router) => {
       const date = new Date(Date.now());
       const options = {day: "numeric", month: "long", year: "numeric"};
       const formattedDate = date.toLocaleDateString("de-DE", options);
       const newObject = {
         ...data,
         date: formattedDate,
-        user: user,
         nodes: JSON.stringify(
           initialNodes(data.mapType === "Repos" ? "Repos" : "Root")
         ),
@@ -134,6 +132,7 @@ const useStore = create((set, get) => {
       });
       if (response.ok) {
         const {_id} = await response.json();
+
         router.push(`/maps/${_id}`);
       }
     },

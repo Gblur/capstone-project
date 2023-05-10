@@ -5,6 +5,7 @@ import ProjectForm from "../../components/Form";
 import useStore from "../../store";
 import modalControlsStore from "../../store/modalControls";
 import {shallow} from "zustand/shallow";
+import {useSession} from "next-auth/react";
 
 const selector = (state) => {
   return {
@@ -40,6 +41,8 @@ export default function MapsPage() {
     setSelectedItem(item);
     getMap(id);
   }
+
+  // const {data: session} = useSession();
 
   useEffect(() => {
     prevMyStateValueRef.current = maps;
