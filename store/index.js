@@ -68,6 +68,7 @@ const useStore = create((set, get) => {
       const response = await fetch("/api/maps");
       if (response.ok) {
         const data = await response.json();
+        // const filteredData = data.filter((map) => map.user.name === user?.name);
         set({
           maps: data,
         });

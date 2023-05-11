@@ -21,7 +21,7 @@ export const authOptions = {
           return true;
         }
 
-        console.log("new User callback", user);
+        console.log("new User callback", account);
 
         const newUser = new User({
           name: user.user.name,

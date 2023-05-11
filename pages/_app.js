@@ -10,7 +10,7 @@ export default function App({Component, pageProps: {session, ...pageProps}}) {
 			<Head>
 				<title>Mindmap</title>
 			</Head>
-			<SessionProvider session={session}>
+			<SessionProvider session={session}> 
 				<Layout>
 					<Component {...pageProps} />
 				</Layout>

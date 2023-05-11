@@ -48,6 +48,7 @@ export default function MapsPage() {
     prevMyStateValueRef.current = maps;
   });
   const prevMyStateValue = prevMyStateValueRef.current;
+  // const {data: session} = useSession();
 
   useEffect(() => {
     if (!maps.length || maps !== prevMyStateValue) fetchMaps();

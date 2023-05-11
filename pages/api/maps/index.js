@@ -7,6 +7,7 @@ import {authOptions} from "../auth/[...nextauth]";
 
 export default async function handler(req, res) {
   const session = await getServerSession(req, res, authOptions);
+
   if (session) {
     try {
       await dbConnect();
@@ -14,11 +15,13 @@ export default async function handler(req, res) {
       switch (req.method) {
         case "GET":
           const user = await User.findOne({email: session.user.email});
-          console.log(user);
           const hasReadAccess = user.priviledges.includes("maps.read");
           if (hasReadAccess) {
             const map = await Map.find().populate("user");
-            return res.status(200).json(map);
+            const filteredMap = map.filter(
+              (map) => map.user.name === user.name
+            );
+            return res.status(200).json(filteredMap);
           } else res.status(403).json({message: "You have no read rights"});
         case "POST":
           try {
