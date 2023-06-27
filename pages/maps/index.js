@@ -1,11 +1,12 @@
 import Dashboard from "../../components/Dashboard";
-import React, {useEffect, useState, useRef} from "react";
+import React, { useEffect, useState, useRef } from "react";
 import CustomModal from "../../components/Modal";
 import ProjectForm from "../../components/Form";
 import useStore from "../../store";
 import modalControlsStore from "../../store/modalControls";
-import {shallow} from "zustand/shallow";
-import {useSession} from "next-auth/react";
+import { shallow } from "zustand/shallow";
+import { useSession } from "next-auth/react";
+import IframeComponent from "../../components/Iframe";
 
 const selector = (state) => {
   return {
@@ -41,8 +42,6 @@ export default function MapsPage() {
     setSelectedItem(item);
     getMap(id);
   }
-
-  // const {data: session} = useSession();
 
   useEffect(() => {
     prevMyStateValueRef.current = maps;

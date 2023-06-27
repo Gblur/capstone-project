@@ -13,10 +13,10 @@ export const authOptions = {
     }),
   ],
   events: {
-    async signIn(user, account, profile) {
+    async signIn(user, account) {
       try {
         await dbConnect();
-        const existingUser = await User.findOne({email: user?.user?.email});
+        const existingUser = await User.findOne({ email: user?.user?.email });
         if (existingUser) {
           return true;
         }
@@ -26,12 +26,13 @@ export const authOptions = {
         const newUser = new User({
           name: user.user.name,
           email: user.user.email,
+          team: "frontend",
         });
 
         await newUser.save();
         return true;
       } catch (error) {
-        console.error({message: error});
+        console.error({ message: error });
       }
     },
   },
