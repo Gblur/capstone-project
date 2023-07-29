@@ -1,8 +1,8 @@
-import {createGlobalStyle} from "styled-components";
+import { createGlobalStyle } from "styled-components";
 
 export default createGlobalStyle`
   html{
-    scroll: smooth
+    scroll: smooth;
     -ms-overflow-style: none; /* for Internet Explorer, Edge */
     scrollbar-width: none; /* for Firefox */
     overflow-y: scroll; 
@@ -49,5 +49,4 @@ export default createGlobalStyle`
     padding: 0 20px;
     background: url("/images/map_bg_color.jpeg") no-repeat center;
     background-size: cover;
-  }
-`;
+  }`;

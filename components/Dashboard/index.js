@@ -1,13 +1,12 @@
-import React, {useEffect} from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import CircularProgress from "@mui/material/CircularProgress";
 import EnhancedTable from "./Table";
-import {styles} from "../Canvas/styles";
-import {Icon} from "../Icons";
-import ReactFlow, {Background, Controls} from "reactflow";
-import {nodeTypes} from "../Node/customNode";
-import {router} from "next/router";
-import Canvas from "../Canvas";
+import { styles } from "../Canvas/styles";
+import { Icon } from "../Icons";
+import ReactFlow, { Background, Controls } from "reactflow";
+import { nodeTypes } from "../Node/customNode";
+import { router } from "next/router";
 import "reactflow/dist/style.css";
 
 const DashboardContainer = styled.div`
@@ -86,40 +85,38 @@ export default function Dashboard({
   handleDelete,
   nodes,
   edges,
-  isloading,
+  loading,
 }) {
   return (
     <DashboardContainer>
       <ProjectListContainer>
         <h2>Project list</h2>
         <hr />
-        {!isloading && data ? (
+        {data && !loading ? (
           <ProjectList>
             {data.length > 0 ? (
               data.map((item) => {
                 return (
                   <ProjectListItem
-                    className={selectedItem?._id === item._id ? "selected" : ""}
+                    className={selectedItem?.id === item.id ? "selected" : ""}
                     key={item._id}
                     onClick={() => handleMapSelect(item, item._id)}
                   >
                     <a>{item.name}</a>
-                    {selectedItem === item && (
-                      <span>
-                        <Icon.EditIcon
-                          onClick={() => {
-                            router.push(`/maps/${item._id}`);
-                          }}
-                          color="primary"
-                        />
-                        <Icon.DeleteIcon
-                          onClick={() => {
-                            handleDelete(item._id);
-                          }}
-                          color="error"
-                        />
-                      </span>
-                    )}
+                    <span>
+                      <Icon.EditIcon
+                        onClick={() => {
+                          router.push(`/maps/${item._id}`);
+                        }}
+                        color="primary"
+                      />
+                      <Icon.DeleteIcon
+                        onClick={() => {
+                          handleDelete(item._id);
+                        }}
+                        color="error"
+                      />
+                    </span>
                   </ProjectListItem>
                 );
               })
@@ -141,7 +138,7 @@ export default function Dashboard({
               nodeTypes={nodeTypes}
               fitView
             >
-              <Background style={{background: styles["color-bg"]}} />
+              <Background style={{ background: styles["color-bg"] }} />
               <Controls />
             </ReactFlow>
           </>
