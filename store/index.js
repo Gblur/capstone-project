@@ -1,15 +1,20 @@
-import {create} from "zustand";
-import {mountStoreDevtool} from "simple-zustand-devtools";
+import { create } from "zustand";
+import { mountStoreDevtool } from "simple-zustand-devtools";
 import nodeCreator from "../components/Canvas/hooks/nodeCreator";
 import nodeGenerator from "../components/Canvas/hooks/nodeGenerator";
-import {addEdge, addNode, applyNodeChanges, applyEdgeChanges} from "reactflow";
-import {v4 as uuidv4} from "uuid";
+import {
+  addEdge,
+  addNode,
+  applyNodeChanges,
+  applyEdgeChanges,
+} from "reactflow";
+import { v4 as uuidv4 } from "uuid";
 
 const handleUpdateData = async (node, id) => {
   const response = await fetch(`/api/maps/${id}`, {
     method: "PUT",
     body: JSON.stringify(node),
-    headers: {"Content-Type": "application/json"},
+    headers: { "Content-Type": "application/json" },
   });
   if (response.ok) {
     await response.json();
@@ -21,7 +26,7 @@ const handleDelete = async (id, update) => {
     const response = await fetch(`/api/maps`, {
       method: "DELETE",
       body: JSON.stringify(id),
-      headers: {"Content-Type": "application/json"},
+      headers: { "Content-Type": "application/json" },
     });
     if (response.ok) {
       await response.json();
@@ -39,12 +44,12 @@ const initialNodes = (label) => [
     id: uuidv4(),
     type: "parent",
     data: {
-      label: label,
+      label,
       background: "var(--color-node-parent-bg)",
       type: "root",
       status: "unknown",
     },
-    position: {x: 250, y: 25},
+    position: { x: 250, y: 25 },
   },
 ];
 const initialEdge = [];
@@ -65,6 +70,7 @@ const useStore = create((set, get) => {
       });
     },
     fetchMaps: async () => {
+      set({ loading: true });
       const response = await fetch("/api/maps");
       if (response.ok) {
         const data = await response.json();
@@ -72,7 +78,7 @@ const useStore = create((set, get) => {
         set({
           maps: data,
         });
-        set({loading: false});
+        set({ loading: false });
       }
     },
     fetchMap: async (id) => {
@@ -105,18 +111,18 @@ const useStore = create((set, get) => {
       }
     },
     fetchRepos: async (url) => {
-      set({loading: true});
+      set({ loading: true });
       const response = await fetch(url, {
         method: "GET",
       });
       const data = await response.json();
-      set({loading: false});
+      set({ loading: false });
       get().onGenerateNodes(data.data);
-      set({repos: data.data});
+      set({ repos: data.data });
     },
     createMap: async (data, router) => {
       const date = new Date(Date.now());
-      const options = {day: "numeric", month: "long", year: "numeric"};
+      const options = { day: "numeric", month: "long", year: "numeric" };
       const formattedDate = date.toLocaleDateString("de-DE", options);
       const newObject = {
         ...data,
@@ -129,10 +135,10 @@ const useStore = create((set, get) => {
       const response = await fetch(`/api/maps`, {
         method: "POST",
         body: JSON.stringify(newObject),
-        headers: {"Content-Type": "application/json"},
+        headers: { "Content-Type": "application/json" },
       });
       if (response.ok) {
-        const {_id} = await response.json();
+        const { _id } = await response.json();
 
         router.push(`/maps/${_id}`);
       }
@@ -188,7 +194,7 @@ const useStore = create((set, get) => {
       set({
         nodes: get().nodes.map((node) => {
           if (node.id === nodeId) {
-            node.data = {...node.data, label};
+            node.data = { ...node.data, label };
           }
 
           return node;
@@ -199,7 +205,7 @@ const useStore = create((set, get) => {
       set({
         nodes: get().nodes.map((node) => {
           if (node.id === nodeId) {
-            node.data = {...node.data, nodeType: type};
+            node.data = { ...node.data, nodeType: type };
           }
 
           return node;
@@ -210,7 +216,7 @@ const useStore = create((set, get) => {
       set({
         nodes: get().nodes.map((node) => {
           if (node.id === nodeId) {
-            node.data = {...node.data, status};
+            node.data = { ...node.data, status };
           }
 
           return node;
