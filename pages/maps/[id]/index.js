@@ -10,6 +10,7 @@ import useStore from "../../../store";
 import { useSession } from "next-auth/react";
 import Stack from "@mui/material/Stack";
 import modalControlsStore from "../../../store/modalControls";
+import { trpc } from "../../../utils/trpc";
 
 const MapInfoBox = styled.div`
   display: flex;
@@ -28,7 +29,6 @@ const MapInfoBoxHead = styled.article`
 
 const selector = (state) => ({
   loading: state.loading,
-  map: state.map,
   nodes: state.nodes,
   edges: state.edges,
   fetchMap: state.fetchMap,
@@ -47,7 +47,6 @@ const selector = (state) => ({
 });
 export default function MapDetailsPage() {
   const {
-    map,
     nodes,
     edges,
     repos,
@@ -67,13 +66,36 @@ export default function MapDetailsPage() {
   const closeModal = modalControlsStore((state) => state.closeModal);
   const openModal = modalControlsStore((state) => state.openModal);
 
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
   const [notionObject, setNotionObject] = useState(null);
 
   const router = useRouter();
   const {
     query: { id },
   } = router;
+
+  const { data: mapById, status } = trpc.maps.byId.useQuery({ id });
+
+  const editTask = trpc.maps.edit.useMutation({
+    async onMutate({ id, data }) {
+      await utils.todo.all.cancel();
+      const allTasks = utils.todo.all.getData();
+      if (!allTasks) {
+        return;
+      }
+      utils.todo.all.setData(
+        undefined,
+        allTasks.map((t) =>
+          t.id === id
+            ? {
+                ...t,
+                ...data,
+              }
+            : t
+        )
+      );
+    },
+  });
 
   async function handlePostToNotion(notionPost) {
     const response = await fetch("/api/notion/client", {
@@ -88,13 +110,15 @@ export default function MapDetailsPage() {
 
   useEffect(() => {
     closeModal();
-    if (id) {
-      fetchMap(id);
-      if (map.mapType === "Repos" && !map.nodes.includes("child")) {
-        fetchRepos(`/api/auth/github`);
-      }
-    }
-  }, [map._id, id]);
+    // if (id) {
+    // fetchMap(id);
+    // if (map.mapType === "Repos" && !map.nodes.includes("child")) {
+    //   fetchRepos(`/api/auth/github`);
+    // }
+    // }
+  }, [mapById?.id]);
+
+  if (status !== "success") return <div>Loading...</div>;
 
   if (!router.isReady) return <CircularProgress />;
 
@@ -106,8 +130,8 @@ export default function MapDetailsPage() {
     >
       <MapInfoBox>
         <MapInfoBoxHead>
-          <h3>{map.name}</h3>
-          <p>{map.description}</p>
+          <h3>{mapById?.name}</h3>
+          <p>{mapById?.description}</p>
         </MapInfoBoxHead>
       </MapInfoBox>
       <section style={{ height: "65%" }}>
@@ -130,14 +154,16 @@ export default function MapDetailsPage() {
         <Canvas
           handlePostToNotion={handlePostToNotion}
           user={session?.user?.name}
-          nodes={nodes}
-          edges={edges}
+          nodes={JSON.parse(mapById?.nodes)}
+          edges={JSON.parse(mapById?.edges)}
           onConnect={onConnect}
-          onNodeCreate={onNodeCreate}
+          onNodeCreate={() => {
+            onNodeCreate();
+          }}
           fetchMap={fetchMap}
           onEdgesChange={onEdgesChange}
           onNodesChange={onNodesChange}
-          map={map}
+          map={mapById}
           id={id}
           repos={repos}
           modal={modal}

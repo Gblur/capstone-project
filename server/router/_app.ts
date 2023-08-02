@@ -1,8 +1,12 @@
 import { baseProcedure, router } from "../trpc";
-import { todoRouter } from "./actionRouter";
+import { mapsRouter } from "./mapsRouter";
 
+// On Client side you invoke trpc.maps.all where trpc = createTRPCNext<AppRouter>({opts})
 export const appRouter = router({
-  todo: todoRouter,
+  checkStatus: baseProcedure.query(() => {
+    return "Hey Mister";
+  }),
+  maps: mapsRouter,
 });
 
 export type AppRouter = typeof appRouter;

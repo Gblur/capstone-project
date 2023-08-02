@@ -23,12 +23,8 @@ const selector = (state) => {
 };
 
 export default function MapsPage() {
-  const { data: mapdata, status } = trpc.todo.all.useQuery();
+  const { data: mapdata, status } = trpc.maps.all.useQuery();
   const loading = status == "loading";
-  console.log(loading);
-  console.log(mapdata);
-
-  // const { nodes: trpcNodes } = mapsData.data;
 
   const { fetchMap, deleteMap, map, nodes, edges, getMap } = useStore(
     selector,
@@ -37,21 +33,10 @@ export default function MapsPage() {
   const modal = modalControlsStore((state) => state.modal);
   const onClose = modalControlsStore((state) => state.closeModal);
   const [selectedItem, setSelectedItem] = useState(null);
-  console.log(selectedItem);
-  function handleMapSelect(maps, id) {
-    setSelectedItem(maps);
+  function handleMapSelect(id) {
+    setSelectedItem(id);
     getMap(id);
   }
-
-  // useEffect(() => {
-  //   prevMyStateValueRef.current = maps;
-  // });
-  // const prevMyStateValue = prevMyStateValueRef.current;
-  // // const {data: session} = useSession();
-
-  // // useEffect(() => {
-  // //   if (!maps.length || maps !== prevMyStateValue) fetchMaps();
-  // // }, []);
 
   useEffect(() => {
     if (!selectedItem && !loading) {

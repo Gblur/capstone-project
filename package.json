@@ -38,6 +38,7 @@
     "swr": "^2.1.1",
     "use-local-storage-state": "^18.3.2",
     "uuid": "^9.0.0",
+    "ws": "^8.13.0",
     "zod": "^3.21.4",
     "zustand": "^4.3.6"
   },
@@ -46,6 +47,7 @@
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^14.0.0",
     "@testing-library/user-event": "^14.4.3",
+    "@types/ws": "^8.5.5",
     "eslint": "8.35.0",
     "eslint-config-next": "13.2.3",
     "eslint-plugin-jest": "^27.2.1",
