@@ -1,12 +1,12 @@
-import React, {useEffect} from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import CircularProgress from "@mui/material/CircularProgress";
 import EnhancedTable from "./Table";
-import {styles} from "../Canvas/styles";
-import {Icon} from "../Icons";
-import ReactFlow, {Background, Controls} from "reactflow";
-import {nodeTypes} from "../Node/customNode";
-import {router} from "next/router";
+import { styles } from "../Canvas/styles";
+import { Icon } from "../Icons";
+import ReactFlow, { Background, Controls } from "reactflow";
+import { nodeTypes } from "../Node/customNode";
+import { router } from "next/router";
 import Canvas from "../Canvas";
 import "reactflow/dist/style.css";
 
@@ -21,15 +21,17 @@ const ProjectListContainer = styled.section`
   border: 1px solid var(--color-dashboard-border);
   border-radius: 4px;
   padding: 10px;
-  min-height: 250px;
   background: rgba(255, 255, 255, 0.9);
 `;
 
 const ProjectList = styled.ul`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   list-style: none;
   padding: 0;
   min-height: 80px;
-  max-height: 120px;
+  max-height: 180px;
   overflow-y: auto;
 `;
 
@@ -54,10 +56,10 @@ const ProjectListItem = styled.li`
   justify-content: space-between;
   border-radius: 5px;
   padding: 10px;
-  margin-bottom: 5px;
+  width: 90%;
   cursor: pointer;
   scale: 1;
-  margin: 10px;
+  margin: 5px;
   transition: ease-in-out 200ms;
   box-shadow: 0 0 3px #000;
   &:hover {
@@ -141,7 +143,7 @@ export default function Dashboard({
               nodeTypes={nodeTypes}
               fitView
             >
-              <Background style={{background: styles["color-bg"]}} />
+              <Background style={{ background: styles["color-bg"] }} />
               <Controls />
             </ReactFlow>
           </>

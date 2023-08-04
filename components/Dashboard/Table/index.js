@@ -7,16 +7,15 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 
-export default function BasicTable({map}) {
+export default function BasicTable({ map }) {
   return (
     <TableContainer component={Paper}>
       <Table
-        sx={{minWidth: 300, minHeight: 115}}
+        sx={{ minWidth: 300, minHeight: 115 }}
         aria-label="table for map info"
       >
         <TableHead>
-          <TableRow sx={{background: "var(--color-hover-item)"}}>
-            <TableCell align="left">User</TableCell>
+          <TableRow sx={{ background: "var(--color-hover-item)" }}>
             <TableCell align="left">Team</TableCell>
             <TableCell align="left">Template</TableCell>
             <TableCell align="left">Date</TableCell>
@@ -25,12 +24,9 @@ export default function BasicTable({map}) {
         <TableBody>
           <TableRow
             sx={{
-              "&:last-child td, &:last-child th": {border: 0},
+              "&:last-child td, &:last-child th": { border: 0 },
             }}
           >
-            <TableCell component="th" scope="row">
-              {map?.user?.name}
-            </TableCell>
             <TableCell align="left">{map?.team || ""}</TableCell>
             <TableCell align="left">{map?.mapType || ""}</TableCell>
             <TableCell align="left">{map?.date || ""}</TableCell>
