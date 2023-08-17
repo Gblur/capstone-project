@@ -1,4 +1,9 @@
-import { httpBatchLink, loggerLink } from "@trpc/client";
+import {
+  createWSClient,
+  httpBatchLink,
+  loggerLink,
+  wsLink,
+} from "@trpc/client";
 import { createTRPCNext } from "@trpc/next";
 import superjson from "superjson";
 import type { AppRouter } from "../server/router/_app";
@@ -20,6 +25,21 @@ function getBaseUrl() {
   // assume localhost
   return `http://localhost:${process.env.PORT ?? 3000}`;
 }
+
+function getEndingLink() {
+  if (typeof window === "undefined") {
+    return httpBatchLink({
+      url: `${getBaseUrl()}/api/trpc`,
+    });
+  }
+  const client = createWSClient({
+    url: "ws://localhost:3000/trpc",
+  });
+  return wsLink<AppRouter>({
+    client,
+  });
+}
+
 export const trpc = createTRPCNext<AppRouter>({
   config() {
     return {
@@ -35,9 +55,10 @@ export const trpc = createTRPCNext<AppRouter>({
         httpBatchLink({
           url: `${getBaseUrl()}/api/trpc`,
         }),
+        getEndingLink(),
       ],
     };
   },
-
+  abortOnUnmount: true,
   ssr: false,
 });

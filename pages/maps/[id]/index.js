@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Canvas from "../../../components/Canvas";
 import "reactflow/dist/style.css";
+import ReactFlow, { addEdge, useNodesState, useEdgesState } from "reactflow";
 import { shallow } from "zustand/shallow";
 import Button from "@mui/material/Button";
 import styled from "styled-components";
@@ -11,6 +12,7 @@ import { useSession } from "next-auth/react";
 import Stack from "@mui/material/Stack";
 import modalControlsStore from "../../../store/modalControls";
 import { trpc } from "../../../utils/trpc";
+import nodeCreator from "../../../components/Canvas/hooks/nodeCreator";
 
 const MapInfoBox = styled.div`
   display: flex;
@@ -44,11 +46,10 @@ const selector = (state) => ({
   updateNodeType: state.updateNodeType,
   updateNodeLabel: state.updateNodeLabel,
   updateNodeStatus: state.updateNodeStatus,
+  transferMapData: state.transferMapData,
 });
 export default function MapDetailsPage() {
   const {
-    nodes,
-    edges,
     repos,
     fetchMap,
     fetchRepos,
@@ -56,6 +57,9 @@ export default function MapDetailsPage() {
     onEdgesChange,
     onConnect,
     onNodeCreate,
+    nodes,
+    edges,
+    transferMapData,
     onUpdateMap,
     updateNodeLabel,
     updateNodeType,
@@ -75,27 +79,24 @@ export default function MapDetailsPage() {
   } = router;
 
   const { data: mapById, status } = trpc.maps.byId.useQuery({ id });
+  // const onUpdate = trpc.maps.onUpdate.subscribe();
+  const addNode = trpc.maps.addNode.useMutation();
 
-  const editTask = trpc.maps.edit.useMutation({
-    async onMutate({ id, data }) {
-      await utils.todo.all.cancel();
-      const allTasks = utils.todo.all.getData();
-      if (!allTasks) {
-        return;
-      }
-      utils.todo.all.setData(
-        undefined,
-        allTasks.map((t) =>
-          t.id === id
-            ? {
-                ...t,
-                ...data,
-              }
-            : t
-        )
-      );
-    },
-  });
+  function handleAddNode(parent, newId) {
+    addNode.mutate({
+      id,
+      data: {
+        nodes: JSON.stringify([
+          ...JSON.parse(mapById.nodes),
+          nodeCreator(parent, newId).node,
+        ]),
+        edges: JSON.stringify([
+          ...JSON.parse(mapById.edges),
+          nodeCreator(parent, newId).edge,
+        ]),
+      },
+    });
+  }
 
   async function handlePostToNotion(notionPost) {
     const response = await fetch("/api/notion/client", {
@@ -110,13 +111,16 @@ export default function MapDetailsPage() {
 
   useEffect(() => {
     closeModal();
+    transferMapData(mapById);
     // if (id) {
     // fetchMap(id);
     // if (map.mapType === "Repos" && !map.nodes.includes("child")) {
     //   fetchRepos(`/api/auth/github`);
     // }
     // }
-  }, [mapById?.id]);
+  }, [mapById]);
+
+  console.log(nodes);
 
   if (status !== "success") return <div>Loading...</div>;
 
@@ -154,12 +158,10 @@ export default function MapDetailsPage() {
         <Canvas
           handlePostToNotion={handlePostToNotion}
           user={session?.user?.name}
-          nodes={JSON.parse(mapById?.nodes)}
-          edges={JSON.parse(mapById?.edges)}
+          createNode={handleAddNode}
+          nodes={nodes}
+          edges={edges}
           onConnect={onConnect}
-          onNodeCreate={() => {
-            onNodeCreate();
-          }}
           fetchMap={fetchMap}
           onEdgesChange={onEdgesChange}
           onNodesChange={onNodesChange}

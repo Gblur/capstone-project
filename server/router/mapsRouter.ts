@@ -31,11 +31,12 @@ export const mapsRouter = router({
   //     });
   //     return todo;
   //   }),
+
   // update nodes and edges of map by id
-  edit: baseProcedure
+  addNode: baseProcedure
     .input(
       z.object({
-        id: z.string().uuid(),
+        id: z.string(),
         data: z.object({
           nodes: z.string(),
           edges: z.string(),
@@ -60,9 +61,9 @@ export const mapsRouter = router({
       const onUpdate = (data: maps) => {
         emit.next(data);
       };
-      ee.on("add", onUpdate);
+      ee.on("update", onUpdate);
       return () => {
-        ee.off("add", onUpdate);
+        ee.off("update", onUpdate);
       };
     });
   }),

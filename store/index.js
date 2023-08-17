@@ -62,6 +62,12 @@ const useStore = create((set, get) => {
     nodes: [],
     edges: [],
     repos: [],
+    transferMapData: (mapById) => {
+      set({
+        nodes: JSON.parse(mapById?.nodes),
+        edges: JSON.parse(mapById?.edges),
+      });
+    },
     filterMaps: (searchString) => {
       set({
         maps: get().maps.filter((map) => {
