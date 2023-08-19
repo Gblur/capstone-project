@@ -1,11 +1,14 @@
 import Dashboard from "../../components/Dashboard";
-import React, {useEffect, useState, useRef} from "react";
+import React, { useEffect, useState, useRef } from "react";
 import CustomModal from "../../components/Modal";
 import ProjectForm from "../../components/Form";
 import useStore from "../../store";
 import modalControlsStore from "../../store/modalControls";
-import {shallow} from "zustand/shallow";
-import {useSession} from "next-auth/react";
+import { shallow } from "zustand/shallow";
+import { useSession } from "next-auth/react";
+import { useLazyQuery, useQuery } from "@apollo/client";
+import GET_MAPS from "../../graphql/gql/getmaps.graphql";
+import { DateRange } from "@mui/icons-material";
 
 const selector = (state) => {
   return {
@@ -22,43 +25,57 @@ const selector = (state) => {
 };
 
 export default function MapsPage() {
-  const {
-    maps,
-    fetchMap,
-    fetchMaps,
-    deleteMap,
-    map,
-    nodes,
-    edges,
-    loading,
-    getMap,
-  } = useStore(selector, shallow);
+  const { fetchMap, deleteMap, map, nodes, edges, getMap } = useStore(
+    selector,
+    shallow
+  );
+
+  const [maps, setMaps] = useState(null);
   const modal = modalControlsStore((state) => state.modal);
   const onClose = modalControlsStore((state) => state.closeModal);
   const [selectedItem, setSelectedItem] = useState();
-  const prevMyStateValueRef = useRef();
   function handleMapSelect(item, id) {
     setSelectedItem(item);
     getMap(id);
   }
 
-  // const {data: session} = useSession();
+  const fetchMaps = async () => {
+    const response = await fetch("/api/graphql", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        query: `query getmaps {
+          maps {
+            id
+            name
+            nodes
+            edges
+          }
+        }`,
+      }),
+    });
+    const { data } = await response.json();
+    setMaps(data?.maps);
+  };
 
   useEffect(() => {
-    prevMyStateValueRef.current = maps;
-  });
-  const prevMyStateValue = prevMyStateValueRef.current;
-  // const {data: session} = useSession();
-
-  useEffect(() => {
-    if (!maps.length || maps !== prevMyStateValue) fetchMaps();
+    if (!maps) {
+      fetchMaps();
+    }
   }, []);
 
-  useEffect(() => {
-    if (!selectedItem) {
-      handleMapSelect(maps[0], maps[0]?._id);
-    }
-  }, [loading]);
+  // useEffect(() => {
+  //   if (!selectedItem && !loading) {
+  //     handleMapSelect(mapdata[0], mapdata[0]._id);
+  //   }
+  // }, [loading]);
+
+  // const {data: session} = useSession();
+  // const maps = useQuery(GET_MAPS);
+
+  // console.log(maps);
 
   return (
     <main>
@@ -70,7 +87,7 @@ export default function MapsPage() {
         selectedItem={selectedItem}
         handleMapSelect={handleMapSelect}
         handleDelete={deleteMap}
-        isloading={loading}
+        isloading={false}
       />
       <CustomModal modal={modal} onClose={onClose}>
         <ProjectForm />

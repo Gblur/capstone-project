@@ -1,0 +1,5 @@
+query getmaps {
+  maps {
+    name
+  }
+}

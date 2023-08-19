@@ -101,8 +101,8 @@ export default function Dashboard({
               data.map((item) => {
                 return (
                   <ProjectListItem
-                    className={selectedItem?._id === item._id ? "selected" : ""}
-                    key={item._id}
+                    className={selectedItem?.id === item.id ? "selected" : ""}
+                    key={item.id}
                     onClick={() => handleMapSelect(item, item._id)}
                   >
                     <a>{item.name}</a>
@@ -110,13 +110,13 @@ export default function Dashboard({
                       <span>
                         <Icon.EditIcon
                           onClick={() => {
-                            router.push(`/maps/${item._id}`);
+                            router.push(`/maps/${item.id}`);
                           }}
                           color="primary"
                         />
                         <Icon.DeleteIcon
                           onClick={() => {
-                            handleDelete(item._id);
+                            handleDelete(item.id);
                           }}
                           color="error"
                         />
