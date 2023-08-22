@@ -10,9 +10,14 @@ import MenuItem from "@mui/material/MenuItem";
 import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
 import TextField from "@mui/material/TextField";
+import { useMutation } from "@apollo/client";
+import POSTMAP from "../../graphql/gql/postMap.gql";
 
 export default function ProjectForm() {
   const createPost = useStore((state) => state.createMap);
+
+  const [postMap, { data, loading, error }] = useMutation(POSTMAP);
+
   const router = useRouter();
   // const {data: session} = useSession();
   const [name, setName] = useState("");
@@ -24,7 +29,7 @@ export default function ProjectForm() {
     event.preventDefault();
     const form = new FormData(event.target);
     const data = Object.fromEntries(form);
-    createPost(data, router);
+    postMap({ variables: { input: data } });
   };
 
   return (

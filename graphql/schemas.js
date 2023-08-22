@@ -6,13 +6,21 @@ const typeDefs = gql`
     searchMaps(value: String): [Map]
   }
 
+  input Post {
+    team: String!
+    description: String!
+    name: String!
+    mapType: String!
+  }
+
+  type Mutation {
+    postMap(input: Post!): Map
+  }
+
   type Map {
     id: ID
     team: String
     description: String
-    date: String
-    nodes: String
-    edges: String
     name: String
     mapType: String
   }

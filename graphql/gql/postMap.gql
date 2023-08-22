@@ -1,0 +1,9 @@
+mutation PostMap($input: Post!) {
+  postMap(input: $input) {
+    id
+    team
+    description
+    name
+    mapType
+  }
+}

@@ -11,10 +11,10 @@ generator client {
 }
 
 model Map {
-  id          String @id @default(auto()) @map("_id") @db.ObjectId
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
   team        String
   description String
-  date        String
+  date        DateTime @default(now())
   nodes       String
   edges       String
   name        String

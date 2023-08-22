@@ -20,17 +20,17 @@ export default async function handler(req, res) {
         // const filteredMap = map.filter((map) => map.user.name === user.name);
         return res.status(200).json(maps);
       // } else res.status(403).json({ message: "You have no read rights" });
-      case "POST":
-        try {
-          // const user = await User.findOne({ name: session.user.name });
-          const newProject = await new Map(data);
-          await newProject.save();
-          return res
-            .status(200)
-            .json({ status: "New Map created", _id: newProject._id });
-        } catch (error) {
-          return res.status(400).json({ error: error.message });
-        }
+      // case "POST":
+      //   try {
+      //     // const user = await User.findOne({ name: session.user.name });
+      //     const newProject = await new Map(data);
+      //     await newProject.save();
+      //     return res
+      //       .status(200)
+      //       .json({ status: "New Map created", _id: newProject._id });
+      //   } catch (error) {
+      //     return res.status(400).json({ error: error.message });
+      //   }
 
       case "DELETE":
         try {

@@ -6,9 +6,11 @@ import useStore from "../../store";
 import modalControlsStore from "../../store/modalControls";
 import { shallow } from "zustand/shallow";
 import { useSession } from "next-auth/react";
-import { useLazyQuery, useQuery } from "@apollo/client";
-import GET_MAPS from "../../graphql/gql/getmaps.graphql";
+import { useQuery } from "@apollo/client";
 import { DateRange } from "@mui/icons-material";
+import { CircularProgress } from "@mui/material";
+import client from "../../lib/apollo-client.js";
+import GET_MAPS from "../../graphql/gql/getmaps.gql";
 
 const selector = (state) => {
   return {
@@ -30,7 +32,7 @@ export default function MapsPage() {
     shallow
   );
 
-  const [maps, setMaps] = useState(null);
+  const [maps, setMaps] = useState([]);
   const modal = modalControlsStore((state) => state.modal);
   const onClose = modalControlsStore((state) => state.closeModal);
   const [selectedItem, setSelectedItem] = useState();
@@ -39,55 +41,33 @@ export default function MapsPage() {
     getMap(id);
   }
 
-  const fetchMaps = async () => {
-    const response = await fetch("/api/graphql", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        query: `query getmaps {
-          maps {
-            id
-            name
-            nodes
-            edges
-          }
-        }`,
-      }),
-    });
-    const { data } = await response.json();
-    setMaps(data?.maps);
-  };
+  const { data, loading, error } = useQuery(GET_MAPS);
 
-  useEffect(() => {
-    if (!maps) {
-      fetchMaps();
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (!loading && !maps.length) {
+  //     // fetchMaps();
+  //     setMaps(data.maps);
+  //   }
+  // }, []);
 
   // useEffect(() => {
   //   if (!selectedItem && !loading) {
   //     handleMapSelect(mapdata[0], mapdata[0]._id);
   //   }
   // }, [loading]);
-
-  // const {data: session} = useSession();
-  // const maps = useQuery(GET_MAPS);
-
-  // console.log(maps);
+  console.log(data?.maps);
 
   return (
     <main>
       <Dashboard
-        data={maps}
+        data={data?.maps}
         map={map}
         nodes={nodes}
         edges={edges}
         selectedItem={selectedItem}
         handleMapSelect={handleMapSelect}
         handleDelete={deleteMap}
-        isloading={false}
+        isloading={loading}
       />
       <CustomModal modal={modal} onClose={onClose}>
         <ProjectForm />

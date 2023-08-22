@@ -95,15 +95,15 @@ export default function Dashboard({
       <ProjectListContainer>
         <h2>Project list</h2>
         <hr />
-        {!isloading && data ? (
+        {!isloading ? (
           <ProjectList>
-            {data.length > 0 ? (
+            {data?.length ? (
               data.map((item) => {
                 return (
                   <ProjectListItem
                     className={selectedItem?.id === item.id ? "selected" : ""}
                     key={item.id}
-                    onClick={() => handleMapSelect(item, item._id)}
+                    onClick={() => handleMapSelect(item, item.id)}
                   >
                     <a>{item.name}</a>
                     {selectedItem === item && (

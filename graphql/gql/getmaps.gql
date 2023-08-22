@@ -1,0 +1,12 @@
+query getmaps {
+  maps {
+    id
+    team
+    description
+    date
+    nodes
+    edges
+    name
+    mapType
+  }
+}
