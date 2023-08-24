@@ -4,8 +4,6 @@ query getmaps {
     team
     description
     date
-    nodes
-    edges
     name
     mapType
   }

@@ -134,7 +134,7 @@ export default function Dashboard({
         )}
       </ProjectListContainer>
       <InformationContainer>
-        <EnhancedTable map={map} />
+        <EnhancedTable map={selectedItem} />
         <MapPreview>
           <>
             <ReactFlow

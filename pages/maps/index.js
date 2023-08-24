@@ -54,8 +54,8 @@ export default function MapsPage() {
   //   if (!selectedItem && !loading) {
   //     handleMapSelect(mapdata[0], mapdata[0]._id);
   //   }
-  // }, [loading]);
-  console.log(data?.maps);
+  // }, [selectedItem]);
+  console.log(selectedItem);
 
   return (
     <main>

@@ -1,6 +1,7 @@
 import gql from "graphql-tag";
 
 const typeDefs = gql`
+  scalar DateTime
   type Query {
     maps: [Map]
     searchMaps(value: String): [Map]
@@ -20,6 +21,7 @@ const typeDefs = gql`
   type Map {
     id: ID
     team: String
+    date: DateTime!
     description: String
     name: String
     mapType: String

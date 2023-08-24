@@ -15,7 +15,6 @@ const resolvers = {
   Mutation: {
     postMap: (_, { input }) => {
       try {
-        console.log(input);
         const newPost = prisma.map.create({
           data: { ...input, nodes: "[]", edges: "[]" },
         });
