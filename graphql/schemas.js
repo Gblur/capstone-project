@@ -22,6 +22,8 @@ const typeDefs = gql`
     id: ID
     team: String
     date: DateTime!
+    nodes: String
+    edges: String
     description: String
     name: String
     mapType: String

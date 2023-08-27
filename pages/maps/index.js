@@ -36,9 +36,8 @@ export default function MapsPage() {
   const modal = modalControlsStore((state) => state.modal);
   const onClose = modalControlsStore((state) => state.closeModal);
   const [selectedItem, setSelectedItem] = useState();
-  function handleMapSelect(item, id) {
+  function handleMapSelect(item) {
     setSelectedItem(item);
-    getMap(id);
   }
 
   const { data, loading, error } = useQuery(GET_MAPS);
@@ -55,15 +54,12 @@ export default function MapsPage() {
   //     handleMapSelect(mapdata[0], mapdata[0]._id);
   //   }
   // }, [selectedItem]);
-  console.log(selectedItem);
 
   return (
     <main>
       <Dashboard
         data={data?.maps}
         map={map}
-        nodes={nodes}
-        edges={edges}
         selectedItem={selectedItem}
         handleMapSelect={handleMapSelect}
         handleDelete={deleteMap}

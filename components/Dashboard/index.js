@@ -72,22 +72,12 @@ const ProjectListItem = styled.li`
   }
 `;
 
-// const Table = styled.section`
-// 	display: table;
-// 	height: 100%;
-// 	width: 100%;
-// 	border: 2px solid var(--color-dashboard-border);
-// 	padding: 20px;
-// `;
-
 export default function Dashboard({
   data,
   map,
   selectedItem,
   handleMapSelect,
   handleDelete,
-  nodes,
-  edges,
   isloading,
 }) {
   return (
@@ -138,8 +128,8 @@ export default function Dashboard({
         <MapPreview>
           <>
             <ReactFlow
-              nodes={nodes}
-              edges={edges}
+              nodes={selectedItem ? JSON.parse(selectedItem.nodes) : []}
+              edges={selectedItem ? JSON.parse(selectedItem.edges) : []}
               nodeTypes={nodeTypes}
               fitView
             >
