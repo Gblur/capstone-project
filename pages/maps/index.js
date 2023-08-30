@@ -11,6 +11,7 @@ import DateRange from "@mui/icons-material/DateRange";
 import CircularProgress from "@mui/material/CircularProgress";
 import client from "../../lib/apollo-client.js";
 import GET_MAPS from "../../graphql/gql/getmaps.gql";
+import useLocalStorageState from "use-local-storage-state";
 
 const selector = (state) => {
   return {
@@ -35,13 +36,19 @@ export default function MapsPage() {
   const [maps, setMaps] = useState([]);
   const modal = modalControlsStore((state) => state.modal);
   const onClose = modalControlsStore((state) => state.closeModal);
-  const [selectedItem, setSelectedItem] = useState();
+  const [selectedItem, setSelectedItem] = useLocalStorageState("selectedItem", {
+    defaultValue: "",
+  });
+  const [searchString, setSearchString] = useState("");
   function handleMapSelect(item) {
     setSelectedItem(item);
   }
 
   const { data, loading, error } = useQuery(GET_MAPS);
 
+  const filteredMaps = data?.maps.filter((item) =>
+    item.name.toLowerCase().includes(searchString.toLowerCase())
+  );
   // useEffect(() => {
   //   if (!loading && !maps.length) {
   //     // fetchMaps();
@@ -49,16 +56,17 @@ export default function MapsPage() {
   //   }
   // }, []);
 
-  // useEffect(() => {
-  //   if (!selectedItem && !loading) {
-  //     handleMapSelect(mapdata[0], mapdata[0]._id);
-  //   }
-  // }, [selectedItem]);
+  useEffect(() => {
+    if (!selectedItem && !loading) {
+      handleMapSelect(filteredMaps[0]);
+    }
+  }, [filteredMaps]);
 
   return (
     <main>
+      <input onChange={(e) => setSearchString(e.target.value)} />
       <Dashboard
-        data={data?.maps}
+        data={filteredMaps}
         map={map}
         selectedItem={selectedItem}
         handleMapSelect={handleMapSelect}

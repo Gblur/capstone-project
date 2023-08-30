@@ -4,7 +4,7 @@ const typeDefs = gql`
   scalar DateTime
   type Query {
     maps: [Map]
-    searchMaps(value: String): [Map]
+    searchMaps(name: String): [Map]
   }
 
   input Post {

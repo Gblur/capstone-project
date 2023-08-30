@@ -27,6 +27,11 @@ const resolvers = {
         console.error("Failed to fetch", error);
       }
     },
+    // searchMaps: async (input) => {
+    //   return prisma.map.findMany({
+    //     where: { name: input ?? "lol" },
+    //   });
+    // },
   },
   Mutation: {
     postMap: (_, { input }) => {

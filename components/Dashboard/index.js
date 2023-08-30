@@ -29,9 +29,8 @@ const ProjectList = styled.ul`
   flex-direction: column;
   align-items: center;
   list-style: none;
+  max-height: 300px;
   padding: 0;
-  min-height: 80px;
-  max-height: 180px;
   overflow-y: auto;
 `;
 
@@ -88,7 +87,7 @@ export default function Dashboard({
         {!isloading ? (
           <ProjectList>
             {data?.length ? (
-              data.map((item) => {
+              data?.map((item) => {
                 return (
                   <ProjectListItem
                     className={selectedItem?.id === item.id ? "selected" : ""}
@@ -96,7 +95,7 @@ export default function Dashboard({
                     onClick={() => handleMapSelect(item, item.id)}
                   >
                     <a>{item.name}</a>
-                    {selectedItem === item && (
+                    {selectedItem.name === item.name && (
                       <span>
                         <Icon.EditIcon
                           onClick={() => {
@@ -116,7 +115,7 @@ export default function Dashboard({
                 );
               })
             ) : (
-              <ProjectListItem>No Entry</ProjectListItem>
+              <ProjectListItem>No Entries found</ProjectListItem>
             )}
           </ProjectList>
         ) : (
