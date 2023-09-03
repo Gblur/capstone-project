@@ -1,0 +1,8 @@
+query getMapById($ID: ID!) {
+  mapById(id: $ID) {
+    nodes
+    edges
+    name
+    description
+  }
+}

@@ -12,6 +12,8 @@ import { v4 as uuidv4 } from "uuid";
 import { useSession } from "next-auth/react";
 import Stack from "@mui/material/Stack";
 import modalControlsStore from "../../../store/modalControls";
+import { useQuery } from "@apollo/client";
+import GET_MAP_BY_ID from "../../../graphql/gql/getMapById.gql";
 
 const MapInfoBox = styled.div`
   display: flex;
@@ -49,8 +51,6 @@ const selector = (state) => ({
 });
 export default function MapDetailsPage() {
   const {
-    loading,
-    map,
     nodes,
     edges,
     repos,
@@ -67,40 +67,43 @@ export default function MapDetailsPage() {
     updateNodeStatus,
   } = useStore(selector, shallow);
 
-  const modal = modalControlsStore((state) => state.modal);
-  const closeModal = modalControlsStore((state) => state.closeModal);
-  const openModal = modalControlsStore((state) => state.openModal);
-
+  const modal = modalControlsStore((state) => state);
   // const {data: session, status} = useSession();
-  const [notionObject, setNotionObject] = useState(null);
 
   const router = useRouter();
   const {
     query: { id },
   } = router;
 
-  async function handlePostToNotion(notionPost) {
-    const response = await fetch("/api/notion/client", {
-      method: "POST",
-      body: JSON.stringify(notionPost),
-      headers: { "Content-Type": "application/json" },
-    });
-    if (response.ok) {
-      await response.json();
-    }
-  }
+  const { data, loading, error } = useQuery(GET_MAP_BY_ID, {
+    variables: {
+      ID: id,
+    },
+  });
 
-  useEffect(() => {
-    closeModal();
-    if (id) {
-      fetchMap(id);
-      if (map.mapType === "Repos" && !map.nodes.includes("child")) {
-        fetchRepos(`/api/auth/github`);
-      }
-    }
-  }, [map._id, id]);
+  const mapById = data?.mapById;
 
-  if (!router.isReady) return <CircularProgress />;
+  // async function handlePostToNotion(notionPost) {
+  //   const response = await fetch("/api/notion/client", {
+  //     method: "POST",
+  //     body: JSON.stringify(notionPost),
+  //     headers: { "Content-Type": "application/json" },
+  //   });
+  //   if (response.ok) {
+  //     await response.json();
+  //   }
+  // }
+
+  // useEffect(() => {
+  //   closeModal();
+  //   if (id) {
+  //     fetchMap(id);
+  //     if (map.mapType === "Repos" && !map.nodes.includes("child")) {
+  //       fetchRepos(`/api/auth/github`);
+  //     }
+  //   }
+  // }, [map._id, id]);
+  if (loading) return <CircularProgress />;
 
   return (
     <main
@@ -110,8 +113,8 @@ export default function MapDetailsPage() {
     >
       <MapInfoBox>
         <MapInfoBoxHead>
-          <h3>{map.name}</h3>
-          <p>{map.description}</p>
+          <h3>{mapById?.name}</h3>
+          <p>{mapById?.description}</p>
         </MapInfoBoxHead>
       </MapInfoBox>
       <section style={{ height: "65%" }}>
@@ -132,20 +135,19 @@ export default function MapDetailsPage() {
           </Stack>
         </div>
         <Canvas
-          handlePostToNotion={handlePostToNotion}
-          nodes={nodes}
-          edges={edges}
+          nodes={JSON.parse(mapById.nodes)}
+          edges={JSON.parse(mapById.edges)}
           onConnect={onConnect}
           onNodeCreate={onNodeCreate}
           fetchMap={fetchMap}
           onEdgesChange={onEdgesChange}
           onNodesChange={onNodesChange}
-          map={map}
+          map={mapById}
           id={id}
           repos={repos}
-          modal={modal}
-          closeModal={closeModal}
-          openModal={openModal}
+          modal={modal.modal}
+          closeModal={modal.closeModal}
+          openModal={modal.ButtonopenModal}
           updateNodeLabel={updateNodeLabel}
           updateNodeType={updateNodeType}
           updateNodeStatus={updateNodeStatus}

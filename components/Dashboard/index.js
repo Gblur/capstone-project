@@ -71,10 +71,8 @@ const ProjectListItem = styled.li`
 
 export default function Dashboard({
   data,
-  map,
   selectedItem,
   handleMapSelect,
-  handleDelete,
   isloading,
 }) {
   return (

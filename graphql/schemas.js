@@ -5,6 +5,7 @@ const typeDefs = gql`
   type Query {
     maps: [Map]
     orderByName(orderBy: SortByName): [Map]
+    mapById(id: ID!): Map
   }
 
   enum Sort {

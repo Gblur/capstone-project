@@ -9,30 +9,10 @@ import { useSession } from "next-auth/react";
 import { useQuery } from "@apollo/client";
 import DateRange from "@mui/icons-material/DateRange";
 import CircularProgress from "@mui/material/CircularProgress";
-import client from "../../lib/apollo-client.js";
 import GET_MAPS_SORTED from "../../graphql/gql/sortMaps.gql";
 import useLocalStorageState from "use-local-storage-state";
 
-const selector = (state) => {
-  return {
-    maps: state.maps,
-    map: state.map,
-    fetchMap: state.fetchMap,
-    fetchMaps: state.fetchMaps,
-    deleteMap: state.deleteMap,
-    nodes: state.nodes,
-    edges: state.edges,
-    loading: state.loading,
-    getMap: state.getMap,
-  };
-};
-
 export default function MapsPage() {
-  const { fetchMap, deleteMap, map, nodes, edges, getMap } = useStore(
-    selector,
-    shallow
-  );
-
   const [maps, setMaps] = useState([]);
   const modal = modalControlsStore((state) => state.modal);
   const onClose = modalControlsStore((state) => state.closeModal);
@@ -74,10 +54,8 @@ export default function MapsPage() {
       <input onChange={(e) => setSearchString(e.target.value)} />
       <Dashboard
         data={filteredMaps}
-        map={map}
         selectedItem={selectedItem}
         handleMapSelect={handleMapSelect}
-        handleDelete={deleteMap}
         isloading={loading}
       />
       <CustomModal modal={modal} onClose={onClose}>

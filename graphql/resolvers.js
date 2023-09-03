@@ -59,6 +59,15 @@ const resolvers = {
         ],
       });
     },
+    mapById: async (_, { id }) => {
+      try {
+        return await prisma.map.findUnique({
+          where: { id },
+        });
+      } catch (error) {
+        console.error(error);
+      }
+    },
   },
   Mutation: {
     postMap: (_, { input }) => {
