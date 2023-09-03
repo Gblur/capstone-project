@@ -16,7 +16,7 @@ import POSTMAP from "../../graphql/gql/postMap.gql";
 export default function ProjectForm() {
   const createPost = useStore((state) => state.createMap);
 
-  const [postMap, { data, loading, error }] = useMutation(POSTMAP);
+  const [postMap] = useMutation(POSTMAP);
 
   const router = useRouter();
   // const {data: session} = useSession();

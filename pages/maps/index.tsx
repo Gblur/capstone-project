@@ -10,7 +10,7 @@ import { useQuery } from "@apollo/client";
 import DateRange from "@mui/icons-material/DateRange";
 import CircularProgress from "@mui/material/CircularProgress";
 import client from "../../lib/apollo-client.js";
-import GET_MAPS from "../../graphql/gql/getmaps.gql";
+import GET_MAPS_SORTED from "../../graphql/gql/sortMaps.gql";
 import useLocalStorageState from "use-local-storage-state";
 
 const selector = (state) => {
@@ -40,13 +40,20 @@ export default function MapsPage() {
     defaultValue: "",
   });
   const [searchString, setSearchString] = useState("");
+
   function handleMapSelect(item) {
     setSelectedItem(item);
   }
 
-  const { data, loading, error } = useQuery(GET_MAPS);
+  const { data, loading, error } = useQuery(GET_MAPS_SORTED, {
+    variables: {
+      input: {
+        name: "asc",
+      },
+    },
+  });
 
-  const filteredMaps = data?.maps.filter((item) =>
+  const filteredMaps = data?.orderByName.filter((item) =>
     item.name.toLowerCase().includes(searchString.toLowerCase())
   );
   // useEffect(() => {

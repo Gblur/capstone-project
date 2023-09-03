@@ -12,7 +12,7 @@ import "reactflow/dist/style.css";
 
 const DashboardContainer = styled.div`
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: 1fr 1fr;
   gap: 20px;
 `;
 
@@ -29,7 +29,6 @@ const ProjectList = styled.ul`
   flex-direction: column;
   align-items: center;
   list-style: none;
-  max-height: 300px;
   padding: 0;
   overflow-y: auto;
 `;
@@ -44,7 +43,6 @@ const MapPreview = styled.div`
   display: block;
   min-height: 500px;
   border: 1px solid var(--color-dashboard-border);
-  margin-bottom: 20px;
   overflow: hidden;
   border-radius: 4px;
 `;

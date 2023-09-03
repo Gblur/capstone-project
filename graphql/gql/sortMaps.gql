@@ -1,5 +1,5 @@
-query getmaps {
-  maps {
+query SortMaps($input: SortByName) {
+  orderByName(orderBy: $input) {
     id
     team
     description

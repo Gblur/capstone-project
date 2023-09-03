@@ -1,4 +1,4 @@
-import {createGlobalStyle} from "styled-components";
+import { createGlobalStyle } from "styled-components";
 
 export default createGlobalStyle`
   html{
@@ -42,9 +42,8 @@ export default createGlobalStyle`
 
   }
   body {
-
     margin: 0 auto;
-    max-width: 768px;
+    max-width: 1100px;
     font-family: system-ui;
     padding: 0 20px;
     background: url("/images/map_bg_color.jpeg") no-repeat center;

@@ -4,7 +4,16 @@ const typeDefs = gql`
   scalar DateTime
   type Query {
     maps: [Map]
-    searchMaps(name: String): [Map]
+    orderByName(orderBy: SortByName): [Map]
+  }
+
+  enum Sort {
+    asc
+    desc
+  }
+
+  input SortByName {
+    name: Sort
   }
 
   input Post {
