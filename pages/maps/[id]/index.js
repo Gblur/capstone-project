@@ -14,6 +14,7 @@ import Stack from "@mui/material/Stack";
 import modalControlsStore from "../../../store/modalControls";
 import { useQuery } from "@apollo/client";
 import GET_MAP_BY_ID from "../../../graphql/gql/getMapById.gql";
+import useLocalStorageState from "use-local-storage-state";
 
 const MapInfoBox = styled.div`
   display: flex;
@@ -44,22 +45,22 @@ const selector = (state) => ({
   onConnect: state.onConnect,
   onNodeCreate: state.onNodeCreate,
   onGenerateNodes: state.onGenerateNodes,
-  onUpdateMap: state.onUpdateMap,
+  cloneMap: state.cloneMap,
   updateNodeType: state.updateNodeType,
   updateNodeLabel: state.updateNodeLabel,
   updateNodeStatus: state.updateNodeStatus,
 });
 export default function MapDetailsPage() {
   const {
-    nodes,
-    edges,
     repos,
     fetchMap,
+    map,
     fetchRepos,
     onNodesChange,
     onEdgesChange,
     onConnect,
     onNodeCreate,
+    cloneMap,
     onGenerateNodes,
     onUpdateMap,
     updateNodeLabel,
@@ -70,40 +71,34 @@ export default function MapDetailsPage() {
   const modal = modalControlsStore((state) => state);
   // const {data: session, status} = useSession();
 
-  const router = useRouter();
-  const {
-    query: { id },
-  } = router;
+  // const router = useRouter();
+  // const {
+  //   query: { id },
+  // } = router;
 
-  const { data, loading, error } = useQuery(GET_MAP_BY_ID, {
-    variables: {
-      ID: id,
-    },
-  });
+  // const { data, loading, error } = useQuery(GET_MAP_BY_ID, {
+  //   variables: {
+  //     ID: id,
+  //   },
+  // });
 
-  const mapById = data?.mapById;
+  const [selectedItem] = useLocalStorageState("selectedItem");
 
-  // async function handlePostToNotion(notionPost) {
-  //   const response = await fetch("/api/notion/client", {
-  //     method: "POST",
-  //     body: JSON.stringify(notionPost),
-  //     headers: { "Content-Type": "application/json" },
-  //   });
-  //   if (response.ok) {
-  //     await response.json();
-  //   }
-  // }
+  // TODO
+  // mapById {edges: string, nodes: string} muessen geaendert werden
+  // Die strings edges und nodes muessen zu validen Objecten konvertiert werden : Done!
+  // Das onConnectEnd erstellt neue edges und nodes: mutiert clonedMap
+  // jedes node und edge hat eigene Properties die geaendert werden muessen.
 
-  // useEffect(() => {
-  //   closeModal();
-  //   if (id) {
-  //     fetchMap(id);
-  //     if (map.mapType === "Repos" && !map.nodes.includes("child")) {
-  //       fetchRepos(`/api/auth/github`);
-  //     }
-  //   }
-  // }, [map._id, id]);
-  if (loading) return <CircularProgress />;
+  useEffect(() => {
+    if (selectedItem) {
+      cloneMap({
+        ...selectedItem,
+        nodes: JSON.parse(selectedItem?.nodes),
+        edges: JSON.parse(selectedItem?.edges),
+      });
+    }
+  }, []);
 
   return (
     <main
@@ -113,8 +108,8 @@ export default function MapDetailsPage() {
     >
       <MapInfoBox>
         <MapInfoBoxHead>
-          <h3>{mapById?.name}</h3>
-          <p>{mapById?.description}</p>
+          <h3>{map?.name}</h3>
+          <p>{map?.description}</p>
         </MapInfoBoxHead>
       </MapInfoBox>
       <section style={{ height: "65%" }}>
@@ -135,19 +130,19 @@ export default function MapDetailsPage() {
           </Stack>
         </div>
         <Canvas
-          nodes={JSON.parse(mapById.nodes)}
-          edges={JSON.parse(mapById.edges)}
+          nodes={map?.nodes}
+          edges={map?.edges}
           onConnect={onConnect}
           onNodeCreate={onNodeCreate}
           fetchMap={fetchMap}
           onEdgesChange={onEdgesChange}
           onNodesChange={onNodesChange}
-          map={mapById}
-          id={id}
+          map={map}
+          id={map.id}
           repos={repos}
           modal={modal.modal}
           closeModal={modal.closeModal}
-          openModal={modal.ButtonopenModal}
+          openModal={modal.openModal}
           updateNodeLabel={updateNodeLabel}
           updateNodeType={updateNodeType}
           updateNodeStatus={updateNodeStatus}

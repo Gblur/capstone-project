@@ -17,6 +17,10 @@ const typeDefs = gql`
     name: Sort
   }
 
+  input UpdateById {
+    id: ID!
+  }
+
   input Post {
     team: String!
     description: String!

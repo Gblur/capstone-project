@@ -51,8 +51,8 @@ export default function MapsPage() {
 
   return (
     <main>
-      <input onChange={(e) => setSearchString(e.target.value)} />
       <Dashboard
+        setSearchString={setSearchString}
         data={filteredMaps}
         selectedItem={selectedItem}
         handleMapSelect={handleMapSelect}

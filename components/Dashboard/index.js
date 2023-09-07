@@ -9,6 +9,8 @@ import { nodeTypes } from "../Node/customNode";
 import { router } from "next/router";
 import Canvas from "../Canvas";
 import "reactflow/dist/style.css";
+import Input from "@mui/material/Input";
+import { Box } from "@mui/material";
 
 const DashboardContainer = styled.div`
   display: grid;
@@ -72,6 +74,7 @@ const ProjectListItem = styled.li`
 export default function Dashboard({
   data,
   selectedItem,
+  setSearchString,
   handleMapSelect,
   isloading,
 }) {
@@ -79,6 +82,10 @@ export default function Dashboard({
     <DashboardContainer>
       <ProjectListContainer>
         <h2>Project list</h2>
+        <Input
+          placeholder="filter maps"
+          onChange={(e) => setSearchString(e.target.value)}
+        />
         <hr />
         {!isloading ? (
           <ProjectList>

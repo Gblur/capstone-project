@@ -53,14 +53,14 @@ export default function Canvas({
     }
   }
 
-  // function handleSubmitNodeData(e) {
-  //   e.preventDefault();
-  //   const form = new FormData(e.target);
-  //   const data = Object.fromEntries(form);
-  //   handlePostToNotion(data);
-  //   formRef.current.reset();
-  //   closeModal();
-  // }
+  function handleSubmitNodeData(e) {
+    e.preventDefault();
+    const form = new FormData(e.target);
+    const data = Object.fromEntries(form);
+    handlePostToNotion(data);
+    formRef.current.reset();
+    closeModal();
+  }
 
   function onConnectStart(event) {
     handle.current = event.currentTarget.getAttribute("data-nodeid");
