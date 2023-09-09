@@ -1,8 +1,7 @@
-import { createYoga, createSchema } from "graphql-yoga";
+import { createYoga, createSchema, createPubSub, PubSub } from "graphql-yoga";
 
 import typeDefs from "../../graphql/schemas";
-import resolvers from "../../graphql/resolvers";
-import allowCors from "../../utils/cors";
+import { prisma, resolvers, pubsub } from "../../graphql/resolvers";
 
 const schema = new createSchema({
   typeDefs,
@@ -18,6 +17,7 @@ export const config = {
 
 export default createYoga({
   schema,
+  context: { prisma, pubsub },
   // Needed to be defined explicitly because our endpoint lives at a different path other than `/graphql`
   graphqlEndpoint: "/api/graphql",
 });

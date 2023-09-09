@@ -29,6 +29,7 @@
     "bcrypt": "^5.1.0",
     "graphql": "^16.8.0",
     "graphql-scalars": "^1.22.2",
+    "graphql-sse": "^2.2.3",
     "graphql-tag": "^2.12.6",
     "graphql-yoga": "^4.0.4",
     "mongoose": "^7.0.3",

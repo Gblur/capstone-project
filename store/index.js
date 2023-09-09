@@ -93,6 +93,9 @@ const useStore = create((set, get) => {
         ],
       });
     },
+    updateMap: async () => {
+      
+    },
     cloneMap: (map) => {
       set({ map });
     },

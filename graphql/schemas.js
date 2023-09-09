@@ -8,6 +8,10 @@ const typeDefs = gql`
     mapById(id: ID!): Map
   }
 
+  type Subscription {
+    newPost: Map
+  }
+
   enum Sort {
     asc
     desc
@@ -30,6 +34,11 @@ const typeDefs = gql`
 
   type Mutation {
     postMap(input: Post!): Map
+  }
+
+  type Message {
+    id: ID
+    message: String!
   }
 
   type Map {
