@@ -9,7 +9,6 @@ import { useRouter } from "next/router";
 import useStore from "../../../store";
 import useSWR from "swr";
 import { v4 as uuidv4 } from "uuid";
-import { useSession } from "next-auth/react";
 import Stack from "@mui/material/Stack";
 import modalControlsStore from "../../../store/modalControls";
 import { useQuery } from "@apollo/client";

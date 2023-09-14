@@ -9,7 +9,7 @@ const typeDefs = gql`
   }
 
   type Subscription {
-    newPost: Map
+    newPost(team: String!): Map
   }
 
   enum Sort {

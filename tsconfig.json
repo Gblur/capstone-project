@@ -22,7 +22,7 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx"
-, "lib/apollo-client.js"  ],
+, "lib/apollo-client.js", "pages/api/graphql.js", "graphql/resolvers.js"  ],
   "exclude": [
     "node_modules"
   ]

@@ -1,7 +1,6 @@
 import GlobalStyle from "../styles";
 import Head from "next/head";
 import Layout from "../components/Layout";
-import { SessionProvider } from "next-auth/react";
 import { ApolloProvider, gql } from "@apollo/client";
 import client from "../lib/apollo-client";
 

@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useRouter } from "next/router";
-import { useSession } from "next-auth/react";
 import styled from "styled-components";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
@@ -20,10 +19,12 @@ export default function ProjectForm() {
 
   const router = useRouter();
   // const {data: session} = useSession();
-  const [name, setName] = useState("");
-  const [team, setTeam] = useState("DevOps");
-  const [mapType, setMapType] = useState("Repos");
-  const [description, setDescription] = useState("");
+  const [formInput, setFormInput] = useState({
+    name: "",
+    team: "",
+    mapType: "",
+    description: "",
+  });
 
   const handleSubmitForm = (event) => {
     event.preventDefault();
@@ -37,8 +38,10 @@ export default function ProjectForm() {
       <FormControl margin="normal" fullWidth>
         <TextField
           label="Name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
+          value={formInput.name}
+          onChange={(e) =>
+            setFormInput((prev) => ({ ...prev, name: e.target.value }))
+          }
           required
           name="name"
         />
@@ -50,8 +53,10 @@ export default function ProjectForm() {
           name="team"
           labelId="team-select-label"
           id="team-select"
-          value={team}
-          onChange={(e) => setTeam(e.target.value)}
+          value={formInput.team}
+          onChange={(e) =>
+            setFormInput((prev) => ({ ...prev, team: e.target.value }))
+          }
           required
         >
           <MenuItem value="DevOps">DevOps</MenuItem>
@@ -64,9 +69,11 @@ export default function ProjectForm() {
           label="Template"
           labelId="maptype-select-label"
           id="maptype-select"
-          value={mapType}
+          value={formInput.mapType}
           name="mapType"
-          onChange={(e) => setMapType(e.target.value)}
+          onChange={(e) =>
+            setFormInput((prev) => ({ ...prev, mapType: e.target.value }))
+          }
         >
           <MenuItem value="Repos">Repos</MenuItem>
           <MenuItem value="None">None</MenuItem>
@@ -78,8 +85,10 @@ export default function ProjectForm() {
           name="description"
           multiline
           rows={4}
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
+          value={formInput.description}
+          onChange={(e) =>
+            setFormInput((prev) => ({ ...prev, description: e.target.value }))
+          }
         />
       </FormControl>
       <Stack

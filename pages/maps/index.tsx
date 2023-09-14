@@ -5,7 +5,6 @@ import ProjectForm from "../../components/Form";
 import useStore from "../../store";
 import modalControlsStore from "../../store/modalControls";
 import { shallow } from "zustand/shallow";
-import { useSession } from "next-auth/react";
 import { useQuery } from "@apollo/client";
 import DateRange from "@mui/icons-material/DateRange";
 import CircularProgress from "@mui/material/CircularProgress";

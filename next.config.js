@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  reactStrictMode: false,
+  reactStrictMode: true,
   swcMinify: true,
   compiler: {
     styledComponents: true,
@@ -14,7 +14,7 @@ const nextConfig = {
       },
     ],
   },
-  webpack: (config, options) => {
+  webpack: (config) => {
     config.module.rules.push({
       test: /\.(graphql|gql)/,
       exclude: /node_modules/,
