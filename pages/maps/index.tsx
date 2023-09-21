@@ -35,8 +35,6 @@ export default function MapsPage() {
 
   const { data: subscription } = useSubscription(SUBSCRIPTION_POSTS);
 
-  console.log(subscription);
-
   const filteredMaps = data?.orderByName.filter((item) =>
     item.name.toLowerCase().includes(searchString.toLowerCase())
   );
@@ -54,7 +52,6 @@ export default function MapsPage() {
       variables: {},
       updateQuery: (prev, { subscriptionData }) => {
         if (!subscriptionData.data) return prev;
-        console.log(subscriptionData.data.newPost);
         const newFeedItem = subscriptionData.data.newPost;
 
         return Object.assign({}, prev, {

@@ -5,7 +5,7 @@ import { ApolloServer } from "@apollo/server";
 import { WebSocketServer } from "ws";
 import { useServer as Server } from "graphql-ws/lib/use/ws";
 import typeDefs from "./schemas";
-import { prisma, resolvers, pubSub } from "./resolvers";
+import { resolvers } from "./resolvers";
 import express from "express";
 import bodyParser from "body-parser";
 import cors from "cors";

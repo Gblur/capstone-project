@@ -1,10 +1,9 @@
-import { PrismaClient } from "@prisma/client";
+import prisma from "../lib/prisma";
 import { v4 as uuidv4 } from "uuid";
 import { GraphQLScalarType } from "graphql";
 import { createPubSub } from "graphql-yoga";
 
 // Prisma Client
-export const prisma = new PrismaClient();
 export const pubSub = createPubSub();
 
 // DateResolver
