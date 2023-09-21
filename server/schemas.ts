@@ -1,4 +1,4 @@
-import gql from "graphql-tag";
+const gql = require("graphql-tag");
 
 const typeDefs = gql`
   scalar DateTime
@@ -9,7 +9,7 @@ const typeDefs = gql`
   }
 
   type Subscription {
-    newPost(team: String!): Map
+    newPost: Map!
   }
 
   enum Sort {

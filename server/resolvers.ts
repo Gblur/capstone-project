@@ -1,14 +1,11 @@
-import { Prisma, PrismaClient } from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
 import { v4 as uuidv4 } from "uuid";
-import { z } from "zod";
 import { GraphQLScalarType } from "graphql";
 import { createPubSub } from "graphql-yoga";
 
 // Prisma Client
 export const prisma = new PrismaClient();
-export const pubSub = createPubSub<{
-  newPost: [payload: { name: string; description: string }];
-}>();
+export const pubSub = createPubSub();
 
 // DateResolver
 const options = { day: "numeric", month: "long", year: "numeric" };
@@ -21,12 +18,6 @@ const dateResolver = new GraphQLScalarType({
 });
 
 // Zod FormInput Schema
-const formInputSchema = z.object({
-  name: z.string().max(10),
-  mapType: z.string(),
-  team: z.string(),
-  description: z.string(),
-});
 
 // static variables for Nodes and Edges
 const initialNodes = (label) => [
@@ -74,9 +65,8 @@ export const resolvers = {
     },
   },
   Mutation: {
-    postMap: (_, { input }, args) => {
+    postMap: (_, { input }) => {
       // const formInput = formInputSchema.parse(input);
-      console.log(args);
       try {
         const newPost = prisma.map.create({
           data: {
@@ -87,7 +77,7 @@ export const resolvers = {
             edges: JSON.stringify(initialEdge),
           },
         });
-        pubSub.publish("newPost", input);
+        pubSub.publish("POST_CREATED", input);
         return newPost;
       } catch (error) {
         console.error("Failed to create Post");
@@ -96,11 +86,12 @@ export const resolvers = {
   },
   Subscription: {
     newPost: {
-      subscribe: (_, { newPost }, { pubSub }) => {
-        console.log(newPost);
-        pubSub.subscribe("newMessage", newPost);
+      subscribe: (_, { input }) => {
+        return pubSub.subscribe("POST_CREATED");
       },
-      resolve: (payload) => payload,
+      resolve: (payload) => {
+        return payload;
+      },
     },
   },
 };

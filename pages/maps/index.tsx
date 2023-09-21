@@ -5,10 +5,11 @@ import ProjectForm from "../../components/Form";
 import useStore from "../../store";
 import modalControlsStore from "../../store/modalControls";
 import { shallow } from "zustand/shallow";
-import { useQuery } from "@apollo/client";
+import { useQuery, useSubscription } from "@apollo/client";
 import DateRange from "@mui/icons-material/DateRange";
 import CircularProgress from "@mui/material/CircularProgress";
 import GET_MAPS_SORTED from "../../graphql/gql/sortMaps.gql";
+import SUBSCRIPTION_POSTS from "../../graphql/gql/updatePost.gql";
 import useLocalStorageState from "use-local-storage-state";
 
 export default function MapsPage() {
@@ -24,7 +25,7 @@ export default function MapsPage() {
     setSelectedItem(item);
   }
 
-  const { data, loading, error } = useQuery(GET_MAPS_SORTED, {
+  const { data, loading, error, subscribeToMore } = useQuery(GET_MAPS_SORTED, {
     variables: {
       input: {
         name: "asc",
@@ -32,9 +33,14 @@ export default function MapsPage() {
     },
   });
 
+  const { data: subscription } = useSubscription(SUBSCRIPTION_POSTS);
+
+  console.log(subscription);
+
   const filteredMaps = data?.orderByName.filter((item) =>
     item.name.toLowerCase().includes(searchString.toLowerCase())
   );
+
   // useEffect(() => {
   //   if (!loading && !maps.length) {
   //     // fetchMaps();
@@ -43,6 +49,19 @@ export default function MapsPage() {
   // }, []);
 
   useEffect(() => {
+    subscribeToMore({
+      document: SUBSCRIPTION_POSTS,
+      variables: {},
+      updateQuery: (prev, { subscriptionData }) => {
+        if (!subscriptionData.data) return prev;
+        console.log(subscriptionData.data.newPost);
+        const newFeedItem = subscriptionData.data.newPost;
+
+        return Object.assign({}, prev, {
+          orderByName: [newFeedItem, ...prev?.orderByName],
+        });
+      },
+    });
     if (!selectedItem && !loading) {
       handleMapSelect(filteredMaps[0]);
     }
