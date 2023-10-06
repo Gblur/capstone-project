@@ -1,5 +1,12 @@
-subscription Subscribe {
-  newPost {
+subscription MySubscription {
+  map {
+    id
+    team
+    description
+    nodes
+    edges
+    date
     name
+    mapType
   }
 }

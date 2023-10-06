@@ -21,38 +21,21 @@ export default function MapsPage() {
     setSelectedItem(item);
   }
 
-  const { data, loading, error, subscribeToMore } = useQuery(GET_MAPS_SORTED);
+  const { data, error, loading } = useSubscription(GET_MAPS_SORTED);
 
-  // const { data: subscription } = useSubscription(SUBSCRIPTION_POSTS);
-  console.log(data?.map);
   const filteredMaps = data?.map.filter((item) =>
     item.name.toLowerCase().includes(searchString.toLowerCase())
   );
 
-  // useEffect(() => {
-  //   if (!loading && !maps.length) {
-  //     // fetchMaps();
-  //     setMaps(data.maps);
-  //   }
-  // }, []);
-
   useEffect(() => {
-    subscribeToMore({
-      document: SUBSCRIPTION_POSTS,
-      variables: {},
-      updateQuery: (prev, { subscriptionData }) => {
-        if (!subscriptionData.data) return prev;
-        const newFeedItem = subscriptionData.data.newPost;
-
-        return Object.assign({}, prev, {
-          orderByName: [newFeedItem, ...prev?.orderByName],
-        });
-      },
-    });
     if (!selectedItem && !loading) {
       handleMapSelect(filteredMaps[0]);
     }
   }, [filteredMaps]);
+
+  useEffect(() => {
+    return () => {};
+  }, []);
 
   return (
     <main>

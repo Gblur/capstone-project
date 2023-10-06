@@ -9,8 +9,9 @@ import MenuItem from "@mui/material/MenuItem";
 import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
 import TextField from "@mui/material/TextField";
-import { useMutation } from "@apollo/client";
+import { useMutation, useSubscription } from "@apollo/client";
 import POSTMAP from "../../graphql/gql/postMap.gql";
+import SUBSCRIBE from "../../graphql/gql/updatePost.gql";
 import { v4 as uuidv4 } from "uuid";
 
 const initialNodes = (label) => [

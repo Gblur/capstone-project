@@ -11,6 +11,8 @@ import Canvas from "../Canvas";
 import "reactflow/dist/style.css";
 import Input from "@mui/material/Input";
 import { Box } from "@mui/material";
+import { useMutation } from "@apollo/client";
+import DELETE_MAP from "../../graphql/gql/deleteMap.gql";
 
 const DashboardContainer = styled.div`
   display: grid;
@@ -78,6 +80,8 @@ export default function Dashboard({
   handleMapSelect,
   isloading,
 }) {
+  const [deleteMap] = useMutation(DELETE_MAP);
+
   return (
     <DashboardContainer>
       <ProjectListContainer>
@@ -108,7 +112,7 @@ export default function Dashboard({
                         />
                         <Icon.DeleteIcon
                           onClick={() => {
-                            handleDelete(item.id);
+                            deleteMap({ variables: { id: selectedItem.id } });
                           }}
                           color="error"
                         />

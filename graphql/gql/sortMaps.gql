@@ -1,4 +1,4 @@
-query SortMaps {
+subscription SortMaps {
   map(order_by: { name: asc }) {
     id
     team
