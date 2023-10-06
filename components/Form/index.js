@@ -11,6 +11,22 @@ import FormControl from "@mui/material/FormControl";
 import TextField from "@mui/material/TextField";
 import { useMutation } from "@apollo/client";
 import POSTMAP from "../../graphql/gql/postMap.gql";
+import { v4 as uuidv4 } from "uuid";
+
+const initialNodes = (label) => [
+  {
+    id: uuidv4(),
+    type: "parent",
+    data: {
+      label: label,
+      background: "var(--color-node-parent-bg)",
+      type: "root",
+      status: "unknown",
+    },
+    position: { x: 250, y: 25 },
+  },
+];
+const initialEdge = JSON.stringify([]);
 
 export default function ProjectForm() {
   const createPost = useStore((state) => state.createMap);
@@ -19,18 +35,29 @@ export default function ProjectForm() {
 
   const router = useRouter();
   // const {data: session} = useSession();
-  const [formInput, setFormInput] = useState({
+  const [formInput, setFormInput] = useState((prev) => ({
+    ...prev,
     name: "",
     team: "",
-    mapType: "",
+    mapType: "Repos",
     description: "",
-  });
+  }));
 
   const handleSubmitForm = (event) => {
     event.preventDefault();
     const form = new FormData(event.target);
     const data = Object.fromEntries(form);
-    postMap({ variables: { input: data } });
+    postMap({
+      variables: {
+        object: {
+          ...data,
+          nodes: JSON.stringify(
+            initialNodes(data?.mapType === "Repos" ? "Repos" : "Root")
+          ),
+          edges: initialEdge,
+        },
+      },
+    });
   };
 
   return (

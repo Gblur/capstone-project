@@ -1,5 +1,5 @@
-query SortMaps($input: SortByName) {
-  orderByName(orderBy: $input) {
+query SortMaps {
+  map(order_by: { name: asc }) {
     id
     team
     description

@@ -2,12 +2,8 @@ import Dashboard from "../../components/Dashboard";
 import React, { useEffect, useState, useRef } from "react";
 import CustomModal from "../../components/Modal";
 import ProjectForm from "../../components/Form";
-import useStore from "../../store";
 import modalControlsStore from "../../store/modalControls";
-import { shallow } from "zustand/shallow";
 import { useQuery, useSubscription } from "@apollo/client";
-import DateRange from "@mui/icons-material/DateRange";
-import CircularProgress from "@mui/material/CircularProgress";
 import GET_MAPS_SORTED from "../../graphql/gql/sortMaps.gql";
 import SUBSCRIPTION_POSTS from "../../graphql/gql/updatePost.gql";
 import useLocalStorageState from "use-local-storage-state";
@@ -25,17 +21,11 @@ export default function MapsPage() {
     setSelectedItem(item);
   }
 
-  const { data, loading, error, subscribeToMore } = useQuery(GET_MAPS_SORTED, {
-    variables: {
-      input: {
-        name: "asc",
-      },
-    },
-  });
+  const { data, loading, error, subscribeToMore } = useQuery(GET_MAPS_SORTED);
 
-  const { data: subscription } = useSubscription(SUBSCRIPTION_POSTS);
-
-  const filteredMaps = data?.orderByName.filter((item) =>
+  // const { data: subscription } = useSubscription(SUBSCRIPTION_POSTS);
+  console.log(data?.map);
+  const filteredMaps = data?.map.filter((item) =>
     item.name.toLowerCase().includes(searchString.toLowerCase())
   );
 

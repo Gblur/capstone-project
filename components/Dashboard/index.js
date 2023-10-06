@@ -98,7 +98,7 @@ export default function Dashboard({
                     onClick={() => handleMapSelect(item, item.id)}
                   >
                     <a>{item.name}</a>
-                    {selectedItem.name === item.name && (
+                    {selectedItem.id === item.id && (
                       <span>
                         <Icon.EditIcon
                           onClick={() => {

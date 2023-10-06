@@ -1,9 +1,5 @@
-mutation PostMap($input: Post!) {
-  postMap(input: $input) {
-    id
-    team
-    description
+mutation PostMap($object: map_insert_input!) {
+  insert_map_one(object: $object) {
     name
-    mapType
   }
 }

@@ -1,7 +1,7 @@
 import GlobalStyle from "../styles";
 import Head from "next/head";
 import Layout from "../components/Layout";
-import { ApolloProvider, gql } from "@apollo/client";
+import { ApolloProvider } from "@apollo/client";
 import client from "../lib/apollo-client";
 
 export default function App({
