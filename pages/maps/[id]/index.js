@@ -4,15 +4,9 @@ import "reactflow/dist/style.css";
 import { shallow } from "zustand/shallow";
 import Button from "@mui/material/Button";
 import styled from "styled-components";
-import CircularProgress from "@mui/material/CircularProgress";
-import { useRouter } from "next/router";
 import useStore from "../../../store";
-import useSWR from "swr";
-import { v4 as uuidv4 } from "uuid";
 import Stack from "@mui/material/Stack";
 import modalControlsStore from "../../../store/modalControls";
-import { useQuery } from "@apollo/client";
-import GET_MAP_BY_ID from "../../../graphql/gql/getMapById.gql";
 import useLocalStorageState from "use-local-storage-state";
 
 const MapInfoBox = styled.div`

@@ -4,5 +4,5 @@ import client from "../lib/apollo-client";
 import MapsPage from "./maps";
 
 export default function Home() {
-  return <MapsPage />;
+  return <SignIn />;
 }

@@ -2,6 +2,8 @@ import React from "react";
 import styled from "styled-components";
 import Button from "@mui/material/Button";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
+import { useSession, signOut, signIn } from "next-auth/react";
+import PersonOutline from "@mui/icons-material/PersonOutline";
 
 const ProfileImage = styled.img`
   border-radius: 50%;
@@ -10,24 +12,37 @@ const ProfileImage = styled.img`
 `;
 
 export default function Profile() {
-  // const { data: session, status } = useSession();
+  const { data: session, status } = useSession();
 
-  {
-    session?.user?.image ? (
-      <Button
-        variant="text"
-        color="inherit"
-        onClick={() => {
-          signOut({
-            callbackUrl: "/",
-          });
-        }}
-      >
-        <ProfileImage src={session?.user?.image} alt="User Account" />
-        Sign out
-      </Button>
-    ) : (
-      <PersonOutlineIcon />
-    );
-  }
+  return (
+    <>
+      {session?.user ? (
+        <Button
+          variant="text"
+          color="inherit"
+          onClick={() => {
+            signOut({
+              callbackUrl: "/",
+            });
+          }}
+        >
+          <ProfileImage src={session?.user?.image} alt="User Account" />
+          Sign out
+        </Button>
+      ) : (
+        <Button
+          variant="text"
+          color="inherit"
+          onClick={() => {
+            signOut({
+              callbackUrl: "/",
+            });
+          }}
+        >
+          <PersonOutline />
+          Sign in
+        </Button>
+      )}
+    </>
+  );
 }

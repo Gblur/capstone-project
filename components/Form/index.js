@@ -3,7 +3,6 @@ import { useRouter } from "next/router";
 import styled from "styled-components";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
-import useStore from "../../store";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import InputLabel from "@mui/material/InputLabel";
@@ -13,6 +12,7 @@ import { useMutation, useSubscription } from "@apollo/client";
 import POSTMAP from "../../graphql/gql/postMap.gql";
 import SUBSCRIBE from "../../graphql/gql/updatePost.gql";
 import { v4 as uuidv4 } from "uuid";
+import { useSession } from "next-auth/react";
 
 const initialNodes = (label) => [
   {
@@ -30,8 +30,6 @@ const initialNodes = (label) => [
 const initialEdge = JSON.stringify([]);
 
 export default function ProjectForm() {
-  const createPost = useStore((state) => state.createMap);
-
   const [postMap] = useMutation(POSTMAP);
 
   const router = useRouter();
@@ -43,6 +41,8 @@ export default function ProjectForm() {
     mapType: "Repos",
     description: "",
   }));
+
+  const { data: session } = useSession();
 
   const handleSubmitForm = (event) => {
     event.preventDefault();
@@ -56,6 +56,7 @@ export default function ProjectForm() {
             initialNodes(data?.mapType === "Repos" ? "Repos" : "Root")
           ),
           edges: initialEdge,
+          user: session?.user?.id,
         },
       },
     });
