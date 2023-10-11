@@ -1,0 +1,12 @@
+subscription SortMaps {
+  map(order_by: { name: asc }) {
+    id
+    team
+    description
+    nodes
+    edges
+    date
+    name
+    mapType
+  }
+}

@@ -4,14 +4,10 @@ import "reactflow/dist/style.css";
 import { shallow } from "zustand/shallow";
 import Button from "@mui/material/Button";
 import styled from "styled-components";
-import CircularProgress from "@mui/material/CircularProgress";
-import { useRouter } from "next/router";
 import useStore from "../../../store";
-import useSWR from "swr";
-import { v4 as uuidv4 } from "uuid";
-import { useSession } from "next-auth/react";
 import Stack from "@mui/material/Stack";
 import modalControlsStore from "../../../store/modalControls";
+import useLocalStorageState from "use-local-storage-state";
 
 const MapInfoBox = styled.div`
   display: flex;
@@ -42,24 +38,22 @@ const selector = (state) => ({
   onConnect: state.onConnect,
   onNodeCreate: state.onNodeCreate,
   onGenerateNodes: state.onGenerateNodes,
-  onUpdateMap: state.onUpdateMap,
+  cloneMap: state.cloneMap,
   updateNodeType: state.updateNodeType,
   updateNodeLabel: state.updateNodeLabel,
   updateNodeStatus: state.updateNodeStatus,
 });
 export default function MapDetailsPage() {
   const {
-    loading,
-    map,
-    nodes,
-    edges,
     repos,
     fetchMap,
+    map,
     fetchRepos,
     onNodesChange,
     onEdgesChange,
     onConnect,
     onNodeCreate,
+    cloneMap,
     onGenerateNodes,
     onUpdateMap,
     updateNodeLabel,
@@ -67,40 +61,37 @@ export default function MapDetailsPage() {
     updateNodeStatus,
   } = useStore(selector, shallow);
 
-  const modal = modalControlsStore((state) => state.modal);
-  const closeModal = modalControlsStore((state) => state.closeModal);
-  const openModal = modalControlsStore((state) => state.openModal);
-
+  const modal = modalControlsStore((state) => state);
   // const {data: session, status} = useSession();
-  const [notionObject, setNotionObject] = useState(null);
 
-  const router = useRouter();
-  const {
-    query: { id },
-  } = router;
+  // const router = useRouter();
+  // const {
+  //   query: { id },
+  // } = router;
 
-  async function handlePostToNotion(notionPost) {
-    const response = await fetch("/api/notion/client", {
-      method: "POST",
-      body: JSON.stringify(notionPost),
-      headers: { "Content-Type": "application/json" },
-    });
-    if (response.ok) {
-      await response.json();
-    }
-  }
+  // const { data, loading, error } = useQuery(GET_MAP_BY_ID, {
+  //   variables: {
+  //     ID: id,
+  //   },
+  // });
+
+  const [selectedItem] = useLocalStorageState("selectedItem");
+
+  // TODO
+  // mapById {edges: string, nodes: string} muessen geaendert werden
+  // Die strings edges und nodes muessen zu validen Objecten konvertiert werden : Done!
+  // Das onConnectEnd erstellt neue edges und nodes: mutiert clonedMap
+  // jedes node und edge hat eigene Properties die geaendert werden muessen.
 
   useEffect(() => {
-    closeModal();
-    if (id) {
-      fetchMap(id);
-      if (map.mapType === "Repos" && !map.nodes.includes("child")) {
-        fetchRepos(`/api/auth/github`);
-      }
+    if (selectedItem) {
+      cloneMap({
+        ...selectedItem,
+        nodes: JSON.parse(selectedItem?.nodes),
+        edges: JSON.parse(selectedItem?.edges),
+      });
     }
-  }, [map._id, id]);
-
-  if (!router.isReady) return <CircularProgress />;
+  }, []);
 
   return (
     <main
@@ -110,8 +101,8 @@ export default function MapDetailsPage() {
     >
       <MapInfoBox>
         <MapInfoBoxHead>
-          <h3>{map.name}</h3>
-          <p>{map.description}</p>
+          <h3>{map?.name}</h3>
+          <p>{map?.description}</p>
         </MapInfoBoxHead>
       </MapInfoBox>
       <section style={{ height: "65%" }}>
@@ -132,20 +123,19 @@ export default function MapDetailsPage() {
           </Stack>
         </div>
         <Canvas
-          handlePostToNotion={handlePostToNotion}
-          nodes={nodes}
-          edges={edges}
+          nodes={map?.nodes}
+          edges={map?.edges}
           onConnect={onConnect}
           onNodeCreate={onNodeCreate}
           fetchMap={fetchMap}
           onEdgesChange={onEdgesChange}
           onNodesChange={onNodesChange}
           map={map}
-          id={id}
+          id={map.id}
           repos={repos}
-          modal={modal}
-          closeModal={closeModal}
-          openModal={openModal}
+          modal={modal.modal}
+          closeModal={modal.closeModal}
+          openModal={modal.openModal}
           updateNodeLabel={updateNodeLabel}
           updateNodeType={updateNodeType}
           updateNodeStatus={updateNodeStatus}

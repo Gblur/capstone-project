@@ -1,10 +1,10 @@
 import React from "react";
 import styled from "styled-components";
-import { useSession, signIn } from "next-auth/react";
 import Button from "@mui/material/Button";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import { useRouter } from "next/router";
 import Google from "@mui/icons-material/Google";
+import { useSession, signIn, signOut } from "next-auth/react";
 
 const SignInSection = styled.section`
   display: grid;
@@ -30,7 +30,8 @@ const SignInSection = styled.section`
 `;
 
 export default function SignIn() {
-  // const {data: session} = useSession();
+  const { data: session } = useSession();
+  console.log(session);
   const router = useRouter();
   if (session) {
     router.push("/maps");
@@ -44,7 +45,7 @@ export default function SignIn() {
           variant="contained"
           color="primary"
           onClick={() => {
-            signIn();
+            signIn("github");
           }}
         >
           Github
@@ -54,7 +55,7 @@ export default function SignIn() {
           variant="contained"
           color="primary"
           onClick={() => {
-            signIn();
+            signIn("github");
           }}
         >
           Google

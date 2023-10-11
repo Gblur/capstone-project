@@ -1,0 +1,12 @@
+subscription MySubscription {
+  map {
+    id
+    team
+    description
+    nodes
+    edges
+    date
+    name
+    mapType
+  }
+}

@@ -53,13 +53,13 @@ export default function Header() {
           <Icon.Home sx={{ fontSize: 36 }} />
           Dashboard
         </Button>
-        {pathname === "/" && (
+        {pathname === "/maps" && (
           <Button onClick={openModal} variant="text" color="inherit">
             <Icon.AddCircleOutlineIcon sx={{ fontSize: 36 }} />
             New Project
           </Button>
         )}
-        {/* <Profile /> */}
+        <Profile />
       </HeaderContainer>
     </Heading>
   );

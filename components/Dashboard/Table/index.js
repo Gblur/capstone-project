@@ -7,7 +7,11 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 
+const options = { day: "numeric", month: "long", year: "numeric" };
+
 export default function BasicTable({ map }) {
+  const date = new Date(map?.date).toLocaleDateString("de-DE", options);
+
   return (
     <TableContainer component={Paper}>
       <Table
@@ -27,9 +31,9 @@ export default function BasicTable({ map }) {
               "&:last-child td, &:last-child th": { border: 0 },
             }}
           >
-            <TableCell align="left">{map?.team || ""}</TableCell>
-            <TableCell align="left">{map?.mapType || ""}</TableCell>
-            <TableCell align="left">{map?.date || ""}</TableCell>
+            <TableCell align="left">{map?.team}</TableCell>
+            <TableCell align="left">{map?.mapType}</TableCell>
+            <TableCell align="left">{date}</TableCell>
           </TableRow>
         </TableBody>
       </Table>

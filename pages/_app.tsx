@@ -1,6 +1,8 @@
 import GlobalStyle from "../styles";
 import Head from "next/head";
 import Layout from "../components/Layout";
+import { ApolloProvider } from "@apollo/client";
+import client from "../lib/apollo-client";
 import { SessionProvider } from "next-auth/react";
 
 export default function App({
@@ -13,11 +15,13 @@ export default function App({
       <Head>
         <title>Mindmap</title>
       </Head>
-      {/* <SessionProvider session={session}>  */}
-      <Layout>
-        <Component {...pageProps} />
-      </Layout>
-      {/* </SessionProvider> */}
+      <ApolloProvider client={client}>
+        <SessionProvider session={session}>
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
+        </SessionProvider>
+      </ApolloProvider>
     </>
   );
 }
