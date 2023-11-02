@@ -1,0 +1,12 @@
+query SortMaps($input: SortByName) {
+  orderByName(orderBy: $input) {
+    id
+    team
+    description
+    nodes
+    edges
+    date
+    name
+    mapType
+  }
+}

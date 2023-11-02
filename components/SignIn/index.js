@@ -1,6 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-import { useSession, signIn } from "next-auth/react";
 import Button from "@mui/material/Button";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import { useRouter } from "next/router";

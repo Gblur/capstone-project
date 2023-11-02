@@ -32,3 +32,5 @@ yarn-error.log*
 /jsconfig.json
 # vercel
 .vercel
+
+/server/node_modules

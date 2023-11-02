@@ -9,10 +9,12 @@ import { nodeTypes } from "../Node/customNode";
 import { router } from "next/router";
 import Canvas from "../Canvas";
 import "reactflow/dist/style.css";
+import Input from "@mui/material/Input";
+import { Box } from "@mui/material";
 
 const DashboardContainer = styled.div`
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: 1fr 1fr;
   gap: 20px;
 `;
 
@@ -30,8 +32,6 @@ const ProjectList = styled.ul`
   align-items: center;
   list-style: none;
   padding: 0;
-  min-height: 80px;
-  max-height: 180px;
   overflow-y: auto;
 `;
 
@@ -45,7 +45,6 @@ const MapPreview = styled.div`
   display: block;
   min-height: 500px;
   border: 1px solid var(--color-dashboard-border);
-  margin-bottom: 20px;
   overflow: hidden;
   border-radius: 4px;
 `;
@@ -72,51 +71,44 @@ const ProjectListItem = styled.li`
   }
 `;
 
-// const Table = styled.section`
-// 	display: table;
-// 	height: 100%;
-// 	width: 100%;
-// 	border: 2px solid var(--color-dashboard-border);
-// 	padding: 20px;
-// `;
-
 export default function Dashboard({
   data,
-  map,
   selectedItem,
+  setSearchString,
   handleMapSelect,
-  handleDelete,
-  nodes,
-  edges,
   isloading,
 }) {
   return (
     <DashboardContainer>
       <ProjectListContainer>
         <h2>Project list</h2>
+        <Input
+          placeholder="filter maps"
+          onChange={(e) => setSearchString(e.target.value)}
+        />
         <hr />
-        {!isloading && data ? (
+        {!isloading ? (
           <ProjectList>
-            {data.length > 0 ? (
-              data.map((item) => {
+            {data?.length ? (
+              data?.map((item) => {
                 return (
                   <ProjectListItem
-                    className={selectedItem?._id === item._id ? "selected" : ""}
-                    key={item._id}
-                    onClick={() => handleMapSelect(item, item._id)}
+                    className={selectedItem?.id === item.id ? "selected" : ""}
+                    key={item.id}
+                    onClick={() => handleMapSelect(item, item.id)}
                   >
                     <a>{item.name}</a>
-                    {selectedItem === item && (
+                    {selectedItem.name === item.name && (
                       <span>
                         <Icon.EditIcon
                           onClick={() => {
-                            router.push(`/maps/${item._id}`);
+                            router.push(`/maps/${item.id}`);
                           }}
                           color="primary"
                         />
                         <Icon.DeleteIcon
                           onClick={() => {
-                            handleDelete(item._id);
+                            handleDelete(item.id);
                           }}
                           color="error"
                         />
@@ -126,7 +118,7 @@ export default function Dashboard({
                 );
               })
             ) : (
-              <ProjectListItem>No Entry</ProjectListItem>
+              <ProjectListItem>No Entries found</ProjectListItem>
             )}
           </ProjectList>
         ) : (
@@ -134,12 +126,12 @@ export default function Dashboard({
         )}
       </ProjectListContainer>
       <InformationContainer>
-        <EnhancedTable map={map} />
+        <EnhancedTable map={selectedItem} />
         <MapPreview>
           <>
             <ReactFlow
-              nodes={nodes}
-              edges={edges}
+              nodes={selectedItem ? JSON.parse(selectedItem.nodes) : []}
+              edges={selectedItem ? JSON.parse(selectedItem.edges) : []}
               nodeTypes={nodeTypes}
               fitView
             >

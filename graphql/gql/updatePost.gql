@@ -1,0 +1,5 @@
+subscription Subscribe {
+  newPost {
+    name
+  }
+}
